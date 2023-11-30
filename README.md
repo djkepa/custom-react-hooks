@@ -1,15 +1,28 @@
+<p align="center">
+  <img src="https://i.ibb.co/ykSxVSX/custom-react-hooks-logo.png" alt="Custom React Hooks Logo"/>
+</p>
+
+<p align="center">
+  <a href="https://github.com/djkepa/react-custom-hooks/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/>
+  </a>
+  <a href="https://github.com/djkepa/react-custom-hooks/stargazers">
+    <img src="https://img.shields.io/github/stars/djkepa/react-custom-hooks.svg" alt="GitHub Stars"/>
+  </a>
+  <a href="https://github.com/djkepa/react-custom-hooks/network">
+    <img src="https://img.shields.io/github/forks/djkepa/react-custom-hooks.svg" alt="GitHub Forks"/>
+  </a>
+  <a href="https://github.com/djkepa/react-custom-hooks/issues">
+    <img src="https://img.shields.io/github/issues/djkepa/react-custom-hooks.svg" alt="GitHub Issues"/>
+  </a>
+</p>
+
+<div align="center">
+  A collection of reusable and well-documented custom React hooks for supercharging your React applications. These hooks cover a wide range of functionalities, making it easier for you to build dynamic and interactive user interfaces.
+</div>
+
+
 # Custom React Hooks Library
-
-![Custom React Hooks Logo](URL_TO_LOGO)
-
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/djkepa/react-custom-hooks/blob/main/LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/djkepa/react-custom-hooks.svg)](https://github.com/djkepa/react-custom-hooks/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/djkepa/react-custom-hooks.svg)](https://github.com/djkepa/react-custom-hooks/network)
-[![GitHub Issues](https://img.shields.io/github/issues/djkepa/react-custom-hooks.svg)](https://github.com/djkepa/react-custom-hooks/issues)
-
-A collection of reusable and well-documented custom React hooks for supercharging your React applications. These hooks cover a wide range of functionalities, making it easier for you to build dynamic and interactive user interfaces.
-
-![Custom React Hooks Logo](https://i.ibb.co/ykSxVSX/custom-react-hooks-logo.png)
 
 ## 🌟 Table of Contents
 
