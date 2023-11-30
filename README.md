@@ -26,11 +26,11 @@
 
 ## 🌟 Table of Contents
 
-- [Installation](#installation)
-- [Hooks List](#hooks-list)
-- [Links](#links)
-- [Contributing](#contributing)
-- [License](#license)
+- [Installation](#-installation)
+- [Hooks List](#-hooks-list)
+- [Links](#-links)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ## 🚀 [Installation](#installation)
 
