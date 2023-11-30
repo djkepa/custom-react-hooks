@@ -1,0 +1,12 @@
+{
+  "include": [
+    "src/**/*",
+    "tests/**/*" 
+  ],
+   "compilerOptions": {
+    "esModuleInterop": true,
+     "target": "es5",
+    "module": "commonjs",
+    "jsx": "react",
+  },
+}
