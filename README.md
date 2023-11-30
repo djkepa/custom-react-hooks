@@ -28,11 +28,11 @@
 
 - [Installation](#installation)
 - [Hooks List](#hooks-list)
-- [Usage](#usage)
+- [Links](#links)
 - [Contributing](#contributing)
 - [License](#license)
 
-## 🚀 Installation
+## 🚀 [Installation](#installation)
 
 Choose and install individual hooks that suit your project needs, or install the entire collection for a full suite of utilities.
 
@@ -64,7 +64,7 @@ or
 yarn add @custom-react-hooks/use-async
 ```
 
-## 📚 Hooks List
+## 📚 [Hooks List](#hooks-list)
 
 A list of available hooks and their respective documentation can be found below:
 
@@ -104,16 +104,16 @@ A list of available hooks and their respective documentation can be found below:
 - [use-window-size](#use-window-size)
 
 
-## 🛠️ Contributing
+## 🛠️ [Contributing](#contributing)
 
 Your contributions are welcome! Please read our [Contributing Guidelines](link-to-contributing-guidelines) for details on how to submit pull requests, file bugs, and suggest enhancements.
 
-## 🔗 Links
+## 🔗 [Links](#links)
 
 - [GitHub Repository](https://github.com/djkepa/react-custom-hooks)
 - [Issue Tracker](link-to-issue-tracker)
 
-## 📄 License
+## 📄 [License](#license)
 
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/djkepa/react-custom-hooks/blob/main/LICENSE) file for details.
 
