@@ -104,7 +104,7 @@ A list of available hooks and their respective documentation can be found below:
 - [useWindowSize](#use-window-size)
 
 
-# [useAsync](#use-async) Hook 
+# useAsync Hook 
 
 The `useAsync` hook simplifies the handling of asynchronous operations in React applications, such as data fetching or any other promise-returning functions. It provides a structured way to track the status and outcome of async operations.
 
