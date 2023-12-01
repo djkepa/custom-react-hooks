@@ -17,5 +17,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.3.2"
+  },
+  "gitHead": "f5b3ab05532e923e2b2cc8e099a0aefc0fa73461",
+  "publishConfig": {
+    "access": "public"
   }
 }
