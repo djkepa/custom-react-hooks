@@ -27,7 +27,7 @@ yarn add @custom-react-hooks/use-clipboard
 
 ```typescript
 import React, { useState } from 'react';
-import useClipboard from '@react-custom-hooks/useClipboard';
+import useClipboard from 'custom-react-hooks/useClipboard';
 
 function ClipboardComponent() {
   const [text, setText] = useState('');

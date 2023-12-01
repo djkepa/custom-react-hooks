@@ -7,8 +7,8 @@ We welcome contributions to the React Custom Hooks library! Here's how you can c
 1. **Fork and clone the repository:**
 
    ```
-   git clone https://github.com/your-username/react-custom-hooks.git
-   cd react-custom-hooks
+   git clone https://github.com/your-username/custom-react-hooks.git
+   cd custom-react-hooks
    ```
 
 2. **Install dependencies:**
@@ -72,7 +72,7 @@ npx prettier --write .
 
 ## Reporting Bugs
 
-If you find a bug, please create an issue on our [issue tracker](https://github.com/djkepa/react-custom-hooks/issues) with a description of the bug and steps to reproduce it.
+If you find a bug, please create an issue on our [issue tracker](https://github.com/djkepa/custom-react-hooks/issues) with a description of the bug and steps to reproduce it.
 
 ## Suggesting Features
 

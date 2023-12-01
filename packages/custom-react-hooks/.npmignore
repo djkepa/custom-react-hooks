@@ -1,0 +1,17 @@
+# Source files
+src/
+
+# Test files
+tests/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Configuration files
+tsconfig.json
+tsconfig.build.json
+.jest/
+
+# Others
+node_modules/

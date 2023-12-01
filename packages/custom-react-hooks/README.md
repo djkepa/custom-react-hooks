@@ -186,13 +186,13 @@ The `useClickOutside` hook is designed to detect and handle clicks outside of a 
 ## Installation
 
 ```bash
-npm install custom-react-hooks/use-click-outside
+npm install @custom-react-hooks/use-click-outside
 ```
 
 or
 
 ```bash
-yarn add custom-react-hooks/use-click-outside
+yarn add @custom-react-hooks/use-click-outside
 ```
 
 ## Usage
@@ -201,7 +201,7 @@ Here's an example of how to use the `useClickOutside` hook in a modal component:
 
 ```typescript
 import React, { useRef } from 'react';
-import useClickOutside from 'custom-react-hooks/use-click-outside';
+import useClickOutside from '@custom-react-hooks/use-click-outside';
 
 const ClickOutsideComponent = ({ onClose }: { onClose: () => void }) => {
   const modalRef = useRef<HTMLDivElement>(null); // The ref for the modal
@@ -287,7 +287,7 @@ yarn add @custom-react-hooks/use-clipboard
 
 ```typescript
 import React, { useState } from 'react';
-import useClipboard from 'custom-react-hooks/useClipboard';
+import useClipboard from '@custom-react-hooks/useClipboard';
 
 function ClipboardComponent() {
   const [text, setText] = useState('');
@@ -348,13 +348,13 @@ The `useDebounce` hook is used to delay the execution of a function until a spec
 ## Installation
 
 ```bash
-npm install custom-react-hooks/use-debounce
+npm install @custom-react-hooks/use-debounce
 ```
 
 or
 
 ```bash
-yarn add custom-react-hooks/use-debounce
+yarn add @custom-react-hooks/use-debounce
 ```
 
 ## Usage
@@ -363,7 +363,7 @@ Here's an example of using `useDebounce` in a search input component:
 
 ```typescript
 import React, { useState } from 'react';
-import useDebounce from 'custom-react-hooks/useDebounce';
+import useDebounce from '@custom-react-hooks/useDebounce';
 
 const DebounceTestComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState('');
@@ -448,7 +448,7 @@ yarn add @custom-react-hooks/use-document-title
 
 ```typescript
 import React, { useState } from 'react';
-import useDocumentTitle from 'custom-react-hooks/useDocumentTitle';
+import useDocumentTitle from '@custom-react-hooks/useDocumentTitle';
 
 const DocumentTitleComponent = () => {
   const [title, setTitle] = useState('My Awesome Page');
@@ -520,7 +520,7 @@ yarn add @custom-react-hooks/use-drag-drop
 
 ```tsx
 import React from 'react';
-import useDragDrop from 'custom-react-hooks/useDragDrop';
+import useDragDrop from '@custom-react-hooks/useDragDrop';
 
 const DragDropTestComponent = ({ onDrop }: any) => {
   const dragData = { id: 1, name: 'Draggable Item' };
@@ -596,7 +596,7 @@ Replace `@custom-react-hooks/use-effect-once` with the actual name of your packa
 
 ```typescript
 import React from 'react';
-import useEffectOnce from 'custom-react-hooks/useEffectOnce';
+import useEffectOnce from '@custom-react-hooks/useEffectOnce';
 
 const EffectOnceComponent: React.FC = () => {
   useEffectOnce(() => {
@@ -652,7 +652,7 @@ yarn add @custom-react-hooks/use-element-size
 
 ```typescript
 import React, { useRef, useState } from 'react';
-import useElementSize from 'custom-react-hooks/useElementSize';
+import useElementSize from '@custom-react-hooks/useElementSize';
 
 const TestComponent: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -747,7 +747,7 @@ Here's an example of how to use the `useEventListener` hook in a component:
 
 ```typescript
 import React, { useState, useRef } from 'react';
-import useEventListener from 'custom-react-hooks/useEventListener';
+import useEventListener from '@custom-react-hooks/useEventListener';
 
 const ExampleComponent: React.FC = () => {
   const [count, setCount] = useState(0);
@@ -808,7 +808,7 @@ yarn add @custom-react-hooks/use-fetch
 Here's an example of how to use the `useFetch` hook in a component:
 
 ```typescript
-import useFetch from 'custom-react-hooks/useFetch';
+import useFetch from '@custom-react-hooks/useFetch';
 
 interface User {
   id: number;
@@ -897,7 +897,7 @@ yarn add @custom-react-hooks/use-form
 
 ```typescript
 import React from 'react';
-import useForm from 'custom-react-hooks/useForm';
+import useForm from '@custom-react-hooks/useForm';
 
 interface FormValues {
   username: string;
@@ -1008,7 +1008,7 @@ yarn add @custom-react-hooks/use-geo-location
 Import and use the `useGeoLocation` hook in your React components:
 
 ```typescript
-import useGeoLocation from 'custom-react-hooks/useGeoLocation';
+import useGeoLocation from '@custom-react-hooks/useGeoLocation';
 
 function GeoLocationComponent() {
   const { loading, coordinates, error, isWatching } = useGeoLocation();

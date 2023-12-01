@@ -27,7 +27,7 @@ yarn add @custom-react-hooks/use-form
 
 ```typescript
 import React from 'react';
-import useForm from '@react-custom-hooks/useForm';
+import useForm from '@custom-react-hooks/useForm';
 
 interface FormValues {
   username: string;

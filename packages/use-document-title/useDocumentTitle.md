@@ -26,7 +26,7 @@ yarn add @custom-react-hooks/use-document-title
 
 ```typescript
 import React, { useState } from 'react';
-import useDocumentTitle from '@react-custom-hooks/useDocumentTitle';
+import useDocumentTitle from '@custom-react-hooks/useDocumentTitle';
 
 const DocumentTitleComponent = () => {
   const [title, setTitle] = useState('My Awesome Page');

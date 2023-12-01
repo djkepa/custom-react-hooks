@@ -28,7 +28,7 @@ yarn add @custom-react-hooks/use-drag-drop
 
 ```tsx
 import React from 'react';
-import useDragDrop from '@react-custom-hooks/useDragDrop';
+import useDragDrop from '@custom-react-hooks/useDragDrop';
 
 const DragDropTestComponent = ({ onDrop }: any) => {
   const dragData = { id: 1, name: 'Draggable Item' };

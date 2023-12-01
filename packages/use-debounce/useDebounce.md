@@ -5,13 +5,13 @@ The `useDebounce` hook is used to delay the execution of a function until a spec
 ## Installation
 
 ```bash
-npm install @react-custom-hooks/use-debounce
+npm install @custom-react-hooks/use-debounce
 ```
 
 or
 
 ```bash
-yarn add @react-custom-hooks/use-debounce
+yarn add @custom-react-hooks/use-debounce
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ Here's an example of using `useDebounce` in a search input component:
 
 ```typescript
 import React, { useState } from 'react';
-import useDebounce from '@react-custom-hooks/useDebounce';
+import useDebounce from 'custom-react-hooks/useDebounce';
 
 const DebounceTestComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState('');

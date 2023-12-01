@@ -27,7 +27,7 @@ yarn add @custom-react-hooks/use-element-size
 
 ```typescript
 import React, { useRef, useState } from 'react';
-import useElementSize from '@react-custom-hooks/useElementSize';
+import useElementSize from '@custom-react-hooks/useElementSize';
 
 const TestComponent: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);

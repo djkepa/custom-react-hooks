@@ -27,7 +27,7 @@ yarn add @custom-react-hooks/use-geo-location
 Import and use the `useGeoLocation` hook in your React components:
 
 ```typescript
-import useGeoLocation from '@react-custom-hooks/useGeoLocation';
+import useGeoLocation from '@custom-react-hooks/useGeoLocation';
 
 function GeoLocationComponent() {
   const { loading, coordinates, error, isWatching } = useGeoLocation();

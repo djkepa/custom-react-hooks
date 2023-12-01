@@ -21,7 +21,7 @@ Here's an example of how to use the `useEventListener` hook in a component:
 
 ```typescript
 import React, { useState, useRef } from 'react';
-import useEventListener from '@react-custom-hooks/useEventListener';
+import useEventListener from '@custom-react-hooks/useEventListener';
 
 const ExampleComponent: React.FC = () => {
   const [count, setCount] = useState(0);

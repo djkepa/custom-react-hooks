@@ -19,7 +19,7 @@ yarn add @custom-react-hooks/use-fetch
 Here's an example of how to use the `useFetch` hook in a component:
 
 ```typescript
-import useFetch from '@react-custom-hooks/useFetch';
+import useFetch from '@custom-react-hooks/useFetch';
 
 interface User {
   id: number;

@@ -1,5 +1,5 @@
 {
-  "name": "@react-custom-hooks/use-form",
+  "name": "@custom-react-hooks/use-form",
   "version": "1.4.12",
   "main": "dist/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.3.2"
   },
-  "gitHead": "f5b3ab05532e923e2b2cc8e099a0aefc0fa73461",
+  "gitHead": "6aacf4ded1bc9022cef991782b62ee75aef3be35",
   "publishConfig": {
     "access": "public"
   }

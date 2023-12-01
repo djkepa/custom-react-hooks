@@ -6,13 +6,13 @@ The `useClickOutside` hook is designed to detect and handle clicks outside of a 
 ## Installation
 
 ```bash
-npm install @react-custom-hooks/use-click-outside
+npm install @custom-react-hooks/use-click-outside
 ```
 
 or
 
 ```bash
-yarn add @react-custom-hooks/use-click-outside
+yarn add @custom-react-hooks/use-click-outside
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ Here's an example of how to use the `useClickOutside` hook in a modal component:
 
 ```typescript
 import React, { useRef } from 'react';
-import useClickOutside from '@react-custom-hooks/use-click-outside';
+import useClickOutside from 'custom-react-hooks/use-click-outside';
 
 const ClickOutsideComponent = ({ onClose }: { onClose: () => void }) => {
   const modalRef = useRef<HTMLDivElement>(null); // The ref for the modal

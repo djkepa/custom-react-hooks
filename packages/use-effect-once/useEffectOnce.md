@@ -28,7 +28,7 @@ Replace `@custom-react-hooks/use-effect-once` with the actual name of your packa
 
 ```typescript
 import React from 'react';
-import useEffectOnce from '@react-custom-hooks/useEffectOnce';
+import useEffectOnce from '@custom-react-hooks/useEffectOnce';
 
 const EffectOnceComponent: React.FC = () => {
   useEffectOnce(() => {
