@@ -1,21 +1,22 @@
+// ModalComponent.test.tsx
 import React from 'react';
-import { render } from '@testing-library/react';
-import useLockBodyScroll from '../../../../packages/use-lock-body-scroll/dist/index';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import ModalComponent from '../examples/useLockBodyScroll.example';
 
-function TestComponent({ lock }: any) {
-  useLockBodyScroll(lock);
-  return <div>Test</div>;
-}
+describe('ModalComponent', () => {
+  it('locks body scroll when modal is open and unlocks on close', () => {
+    render(<ModalComponent />);
 
-describe('useLockBodyScroll', () => {
-  it('locks body scroll when active', () => {
-    render(<TestComponent lock={true} />);
+    // Check if body scroll is not locked initially
+    expect(document.body.style.overflow).toBe('');
+
+    // Open the modal
+    fireEvent.click(screen.getByText('Open Modal'));
     expect(document.body.style.overflow).toBe('hidden');
-  });
 
-  it('restores original body scroll when not active', () => {
-    const originalOverflow = document.body.style.overflow;
-    render(<TestComponent lock={false} />);
-    expect(document.body.style.overflow).toBe(originalOverflow);
+    // Close the modal
+    fireEvent.click(screen.getByText('Close Modal'));
+    expect(document.body.style.overflow).toBe('');
   });
 });

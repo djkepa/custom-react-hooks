@@ -1,52 +1,41 @@
-import { renderHook, act } from '@testing-library/react';
-import useTimeout from '../../../../packages/use-timeout/src/index';
+import React from 'react';
+import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import TimeoutTestComponent from '../examples/useTimeout.example';
 
-jest.useFakeTimers();
+describe('TimeoutTestComponent', () => {
+  jest.useFakeTimers();
 
-describe('useTimeout Hook', () => {
-  it('should call the callback after specified delay', () => {
-    const callback = jest.fn();
-    renderHook(() => useTimeout(callback, 1000));
-
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-
-    expect(callback).toHaveBeenCalled();
+  it('shows active status initially', () => {
+    render(<TimeoutTestComponent />);
+    expect(screen.getByText('Status: Active')).toBeInTheDocument();
+    expect(screen.getByText('No timeout set')).toBeInTheDocument();
   });
 
-  it('should clear the timeout', () => {
-    const callback = jest.fn();
-    const { result } = renderHook(() => useTimeout(callback, 1000));
+  it('activates and triggers timeout', () => {
+    render(<TimeoutTestComponent />);
+    fireEvent.click(screen.getByText('Set Timeout'));
+
+    expect(screen.getByText('Timeout is active...')).toBeInTheDocument();
+    expect(screen.getByText('Status: Active')).toBeInTheDocument();
 
     act(() => {
-      result.current.clear();
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(2000); // Advance time by 2 seconds
     });
 
-    expect(callback).not.toHaveBeenCalled();
+    expect(screen.getByText('Timeout triggered')).toBeInTheDocument();
+    expect(screen.getByText('Status: Inactive')).toBeInTheDocument();
   });
 
-  it('should reset the timeout', () => {
-    const callback = jest.fn();
-    const { result } = renderHook(() => useTimeout(callback, 1000));
+  it('clears the active timeout', () => {
+    render(<TimeoutTestComponent />);
+    fireEvent.click(screen.getByText('Set Timeout'));
+    fireEvent.click(screen.getByText('Clear Timeout'));
 
-    act(() => {
-      jest.advanceTimersByTime(500); // Halfway through the timeout
-    });
-
-    act(() => {
-      result.current.reset(); // Reset the timeout
-    });
-
-    act(() => {
-      jest.advanceTimersByTime(1000); // Advance by the full delay after reset
-    });
-
-    expect(callback).toHaveBeenCalled();
+    expect(screen.getByText('Timeout cleared')).toBeInTheDocument();
+    expect(screen.getByText('Status: Inactive')).toBeInTheDocument();
   });
 
-  // Clean up
   afterEach(() => {
     jest.clearAllTimers();
   });

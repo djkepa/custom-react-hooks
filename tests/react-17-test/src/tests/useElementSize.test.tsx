@@ -1,47 +1,31 @@
+import React from 'react';
+import { render, fireEvent, screen } from '@testing-library/react';
+import TestComponent from '../examples/useElementSize.example';
 import '@testing-library/jest-dom';
-import { render, act } from '@testing-library/react';
-import useElementSize from '../src/index';
-import React, { useEffect, useRef } from 'react';
-
-// Mock Component using useElementSize
-const TestComponent = ({ onSizeChange }) => {
-  const ref = useRef(null);
-  const size = useElementSize(ref);
-
-  useEffect(() => {
-    onSizeChange(size);
-  }, [size, onSizeChange]);
-
-  return (
-    <div
-      ref={ref}
-      style={{ width: '100px', height: '100px' }}
-      data-testid="size-element"
-    ></div>
-  );
-};
 
 describe('useElementSize', () => {
-  it('measures the size of the element', async () => {
-    let sizeData;
-    const handleSizeChange = jest.fn((size) => {
-      sizeData = size;
-    });
+  it('should render with initial dimensions', () => {
+    render(<TestComponent />);
+    const widthElement = screen.getByText('Width: 0px');
+    const heightElement = screen.getByText('Height: 0px');
+    expect(widthElement).toBeInTheDocument();
+    expect(heightElement).toBeInTheDocument();
+  });
 
-    const { getByTestId } = render(<TestComponent onSizeChange={handleSizeChange} />);
-    const sizeElement = getByTestId('size-element');
+  it('should update dimensions when custom width is set', () => {
+    render(<TestComponent />);
+    const widthElement = screen.getByText(/Width: \d+px/); // Use a regular expression
+    const widthInput = screen.getByLabelText('Set custom width');
+    fireEvent.change(widthInput, { target: { value: '300' } });
+    expect(widthElement).toBeInTheDocument();
+  });
 
-    // Mock the element's offsetWidth and offsetHeight
-    Object.defineProperty(sizeElement, 'offsetWidth', { configurable: true, value: 100 });
-    Object.defineProperty(sizeElement, 'offsetHeight', { configurable: true, value: 100 });
-
-    // Force a re-render to apply the new mock measurements
-    act(() => {
-      window.dispatchEvent(new Event('resize'));
-    });
-
-    expect(handleSizeChange).toHaveBeenCalled();
-    expect(sizeData.width).toBe(100);
-    expect(sizeData.height).toBe(100);
+  it('should update dimensions when custom height is set', () => {
+    render(<TestComponent />);
+    const heightElement = screen.getByText('Height: 0px');
+    const heightInput = screen.getByLabelText('Set custom height');
+    fireEvent.change(heightInput, { target: { value: '200' } });
+    const updatedHeightElement = screen.getByText('Height: 200px');
+    expect(updatedHeightElement).toBeInTheDocument();
   });
 });

@@ -1,36 +1,37 @@
 import React from 'react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { render, fireEvent, renderHook } from '@testing-library/react';
-import useHover from '../../../../packages/use-hover/src/index';
+import HoverComponent from '../examples/useHover.example';
 
-const TestComponent = () => {
-  const { ref, isHovered } = useHover<HTMLDivElement>();
-
-  return <div ref={ref}>{isHovered ? 'Hovered' : 'Not Hovered'}</div>;
-};
-
-describe('useHover', () => {
-  it('should indicate when the element is not being hovered over', () => {
-    const { getByText } = render(<TestComponent />);
-    expect(getByText('Not Hovered')).toBeInTheDocument();
+describe('HoverComponent', () => {
+  it('renders "Not Hovered" by default', () => {
+    const { getByText } = render(<HoverComponent />);
+    const notHoveredText = getByText('Not Hovered');
+    expect(notHoveredText).toBeInTheDocument();
   });
 
-  it('should indicate when the element is being hovered over', () => {
-    const { getByText } = render(<TestComponent />);
-    const element = getByText('Not Hovered');
+  it('changes to "Hovered" when hovered over', () => {
+    const { getByText, getByTestId } = render(<HoverComponent />);
+    const hoverComponent = getByTestId('hover-component');
 
-    fireEvent.mouseEnter(element);
-    expect(getByText('Hovered')).toBeInTheDocument();
+    fireEvent.mouseEnter(hoverComponent);
+
+    const hoveredText = getByText('Hovered');
+    expect(hoveredText).toBeInTheDocument();
   });
 
-  it('should indicate when the element is no longer being hovered over', () => {
-    const { getByText } = render(<TestComponent />);
-    const element = getByText('Not Hovered');
+  it('changes back to "Not Hovered" after hovering', () => {
+    const { getByText, getByTestId } = render(<HoverComponent />);
+    const hoverComponent = getByTestId('hover-component');
 
-    fireEvent.mouseEnter(element);
-    expect(getByText('Hovered')).toBeInTheDocument();
+    fireEvent.mouseEnter(hoverComponent);
 
-    fireEvent.mouseLeave(element);
-    expect(getByText('Not Hovered')).toBeInTheDocument();
+    const hoveredText = getByText('Hovered');
+    expect(hoveredText).toBeInTheDocument();
+
+    fireEvent.mouseLeave(hoverComponent);
+
+    const notHoveredText = getByText('Not Hovered');
+    expect(notHoveredText).toBeInTheDocument();
   });
 });

@@ -1,27 +1,24 @@
-import { renderHook } from '@testing-library/react';
-import useUpdateEffect from '../../../../packages/use-update-effect/src/index';
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import UpdateEffectTestComponent from '../examples/useUpdateEffect.example';
 
-jest.useFakeTimers();
-
-describe('useUpdateEffect Hook', () => {
-  it('should skip the initial effect', () => {
-    const effect = jest.fn();
-    renderHook(() => useUpdateEffect(effect));
-
-    expect(effect).not.toHaveBeenCalled();
+describe('UpdateEffectTestComponent', () => {
+  it('does not display effect message initially', () => {
+    render(<UpdateEffectTestComponent />);
+    expect(screen.queryByText(/Effect ran at count:/)).toBeNull();
   });
 
-  it('should run the effect on update', () => {
-    const effect = jest.fn();
-    const { rerender } = renderHook(({ value }) => useUpdateEffect(effect, [value]), {
-      initialProps: { value: 'initial' },
-    });
-
-    rerender({ value: 'updated' });
-    expect(effect).toHaveBeenCalledTimes(1);
+  it('displays effect message after first update', async () => {
+    render(<UpdateEffectTestComponent />);
+    fireEvent.click(screen.getByText('Increment'));
+    await waitFor(() => expect(screen.getByText('Effect ran at count: 1')).toBeInTheDocument());
   });
 
-  afterEach(() => {
-    jest.clearAllTimers();
+  it('updates effect message on subsequent updates', async () => {
+    render(<UpdateEffectTestComponent />);
+    fireEvent.click(screen.getByText('Increment'));
+    fireEvent.click(screen.getByText('Increment'));
+    await waitFor(() => expect(screen.getByText('Effect ran at count: 2')).toBeInTheDocument());
   });
 });

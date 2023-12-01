@@ -1,12 +1,10 @@
-import React from 'react';
-import useAsync from "../src/hooks/useAsync";
+import useAsync from '../hook/useAsync';
 
 const fetchData = async () => {
-  // Replace with actual data fetching logic
-  return await fetch('/api/data').then(res => res.json());
+  return await fetch('https://jsonplaceholder.typicode.com/todos/1').then((res) => res.json());
 };
 
-const MyComponent = () => {
+const AsyncComponent = () => {
   const { execute, status, value, error } = useAsync(fetchData, false);
 
   return (
@@ -18,3 +16,5 @@ const MyComponent = () => {
     </div>
   );
 };
+
+export default AsyncComponent;

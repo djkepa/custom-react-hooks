@@ -1,5 +1,5 @@
 import React from 'react';
-import useForm from '../src/hooks/useForm';
+import useForm from '../hook/useForm';
 
 interface FormValues {
   username: string;
@@ -17,7 +17,10 @@ const MyForm = () => {
     return errors as Record<keyof FormValues, string | undefined>;
   };
 
-  const { values, errors, touched, handleChange, handleBlur, handleSubmit, resetForm } = useForm(initialValues, validate);
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit, resetForm } = useForm(
+    initialValues,
+    validate,
+  );
 
   const onSubmit = async () => {
     // If you have asynchronous operations, place them here
@@ -26,14 +29,33 @@ const MyForm = () => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
-      <input name="username" value={values.username} onChange={handleChange} onBlur={handleBlur} />
+      <label htmlFor="username">Username</label>
+      <input
+        id="username"
+        name="username"
+        value={values.username}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       {touched.username && errors.username && <div>{errors.username}</div>}
-      
-      <input name="email" value={values.email} onChange={handleChange} onBlur={handleBlur} />
+
+      <label htmlFor="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        value={values.email}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       {touched.email && errors.email && <div>{errors.email}</div>}
 
       <button type="submit">Submit</button>
-      <button type="button" onClick={resetForm}>Reset</button>
+      <button
+        type="button"
+        onClick={resetForm}
+      >
+        Reset
+      </button>
     </form>
   );
 };

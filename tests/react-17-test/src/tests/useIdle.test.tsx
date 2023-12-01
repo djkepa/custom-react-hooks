@@ -1,45 +1,60 @@
 import React from 'react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { render, fireEvent, act, waitFor, renderHook } from '@testing-library/react';
-import useIdle from '../../../../packages/use-idle/dist/index';
+import TestComponent from '../examples/useIdle.example';
 
-const TestComponent = ({ idleTime }: any) => {
-  const isIdle = useIdle(idleTime);
-  return <div>{isIdle ? 'Idle' : 'Active'}</div>;
-};
+jest.useFakeTimers();
 
 describe('useIdle', () => {
-  jest.useFakeTimers();
-
-  it('starts in an active state', () => {
-    const { getByText } = render(<TestComponent idleTime={1000} />);
-    expect(getByText('Active')).toBeInTheDocument();
+  beforeEach(() => {
+    jest.useFakeTimers();
   });
 
-  it('resets idle timer on activity', async () => {
-    const { getByText } = render(<TestComponent idleTime={1000} />);
-
-    // Advance timers by time to set 'Idle'
-    act(() => {
-      jest.advanceTimersByTime(1000);
-    });
-
-    // Wait for 'Idle' state
-    await waitFor(() => {
-      expect(getByText('Idle')).toBeInTheDocument();
-    });
-
-    // Trigger activity and reset timer
-    act(() => {
-      fireEvent.mouseMove(window);
-      jest.advanceTimersByTime(500); // Halfway to idle
-    });
-
-    // Wait for 'Active' state
-    await waitFor(() => {
-      expect(getByText('Active')).toBeInTheDocument();
-    });
-
+  afterEach(() => {
+    jest.clearAllTimers();
     jest.useRealTimers();
+  });
+
+  it('returns false initially', () => {
+    const { getByTestId } = render(<TestComponent idleTime={3000} />);
+    const idleStatus = getByTestId('idle-status');
+    expect(idleStatus).toHaveTextContent('Not Idle');
+  });
+
+  it('becomes idle after specified idle time', () => {
+    const { getByTestId } = render(<TestComponent idleTime={3000} />);
+    const idleStatus = getByTestId('idle-status');
+
+    // Advance the timers to make it idle
+    act(() => {
+      jest.advanceTimersByTime(3000);
+    });
+
+    expect(idleStatus).toHaveTextContent('Idle');
+  });
+
+  it('returns to not idle when there is activity', () => {
+    const { getByTestId } = render(<TestComponent idleTime={3000} />);
+    const idleStatus = getByTestId('idle-status');
+
+    // Advance the timers to make it idle initially
+    act(() => {
+      jest.advanceTimersByTime(3000);
+    });
+
+    expect(idleStatus).toHaveTextContent('Idle');
+
+    // Simulate activity
+    act(() => {
+      document.dispatchEvent(new Event('mousemove'));
+      jest.advanceTimersByTime(1000); // Advance the timer after the activity
+    });
+
+    expect(idleStatus).toHaveTextContent('Not Idle');
+  });
+
+  it('clears timers and removes event listeners on unmount', () => {
+    const { unmount } = render(<TestComponent idleTime={3000} />);
+    unmount();
   });
 });

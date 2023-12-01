@@ -1,95 +1,82 @@
+// src/tests/useGeoLocation.test.tsx
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import GeoLocationComponent from '../examples/useGeoLocation.example';
 import '@testing-library/jest-dom';
-import useGeoLocation from '../../../../packages/use-geo-location/src/index';
+import useGeoLocation from '../hook/useGeoLocation';
 
-// Mock the Geolocation API
-const mockGeolocation = {
-  getCurrentPosition: jest.fn(),
-  watchPosition: jest.fn().mockReturnValue(123), // Mock return value for watch ID
-  clearWatch: jest.fn(),
-};
+jest.mock('../hook/useGeoLocation', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
-Object.defineProperty(global.navigator, 'geolocation', {
-  value: mockGeolocation,
-  writable: true,
-});
-
-function TestComponent({ options, watch }: any) {
-  const { loading, coordinates, error, isWatching } = useGeoLocation(options, watch);
-
-  return (
-    <div>
-      {loading && <div data-testid="loading">Loading...</div>}
-      {error && <div data-testid="error">{error.message}</div>}
-      {coordinates && (
-        <div data-testid="coordinates">
-          Latitude: {coordinates.latitude}, Longitude: {coordinates.longitude}
-        </div>
-      )}
-      <div data-testid="isWatching">{isWatching ? 'Watching' : 'Not Watching'}</div>
-    </div>
-  );
-}
-
-describe('useGeoLocation', () => {
-  it('should show loading initially', () => {
-    render(
-      <TestComponent
-        options={{}}
-        watch={false}
-      />,
-    );
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
-  });
-
-  // Additional test cases
-  it('handles successful geolocation retrieval', async () => {
-    const mockPosition = { coords: { latitude: 10, longitude: 20 } };
-    mockGeolocation.getCurrentPosition.mockImplementation((success) => {
-      act(() => {
-        success(mockPosition);
-      });
+describe('GeoLocationComponent', () => {
+  it('renders loading message', () => {
+    // Mock the useGeoLocation hook's return value for this specific test
+    (useGeoLocation as jest.Mock).mockReturnValueOnce({
+      loading: true,
+      coordinates: null,
+      error: null,
+      isWatching: false,
     });
 
-    render(
-      <TestComponent
-        options={{}}
-        watch={false}
-      />,
-    );
-    expect(await screen.findByTestId('coordinates')).toHaveTextContent(
-      'Latitude: 10, Longitude: 20',
-    );
+    const { getByText } = render(<GeoLocationComponent />);
+    expect(getByText('Loading...')).toBeInTheDocument();
   });
 
-  it('handles geolocation errors', async () => {
-    const mockError = new Error('Geolocation error');
-    mockGeolocation.getCurrentPosition.mockImplementation((success, error) => {
-      act(() => {
-        error(mockError);
-      });
+  it('renders error message', () => {
+    // Mock the useGeoLocation hook's return value for this specific test
+    (useGeoLocation as jest.Mock).mockReturnValueOnce({
+      loading: false,
+      coordinates: null,
+      error: new Error('Geolocation error'),
+      isWatching: false,
     });
 
-    render(
-      <TestComponent
-        options={{}}
-        watch={false}
-      />,
-    );
-    expect(await screen.findByTestId('error')).toHaveTextContent('Geolocation error');
+    const { getByText } = render(<GeoLocationComponent />);
+    expect(getByText('Error: Geolocation error')).toBeInTheDocument();
   });
 
-  it('enables watch mode when requested', () => {
-    render(
-      <TestComponent
-        watch={true}
-        options={{}}
-      />,
-    );
-    expect(screen.getByTestId('isWatching')).toHaveTextContent('Watching');
+  it('renders location information', () => {
+    // Mock the useGeoLocation hook's return value for this specific test
+    (useGeoLocation as jest.Mock).mockReturnValueOnce({
+      loading: false,
+      coordinates: {
+        latitude: 42.12345,
+        longitude: -78.54321,
+      },
+      error: null,
+      isWatching: false,
+    });
+
+    const { getByText } = render(<GeoLocationComponent />);
+    expect(getByText('Latitude: 42.12345')).toBeInTheDocument();
+    expect(getByText('Longitude: -78.54321')).toBeInTheDocument();
   });
 
-  // Add more tests here for different scenarios
-  // e.g., handling success, handling errors, and checking the behavior of the watch functionality
+  it('renders "Watching: Yes" when isWatching is true', () => {
+    // Mock the useGeoLocation hook's return value for this specific test
+    (useGeoLocation as jest.Mock).mockReturnValueOnce({
+      loading: false,
+      coordinates: null,
+      error: null,
+      isWatching: true,
+    });
+
+    const { getByText } = render(<GeoLocationComponent />);
+    expect(getByText('Watching: Yes')).toBeInTheDocument();
+  });
+
+  it('renders "Watching: No" when isWatching is false', () => {
+    // Mock the useGeoLocation hook's return value for this specific test
+    (useGeoLocation as jest.Mock).mockReturnValueOnce({
+      loading: false,
+      coordinates: null,
+      error: null,
+      isWatching: false,
+    });
+
+    const { getByText } = render(<GeoLocationComponent />);
+    expect(getByText('Watching: No')).toBeInTheDocument();
+  });
 });

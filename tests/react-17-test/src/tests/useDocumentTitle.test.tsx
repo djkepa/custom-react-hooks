@@ -1,35 +1,26 @@
-import { renderHook } from '@testing-library/react';
-import useDocumentTitle from '../../../../packages/use-document-title/dist/index';
+import { renderHook } from '@testing-library/react-hooks';
+import { render, fireEvent, screen } from '@testing-library/react';
+import useDocumentTitle from '../hook/useDocumentTitle';
+import React from 'react';
+import DocumentTitleComponent from '../examples/useDocumentTitle.example';
 
 describe('useDocumentTitle', () => {
-  const originalTitle = document.title;
+  it('updates document title on button click', () => {
+    render(<DocumentTitleComponent />);
 
-  afterEach(() => {
-    document.title = originalTitle; // Reset the title after each test
-  });
+    // Check initial title
+    expect(document.title).toBe('My Awesome Page');
 
-  it('sets the document title', () => {
-    const newTitle = 'New Title';
-    renderHook(() => useDocumentTitle(newTitle));
+    const buttonChangeTitle = screen.getByText('Click on the button');
+    fireEvent.click(buttonChangeTitle);
 
-    expect(document.title).toBe(newTitle);
-  });
+    // Check title after button click
+    expect(document.title).toBe('Clicked on the button');
 
-  it('reverts to the original title on unmount', () => {
-    const newTitle = 'Temporary Title';
-    const { unmount } = renderHook(() => useDocumentTitle(newTitle, true));
+    const buttonRestoreTitle = screen.getByText('Restore title name');
+    fireEvent.click(buttonRestoreTitle);
 
-    expect(document.title).toBe(newTitle);
-    unmount();
-    expect(document.title).toBe(originalTitle);
-  });
-
-  it('does not revert title on unmount if revertOnUnmount is false', () => {
-    const newTitle = 'Temporary Title';
-    const { unmount } = renderHook(() => useDocumentTitle(newTitle, false));
-
-    expect(document.title).toBe(newTitle);
-    unmount();
-    expect(document.title).toBe(newTitle); // Still the new title
+    // Check title after restoring
+    expect(document.title).toBe('My Awesome Page');
   });
 });

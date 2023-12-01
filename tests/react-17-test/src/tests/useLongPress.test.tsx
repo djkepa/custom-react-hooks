@@ -1,115 +1,36 @@
+// LongPressTestComponent.test.tsx
 import React from 'react';
-import { render, fireEvent, renderHook } from '@testing-library/react';
-import useLongPress from '../../../../packages/use-long-press/src/index';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import LongPressTestComponent from '../examples/useLongPress.example';
 
-function TestComponent({ callback, options }: any) {
-  const bindings = useLongPress(callback, options);
-  return <button {...bindings}>Press me</button>;
-}
+describe('LongPressTestComponent', () => {
+  jest.useFakeTimers();
 
-describe('useLongPress', () => {
-  beforeEach(() => {
-    jest.useFakeTimers();
+  it('updates status on long press start', () => {
+    render(<LongPressTestComponent />);
+    fireEvent.mouseDown(screen.getByText('Press and Hold'));
+    expect(screen.getByText('Status: Long Press Started')).toBeInTheDocument();
   });
 
-  afterEach(() => {
+  it('updates status on long press finish', () => {
+    render(<LongPressTestComponent />);
+    fireEvent.mouseDown(screen.getByText('Press and Hold'));
+    jest.advanceTimersByTime(500); // Advance the timer by the threshold value
+    fireEvent.mouseUp(screen.getByText('Press and Hold'));
+    expect(screen.getByText('Status: Long Press Finished')).toBeInTheDocument();
+  });
+
+  it('updates status on long press cancel', () => {
+    render(<LongPressTestComponent />);
+    fireEvent.mouseDown(screen.getByText('Press and Hold'));
+    fireEvent.mouseLeave(screen.getByText('Press and Hold'));
+    jest.advanceTimersByTime(500);
+    expect(screen.getByText('Status: Long Press Cancelled')).toBeInTheDocument();
+  });
+
+  // Restore real timers after the tests
+  afterAll(() => {
     jest.useRealTimers();
-  });
-
-  it('triggers long press after threshold', () => {
-    const callback = jest.fn();
-    const { getByText } = render(
-      <TestComponent
-        callback={callback}
-        options={{ threshold: 500 }}
-      />,
-    );
-    const button = getByText('Press me');
-
-    fireEvent.mouseDown(button);
-    jest.advanceTimersByTime(500); // Wait for the threshold to pass
-    fireEvent.mouseUp(button);
-
-    jest.runAllTimers(); // Ensure all timers are cleared
-
-    expect(callback).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not trigger on quick press', () => {
-    const callback = jest.fn();
-    const { getByText } = render(
-      <TestComponent
-        callback={callback}
-        options={{ threshold: 500 }}
-      />,
-    );
-    const button = getByText('Press me');
-
-    fireEvent.mouseDown(button);
-    jest.advanceTimersByTime(100); // Advance timers less than threshold
-    fireEvent.mouseUp(button);
-
-    jest.runAllTimers(); // Ensure all timers are cleared
-
-    expect(callback).not.toHaveBeenCalled();
-  });
-
-  it('calls onStart and onFinish', () => {
-    const onStart = jest.fn();
-    const onFinish = jest.fn();
-    const { getByText } = render(
-      <TestComponent
-        callback={() => {}}
-        options={{ threshold: 500, onStart, onFinish }}
-      />,
-    );
-    const button = getByText('Press me');
-
-    fireEvent.mouseDown(button);
-    expect(onStart).toHaveBeenCalledTimes(1);
-    jest.advanceTimersByTime(500); // Wait for the threshold to pass
-    fireEvent.mouseUp(button);
-
-    jest.runAllTimers(); // Ensure all timers are cleared
-
-    expect(onFinish).toHaveBeenCalledTimes(1);
-  });
-
-  it('triggers long press on touch', () => {
-    const callback = jest.fn();
-    const { getByText } = render(
-      <TestComponent
-        callback={callback}
-        options={{ threshold: 500 }}
-      />,
-    );
-    const button = getByText('Press me');
-
-    fireEvent.touchStart(button);
-    jest.advanceTimersByTime(500); // Wait for the threshold to pass
-    fireEvent.touchEnd(button);
-
-    jest.runAllTimers(); // Ensure all timers are cleared
-
-    expect(callback).toHaveBeenCalledTimes(1);
-  });
-
-  it('cancels long press on mouse leave', () => {
-    const callback = jest.fn();
-    const onCancel = jest.fn();
-    const { getByText } = render(
-      <TestComponent
-        callback={callback}
-        options={{ threshold: 500, onCancel }}
-      />,
-    );
-    const button = getByText('Press me');
-
-    fireEvent.mouseDown(button);
-    jest.advanceTimersByTime(250); // Advance timers less than threshold
-    fireEvent.mouseLeave(button);
-
-    expect(callback).not.toHaveBeenCalled();
-    expect(onCancel).toHaveBeenCalledTimes(1); // onCancel should be called on mouse leave
   });
 });

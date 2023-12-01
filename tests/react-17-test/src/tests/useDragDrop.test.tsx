@@ -1,62 +1,51 @@
 import React from 'react';
-import { render, fireEvent, renderHook } from '@testing-library/react';
-import useDragDrop from '../../../../packages/use-drag-drop/dist/index';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import DragDropTestComponent from '../examples/useDragDrop.example';
 
-// Mock Test Component using useDragDrop
-const TestComponent = ({ onDrop }: any) => {
-  const { bindDrag, bindDrop } = useDragDrop({ item: 'test' }, onDrop);
+describe('DragDropTestComponent', () => {
+  jest.useFakeTimers();
 
-  return (
-    <div>
-      <div
-        {...bindDrag}
-        data-testid="draggable"
-      >
-        Draggable
-      </div>
-      <div
-        {...bindDrop}
-        data-testid="droppable"
-      >
-        Droppable
-      </div>
-    </div>
-  );
-};
+  // Define a type for the mock dataTransfer object
+  type MockDataTransfer = {
+    data: Record<string, string>;
+    setData: (key: string, value: string) => void;
+    getData: (key: string) => string | undefined;
+  };
 
-describe('useDragDrop', () => {
-  it('should handle drag and drop events correctly', () => {
-    const mockOnDrop = jest.fn();
-    const { getByTestId } = render(<TestComponent onDrop={mockOnDrop} />);
+  const mockDataTransfer: MockDataTransfer = {
+    data: {},
+    setData: function (key, value) {
+      this.data[key] = value;
+    },
+    getData: function (key) {
+      return this.data[key];
+    },
+  };
 
-    const draggable = getByTestId('draggable');
-    const droppable = getByTestId('droppable');
+  it('handles drag and drop', async () => {
+    const handleDrop = jest.fn();
+    const { getByText } = render(<DragDropTestComponent onDrop={handleDrop} />);
 
-    // Simulate drag and drop events
-    const data = { item: 'test' };
+    const dragItem = getByText('Drag Me');
+    const dropArea = getByText('Drop Area');
 
-    // Create a mock DataTransfer object
-    const dataTransfer = {
-      setData: jest.fn(),
-      getData: jest.fn().mockReturnValue(JSON.stringify(data)),
-      clearData: jest.fn(),
-      setDragImage: jest.fn(),
-      effectAllowed: '',
-      dropEffect: '',
-    };
+    // Simulate drag start
+    fireEvent.dragStart(dragItem, { dataTransfer: mockDataTransfer });
+    expect(dragItem.textContent).toBe('Dragging...');
 
-    fireEvent.dragStart(draggable, { dataTransfer });
+    // Simulate drag over drop area
+    fireEvent.dragOver(dropArea, { dataTransfer: mockDataTransfer });
+    expect(dropArea.textContent).toBe('Drop Here!');
 
-    fireEvent.dragEnter(droppable, { dataTransfer });
-    fireEvent.dragOver(droppable, { dataTransfer });
+    // Simulate drop
+    fireEvent.drop(dropArea, { dataTransfer: mockDataTransfer });
 
-    // Use the mock DataTransfer object in the drop event
-    fireEvent.drop(droppable, { dataTransfer });
+    await waitFor(() => expect(dropArea.textContent).toBe('Drop Area'));
 
-    fireEvent.dragEnd(draggable);
+    expect(handleDrop).toHaveBeenCalledWith({ id: 1, name: 'Draggable Item' });
 
-    // Assertions
-    expect(mockOnDrop).toHaveBeenCalledTimes(1);
-    // Add more assertions as necessary
+    // Simulate drag end
+    fireEvent.dragEnd(dragItem, { dataTransfer: mockDataTransfer });
+    expect(dragItem.textContent).toBe('Drag Me');
   });
 });

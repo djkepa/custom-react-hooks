@@ -1,13 +1,14 @@
-
 import React from 'react';
-import useIdle from "../src/hooks/useIdle";
+import useIdle from '../hook/useIdle';
 
-const MyComponent = () => {
-  const isUserIdle = useIdle(3000); // User is idle after 3 seconds of inactivity
+const TestComponent = ({ idleTime }: any) => {
+  const isIdle = useIdle(idleTime);
 
   return (
     <div>
-      {isUserIdle ? 'User is idle' : 'User is active'}
+      <p data-testid="idle-status">{isIdle ? 'Idle' : 'Not Idle'}</p>
     </div>
   );
 };
+
+export default TestComponent;

@@ -1,62 +1,62 @@
-import { act, renderHook, waitFor } from '@testing-library/react';
-import useStatus from '../../../../packages/use-status/src/index';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import NetworkStatusComponent from '../examples/useStatus.example';
 
-describe('useStatus Hook', () => {
-  beforeAll(() => {
-    // Mock navigator.onLine
-    Object.defineProperty(window.navigator, 'onLine', {
-      value: true,
+describe('NetworkStatusComponent', () => {
+  beforeEach(() => {
+    const addEventListenerMock = jest.fn((event, handler) => {});
+    const removeEventListenerMock = jest.fn((event, handler) => {});
+
+    const mockConnection = {
+      downlink: 2.5,
+      effectiveType: '4g',
+      rtt: 50,
+      addEventListener: addEventListenerMock,
+      removeEventListener: removeEventListenerMock,
+    };
+
+    Object.defineProperty(navigator, 'connection', {
+      value: mockConnection,
       writable: true,
     });
 
-    // Mock navigator.connection
-    if (!('connection' in navigator)) {
-      Object.defineProperty(navigator, 'connection', {
-        value: {
-          downlink: 10,
-          effectiveType: '4g',
-          rtt: 50,
-          addEventListener: jest.fn(),
-          removeEventListener: jest.fn(),
-        },
-        writable: true,
-      });
-    }
+    Object.defineProperty(navigator, 'onLine', {
+      value: true,
+      writable: true,
+    });
   });
 
-  it('should return initial network status', () => {
-    const { result } = renderHook(() => useStatus());
-    expect(result.current.online).toBe(true);
-    expect(result.current.downlink).toBe(10);
+  it('displays online status initially', () => {
+    render(<NetworkStatusComponent />);
+    expect(screen.getByText('Online')).toBeInTheDocument();
   });
 
-  it('should update network status on online/offline', async () => {
-    const { result } = renderHook(() => useStatus());
-
-    // Simulate offline event
-    act(() => {
-      Object.defineProperty(window.navigator, 'onLine', {
-        value: false,
-        writable: true,
-      });
-      window.dispatchEvent(new Event('offline'));
+  it('updates to offline status', async () => {
+    // Mock window.navigator.onLine
+    Object.defineProperty(navigator, 'onLine', {
+      value: false,
+      writable: true,
     });
 
-    await waitFor(() => {
-      expect(result.current.online).toBe(false);
+    render(<NetworkStatusComponent />);
+    expect(screen.getByText('Offline')).toBeInTheDocument();
+  });
+
+  it('updates network information', () => {
+    Object.defineProperty(navigator, 'connection', {
+      value: {
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        downlink: 2.5,
+        effectiveType: '4g',
+        rtt: 50,
+      },
+      writable: true,
     });
 
-    // Simulate online event
-    act(() => {
-      Object.defineProperty(window.navigator, 'onLine', {
-        value: true,
-        writable: true,
-      });
-      window.dispatchEvent(new Event('online'));
-    });
-
-    await waitFor(() => {
-      expect(result.current.online).toBe(true);
-    });
+    render(<NetworkStatusComponent />);
+    expect(screen.getByText('Downlink Speed: 2.5 Mbps')).toBeInTheDocument();
+    expect(screen.getByText('Effective Type: 4g')).toBeInTheDocument();
+    expect(screen.getByText('RTT: 50 ms')).toBeInTheDocument();
   });
 });

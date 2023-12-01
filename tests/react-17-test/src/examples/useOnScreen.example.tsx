@@ -1,12 +1,24 @@
 import React from 'react';
-import useOnScreen from '../src/hooks/useOnScreen'; 
+import useOnScreen from '../hook/useOnScreen';
 
-const MyComponent = () => {
-  const { ref, isIntersecting } = useOnScreen<HTMLDivElement>({ threshold: 0.5 }, true);
+const OnScreenTestComponent: React.FC = () => {
+  const { ref, isIntersecting } = useOnScreen<HTMLDivElement>();
 
   return (
-    <div ref={ref}>
-      {isIntersecting ? 'Element is visible' : 'Element is not visible'}
+    <div>
+      <div
+        ref={ref}
+        style={{
+          height: '100px',
+          width: '100px',
+          backgroundColor: isIntersecting ? 'green' : 'red',
+        }}
+      >
+        Test Box
+      </div>
+      <p>{isIntersecting ? 'Visible in viewport' : 'Not visible in viewport'}</p>
     </div>
   );
 };
+
+export default OnScreenTestComponent;

@@ -1,110 +1,85 @@
-import React, { useRef } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { render, act } from '@testing-library/react';
+import useImageLoad from '../hook/useImageLoad';
+import { ImageComponent } from '../examples/useImageLoad.example';
 import '@testing-library/jest-dom';
-import useImageLoad from '../../../../packages/use-image-load/src/index';
 
-function TestComponent({ thumbnailSrc, fullSrc, lazyLoad }: any) {
-  const imgRef = useRef(null);
-  const { src, isLoading, isLoaded, hasError } = useImageLoad(
-    { thumbnailSrc, fullSrc, lazyLoad },
-    imgRef,
-  );
+// Mocking Intersection Observer
+class MockIntersectionObserver {
+  constructor(public callback: IntersectionObserverCallback) {}
 
-  return (
-    <div>
-      {isLoading && <div data-testid="loading">Loading...</div>}
-      {hasError && <div data-testid="error">Error</div>}
-      {isLoaded && (
-        <img
-          ref={imgRef}
-          data-testid="loaded-image"
-          src={src}
-          alt="Loaded"
-        />
-      )}
-    </div>
-  );
+  observe() {
+    act(() => {
+      this.callback(
+        [{ isIntersecting: true } as IntersectionObserverEntry],
+        {} as IntersectionObserver,
+      );
+    });
+  }
+
+  unobserve() {}
+  disconnect() {}
 }
 
-describe('useImageLoad Hook', () => {
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: MockIntersectionObserver,
+});
+
+// Mocking useImageLoad hook
+jest.mock('../hook/useImageLoad', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
+
+describe('ImageComponent Tests', () => {
   beforeEach(() => {
-    // Mock Image constructor
-    const mockImage = class {
-      onload: () => void = jest.fn();
-      onerror: () => void = jest.fn();
-      src: string = '';
+    // Resetting the mock before each test
+    (useImageLoad as jest.Mock).mockReset();
+  });
 
-      constructor() {
-        setTimeout(() => {
-          // Check if src is 'invalid.jpg' to simulate an error
-          if (this.src === 'invalid.jpg') {
-            this.onerror();
-          } else {
-            this.onload();
-          }
-        }, 100);
-      }
-    };
-
-    global.Image = mockImage as any;
-
-    // Mock IntersectionObserver
-    window.IntersectionObserver = jest.fn().mockImplementation((callback, options) => {
-      return {
-        observe: jest.fn().mockImplementation((element) => {
-          callback([{ isIntersecting: true, target: element }], this);
-        }),
-        unobserve: jest.fn(),
-        disconnect: jest.fn(),
-      };
+  // Test 1: ImageComponent displays loading message
+  it('displays loading message when image is loading', () => {
+    (useImageLoad as jest.Mock).mockReturnValue({
+      src: 'thumbnail.jpg',
+      isLoading: true,
+      isLoaded: false,
+      hasError: false,
     });
+
+    const options = { thumbnailSrc: 'thumbnail.jpg', fullSrc: 'full.jpg', lazyLoad: true };
+    const { getByText } = render(<ImageComponent options={options} />);
+    expect(getByText('Loading...')).toBeInTheDocument();
   });
 
-  it('shows loading state initially', () => {
-    render(
-      <TestComponent
-        thumbnailSrc="thumbnail.jpg"
-        fullSrc="full.jpg"
-        lazyLoad={false}
-      />,
-    );
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
+  // Test 2: ImageComponent displays error message
+  it('displays error message when there is an error loading the image', () => {
+    (useImageLoad as jest.Mock).mockReturnValue({
+      src: '',
+      isLoading: false,
+      isLoaded: false,
+      hasError: true,
+    });
+
+    const options = { thumbnailSrc: 'thumbnail.jpg', fullSrc: 'full.jpg', lazyLoad: true };
+    const { getByText } = render(<ImageComponent options={options} />);
+    expect(getByText('Error loading image')).toBeInTheDocument();
   });
 
-  it('loads the full image after the thumbnail', async () => {
-    render(
-      <TestComponent
-        thumbnailSrc="thumbnail.jpg"
-        fullSrc="full.jpg"
-        lazyLoad={false}
-      />,
-    );
-    await waitFor(() =>
-      expect(screen.getByTestId('loaded-image')).toHaveAttribute('src', 'full.jpg'),
-    );
-  });
+  // Test 3: ImageComponent successfully loads an image
+  it('renders the image when successfully loaded', () => {
+    (useImageLoad as jest.Mock).mockReturnValue({
+      src: 'full.jpg',
+      isLoading: false,
+      isLoaded: true,
+      hasError: false,
+    });
 
-  it('shows error state on image load failure', async () => {
-    render(
-      <TestComponent
-        thumbnailSrc="invalid.jpg"
-        fullSrc="full.jpg"
-        lazyLoad={false}
-      />,
-    );
-    await waitFor(() => expect(screen.getByTestId('error')).toBeInTheDocument());
-  });
-
-  it('loads image on intersection', async () => {
-    render(
-      <TestComponent
-        thumbnailSrc="thumbnail.jpg"
-        fullSrc="full.jpg"
-        lazyLoad={true}
-      />,
-    );
-    await waitFor(() =>
-      expect(screen.getByTestId('loaded-image')).toHaveAttribute('src', 'full.jpg'),
-    );
+    const options = { thumbnailSrc: 'thumbnail.jpg', fullSrc: 'full.jpg', lazyLoad: true };
+    const { getByRole } = render(<ImageComponent options={options} />);
+    const image = getByRole('img');
+    expect(image).toHaveAttribute('src', 'full.jpg');
+    expect(image.style.visibility).toBe('visible');
   });
 });

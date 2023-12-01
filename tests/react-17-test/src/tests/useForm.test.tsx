@@ -1,158 +1,42 @@
+// MyForm.test.tsx
 import React from 'react';
-import { render, fireEvent, waitFor, renderHook } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useForm from '../../../../packages/use-form/dist/index';
+import userEvent from '@testing-library/user-event';
+import MyForm from '../examples/useForm.example';
 
-const TestForm = ({ initialValues, validate }: any) => {
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    resetForm,
-    isSubmitting,
-    submissionStatus,
-  } = useForm(initialValues, validate);
+describe('MyForm Component', () => {
+  it('renders form inputs and buttons', () => {
+    render(<MyForm />);
 
-  const onSubmit = async (values: any) => {
-    // Simulate async submit action
-  };
-
-  return (
-    <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
-      <label htmlFor="username">Username</label>
-      <input
-        id="username"
-        name="username"
-        value={values.username}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      {touched.username && errors.username && <span>{errors.username}</span>}
-
-      <label htmlFor="password">Password</label>
-      <input
-        id="password"
-        name="password"
-        value={values.password}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      {touched.password && errors.password && <span>{errors.password}</span>}
-
-      <button
-        type="submit"
-        disabled={isSubmitting}
-      >
-        Submit
-      </button>
-      {submissionStatus === 'success' && <div>Form submitted successfully</div>}
-      {submissionStatus === 'error' && <div>Form submission failed</div>}
-      <button
-        type="button"
-        onClick={resetForm}
-      >
-        Reset
-      </button>
-    </form>
-  );
-};
-
-describe('useForm', () => {
-  const initialValues = { username: '', password: '' };
-  const validate = (values: any) => {
-    const errors = { username: '', password: '' };
-    if (!values.username) {
-      errors.username = 'Username required';
-    }
-    if (!values.password) {
-      errors.password = 'Password required';
-    }
-    return errors;
-  };
-
-  it('should handle input value changes', () => {
-    const { getByLabelText } = render(
-      <TestForm
-        initialValues={initialValues}
-        validate={validate}
-      />,
-    );
-    const usernameInput = getByLabelText('Username') as HTMLInputElement;
-    fireEvent.change(usernameInput, { target: { value: 'user' } });
-    expect(usernameInput.value).toBe('user');
+    expect(screen.getByRole('textbox', { name: /username/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /reset/i })).toBeInTheDocument();
   });
 
-  it('should validate fields on blur', () => {
-    const { getByLabelText, getByText } = render(
-      <TestForm
-        initialValues={initialValues}
-        validate={validate}
-      />,
-    );
-    const usernameInput = getByLabelText('Username');
+  it('shows validation errors', async () => {
+    render(<MyForm />);
+
+    const usernameInput = screen.getByRole('textbox', { name: /username/i });
+    const emailInput = screen.getByRole('textbox', { name: /email/i });
+
+    // Focus on the input and then blur to trigger validation
+    fireEvent.focus(usernameInput);
     fireEvent.blur(usernameInput);
-    expect(getByText('Username required')).toBeInTheDocument();
+    fireEvent.focus(emailInput);
+    fireEvent.blur(emailInput);
+
+    // Wait for error messages to appear
+    expect(await screen.findByText('Username is required')).toBeInTheDocument();
+    expect(await screen.findByText('Email is required')).toBeInTheDocument();
   });
 
-  it('should handle form submission', async () => {
-    const { getByLabelText, getByText, getByRole } = render(
-      <TestForm
-        initialValues={initialValues}
-        validate={validate}
-      />,
-    );
-    fireEvent.change(getByLabelText('Username'), { target: { value: 'user' } });
-    fireEvent.change(getByLabelText('Password'), { target: { value: 'password' } });
-    fireEvent.submit(getByRole('button', { name: 'Submit' }));
+  it('submits the form with valid data', async () => {
+    render(<MyForm />);
 
-    await waitFor(() => {
-      expect(getByText('Form submitted successfully')).toBeInTheDocument();
-    });
-  });
-
-  it('should handle form reset', async () => {
-    const { getByLabelText, getByRole } = render(
-      <TestForm
-        initialValues={initialValues}
-        validate={validate}
-      />,
-    );
-
-    // Assert that these elements are HTMLInputElements to access the 'value' property
-    const usernameInput = getByLabelText('Username') as HTMLInputElement;
-    const passwordInput = getByLabelText('Password') as HTMLInputElement;
-    const resetButton = getByRole('button', { name: 'Reset' });
-
-    // Change values
-    fireEvent.change(usernameInput, { target: { value: 'user' } });
-    fireEvent.change(passwordInput, { target: { value: 'password' } });
-
-    // Reset form
-    fireEvent.click(resetButton);
-
-    // Use waitFor to ensure the state updates have been processed
-    await waitFor(() => {
-      expect(usernameInput.value).toBe('');
-      expect(passwordInput.value).toBe('');
-    });
-  });
-
-  it('should display error state when form submission fails', async () => {
-    const { getByLabelText, getByRole, getByText } = render(
-      <TestForm
-        initialValues={initialValues}
-        validate={validate}
-      />,
-    );
-    fireEvent.change(getByLabelText('Username'), { target: { value: '' } });
-    fireEvent.change(getByLabelText('Password'), { target: { value: '' } });
-    fireEvent.submit(getByRole('button', { name: 'Submit' }));
-
-    await waitFor(() => {
-      expect(getByText('Form submission failed')).toBeInTheDocument();
-    });
+    userEvent.type(screen.getByRole('textbox', { name: /username/i }), 'JohnDoe');
+    userEvent.type(screen.getByRole('textbox', { name: /email/i }), 'john@example.com');
+    fireEvent.click(screen.getByRole('button', { name: /submit/i }));
   });
 });

@@ -1,15 +1,21 @@
-import React from 'react';
-import useUpdateEffect from '../src/hooks/useUpdateEffect';
+import React, { useState } from 'react';
+import useUpdateEffect from '../hook/useUpdateEffect';
 
-const MyComponent = ({ value }) => {
+const UpdateEffectTestComponent: React.FC = () => {
+  const [count, setCount] = useState(0);
+  const [message, setMessage] = useState('');
+
   useUpdateEffect(() => {
-    // Effect logic here
-    console.log('Value updated:', value);
+    setMessage(`Effect ran at count: ${count}`);
+  }, [count]);
 
-    return () => {
-      // Optional cleanup logic
-    };
-  }, [value]);
-
-  return <div>Current Value: {value}</div>;
+  return (
+    <div>
+      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+      <p>Count: {count}</p>
+      <p>{message}</p>
+    </div>
+  );
 };
+
+export default UpdateEffectTestComponent;

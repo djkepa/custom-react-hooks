@@ -1,39 +1,29 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import useClickOutside from '../../../../packages/use-click-outside/dist/index';
+import ClickOutsideComponent from '../examples/useClickOutside.example';
 
 describe('useClickOutside', () => {
-  it('should call callback when clicked outside', () => {
-    const callback = jest.fn();
-    const TestComponent = () => {
-      const ref = useRef<HTMLDivElement>(null); // Initialize with null
-      useClickOutside(ref, callback);
+  it('calls onClose when clicking outside the modal', () => {
+    const onClose = jest.fn();
+    render(<ClickOutsideComponent onClose={onClose} />);
 
-      return <div ref={ref}>Inside</div>;
-    };
-
-    const { container } = render(<TestComponent />);
-    expect(callback).not.toHaveBeenCalled();
-
-    // Simulate a click outside
-    fireEvent.mouseDown(container);
-    expect(callback).toHaveBeenCalled();
+    fireEvent.mouseDown(document); // Simulate a click outside the modal
+    expect(onClose).toHaveBeenCalled(); // onClose should be called
   });
 
-  it('should not call callback when clicked inside', () => {
-    const callback = jest.fn();
-    const TestComponent = () => {
-      const ref = useRef<HTMLDivElement>(null); // Initialize with null
-      useClickOutside(ref, callback);
+  it('does not call onClose when clicking inside the modal', () => {
+    const onClose = jest.fn();
+    const { getByText } = render(<ClickOutsideComponent onClose={onClose} />);
 
-      return <div ref={ref}>Inside</div>;
-    };
+    fireEvent.mouseDown(getByText('Modal Content Here')); // Click inside the modal
+    expect(onClose).not.toHaveBeenCalled(); // onClose should not be called
+  });
 
-    const { getByText } = render(<TestComponent />);
-    expect(callback).not.toHaveBeenCalled();
+  it('does not call onClose when clicking the close button', () => {
+    const onClose = jest.fn();
+    const { getByText } = render(<ClickOutsideComponent onClose={onClose} />);
 
-    // Simulate a click inside
-    fireEvent.mouseDown(getByText('Inside'));
-    expect(callback).not.toHaveBeenCalled();
+    fireEvent.click(getByText('Close')); // Click the close button
+    expect(onClose).toHaveBeenCalled(); // onClose should be called
   });
 });

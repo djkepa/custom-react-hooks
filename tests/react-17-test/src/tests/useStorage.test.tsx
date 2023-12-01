@@ -1,28 +1,53 @@
 import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { renderHook, act } from '@testing-library/react';
-import useStorage from '../../../../packages/use-storage/src/index';
+import StorageTestComponent from '../examples/useStorage.example';
 
-describe('useStorage Hook', () => {
+describe('StorageTestComponent', () => {
+  let unmountComponent: any;
+
   beforeEach(() => {
-    // Clear localStorage before each test
     localStorage.clear();
+    sessionStorage.clear();
   });
 
-  it('should retrieve the initial value from localStorage', () => {
-    localStorage.setItem('testKey', JSON.stringify('testValue'));
-    const { result } = renderHook(() => useStorage('testKey', 'defaultValue', 'local'));
-    expect(result.current[0]).toBe('testValue');
+  afterEach(() => {
+    if (unmountComponent) {
+      unmountComponent(); // Ensure the component is unmounted after each test
+    }
+  });
+  it('initially displays default stored value', () => {
+    const { unmount } = render(<StorageTestComponent />);
+    unmountComponent = unmount;
+    expect(screen.getByText('Stored Value:')).toBeInTheDocument();
   });
 
-  it('should update the value in localStorage', () => {
-    const { result } = renderHook(() => useStorage('testKey', 'defaultValue', 'local'));
+  it('updates the stored value on save', () => {
+    render(<StorageTestComponent />);
+    const input = screen.getByRole('textbox');
+    const saveButton = screen.getByText('Save to Storage');
 
-    act(() => {
-      result.current[1]('newValue');
-    });
+    fireEvent.change(input, { target: { value: 'New Value' } });
+    fireEvent.click(saveButton);
 
-    expect(result.current[0]).toBe('newValue');
-    expect(localStorage.getItem('testKey')).toBe(JSON.stringify('newValue'));
+    expect(screen.getByText('Stored Value: New Value')).toBeInTheDocument();
+  });
+
+  it('persists stored value across renders', () => {
+    const { unmount } = render(<StorageTestComponent />);
+    unmountComponent = unmount;
+
+    const input = screen.getByRole('textbox');
+    const saveButton = screen.getByText('Save to Storage');
+
+    fireEvent.change(input, { target: { value: 'Persistent Value' } });
+    fireEvent.click(saveButton);
+
+    unmount(); // Unmount the first instance
+
+    const { unmount: unmountSecond } = render(<StorageTestComponent />);
+    unmountComponent = unmountSecond;
+
+    expect(screen.getByText('Stored Value: Persistent Value')).toBeInTheDocument();
   });
 });

@@ -1,34 +1,56 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import useEffectOnce from '../src/index';
+import { render, unmountComponentAtNode } from 'react-dom';
+import { act } from 'react-dom/test-utils';
+import EffectOnceComponent from '../examples/useEffectOnce.example';
 
-const TestComponent = ({ effect }) => {
-  useEffectOnce(effect);
-  return <div>Test Component</div>;
-};
+let container: HTMLDivElement | null = null;
 
-describe('useEffectOnce', () => {
-  it('should run the effect only once after mounting', () => {
-    const mockEffect = jest.fn();
-    const { rerender } = render(<TestComponent effect={mockEffect} />);
+beforeEach(() => {
+  // Set up a DOM element as a render target
+  container = document.createElement('div');
+  document.body.appendChild(container);
+});
 
-    // The effect should have been called once
-    expect(mockEffect).toHaveBeenCalledTimes(1);
+afterEach(() => {
+  // Clean up on exiting
+  if (container) {
+    unmountComponentAtNode(container);
+    container.remove();
+  }
+});
 
-    // Rerendering the component with the same effect
-    rerender(<TestComponent effect={mockEffect} />);
-    expect(mockEffect).toHaveBeenCalledTimes(1);
-  });
+describe('EffectOnceComponent', () => {
+  it('should render the component and execute the effect once', () => {
+    const consoleLogSpy = jest.spyOn(console, 'log'); // Spy on console.log
 
-  it('should run cleanup function on unmount if provided', () => {
-    const mockCleanup = jest.fn();
-    const effect = () => mockCleanup;
-    const { unmount } = render(<TestComponent effect={effect} />);
+    act(() => {
+      render(<EffectOnceComponent />, container);
+    });
 
-    // Trigger component unmount
-    unmount();
+    // Check that the component has rendered
+    expect(container!.querySelector('div')!.textContent).toBe('My Component');
 
-    // The cleanup function should be called upon unmounting
-    expect(mockCleanup).toHaveBeenCalledTimes(1);
+    // Check that the effect function is called once
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      'This effect runs only once after the component mounts.',
+    );
+
+    // Ensure that the cleanup function is not called yet
+    expect(consoleLogSpy).not.toHaveBeenCalledWith(
+      'This cleanup runs when the component unmounts.',
+    );
+
+    // Unmount the component
+    act(() => {
+      if (container) {
+        unmountComponentAtNode(container);
+      }
+    });
+
+    // Check that the cleanup function is called when unmounting
+    expect(consoleLogSpy).toHaveBeenCalledWith('This cleanup runs when the component unmounts.');
+
+    // Restore the console.log spy
+    consoleLogSpy.mockRestore();
   });
 });

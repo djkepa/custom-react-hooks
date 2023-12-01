@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import useClipboard from '../src/hooks/useClipboard';
+import useClipboard from '../hook/useClipboard';
 
-function MyComponent() {
+function ClipboardComponent() {
   const [text, setText] = useState('');
   const { copyToClipboard, pasteFromClipboard, state } = useClipboard();
 
@@ -10,17 +10,21 @@ function MyComponent() {
     // Handle feedback with state.success and state.error
   };
 
- const handlePaste = async () => {
-  const pastedText = await pasteFromClipboard();
-  if (state.success && pastedText !== undefined) {
-    setText(pastedText);
-  }
-  // Handle errors with state.error
-};
+  const handlePaste = async () => {
+    const pastedText = await pasteFromClipboard();
+    if (state.success && pastedText !== undefined) {
+      setText(pastedText);
+    }
+    // Handle errors with state.error
+  };
 
   return (
     <div>
-      <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
       <button onClick={handleCopy}>Copy to Clipboard</button>
       <button onClick={handlePaste}>Paste from Clipboard</button>
       {state.success && <p>Action successful!</p>}
@@ -28,3 +32,5 @@ function MyComponent() {
     </div>
   );
 }
+
+export default ClipboardComponent;

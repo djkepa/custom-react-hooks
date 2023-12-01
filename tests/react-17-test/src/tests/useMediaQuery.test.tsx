@@ -1,38 +1,62 @@
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useMediaQuery from '../../../../packages/use-media-query/src/index';
-import { render } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import MediaQueryTestComponent from '../examples/useMediaQuery.example';
 
-function TestComponent({ query }: any) {
-  const matches = useMediaQuery(query);
-  return <div>{matches ? 'Matches' : 'Does not match'}</div>;
-}
+describe('MediaQueryTestComponent', () => {
+  beforeAll(() => {
+    const listeners: { [key: string]: Function[] } = {};
 
-describe('useMediaQuery Hook', () => {
-  const originalMatchMedia = window.matchMedia;
+    const matchMediaMock = jest.fn().mockImplementation((query) => {
+      const matches = query.includes('(max-width: 600px)');
 
-  beforeEach(() => {
-    window.matchMedia = jest.fn().mockImplementation((query) => ({
-      matches: query === 'test-query',
+      return {
+        matches,
+        media: query,
+        onchange: null,
+        addListener: jest.fn((listener: Function) => {
+          listeners.change = listeners.change || [];
+          listeners.change.push(listener);
+        }), // For older browsers
+        removeListener: jest.fn((listener: Function) => {
+          listeners.change = listeners.change.filter((l) => l !== listener);
+        }), // For older browsers
+        addEventListener: jest.fn((event: string, listener: Function) => {
+          listeners[event] = listeners[event] || [];
+          listeners[event].push(listener);
+        }), // For modern browsers
+        removeEventListener: jest.fn((event: string, listener: Function) => {
+          listeners[event] = listeners[event].filter((l) => l !== listener);
+        }), // For modern browsers
+        dispatchEvent: jest.fn((event: MediaQueryListEvent) => {
+          listeners[event.type]?.forEach((listener) => listener(event));
+        }),
+      };
+    });
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: matchMediaMock,
+    });
+  });
+
+  it('displays mobile view for small screens', () => {
+    (window.matchMedia as jest.Mock).mockReturnValue({
+      matches: true,
       addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
-    }));
+    });
+    render(<MediaQueryTestComponent />);
+    expect(screen.getByText('Mobile View')).toBeInTheDocument();
   });
 
-  afterEach(() => {
-    window.matchMedia = originalMatchMedia;
+  it('displays desktop view for large screens', () => {
+    (window.matchMedia as jest.Mock).mockReturnValue({
+      matches: false,
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    });
+    render(<MediaQueryTestComponent />);
+    expect(screen.getByText('Desktop View')).toBeInTheDocument();
   });
-
-  it('should return true if the query matches', () => {
-    const { getByText } = render(<TestComponent query="test-query" />);
-    expect(getByText('Matches')).toBeInTheDocument();
-  });
-
-  it('should return false if the query does not match', () => {
-    const { getByText } = render(<TestComponent query="non-matching-query" />);
-    expect(getByText('Does not match')).toBeInTheDocument();
-  });
-
-  // Additional tests can be written to simulate changes in media query matching
 });

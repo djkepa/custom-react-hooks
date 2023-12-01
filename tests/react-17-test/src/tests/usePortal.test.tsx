@@ -1,58 +1,33 @@
+// PortalTestComponent.test.tsx
 import React from 'react';
-import { render, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import usePortal from '../../../../packages/use-portal/src/index';
+import PortalTestComponent from '../examples/usePortal.example';
 
-function TestComponent() {
-  const { Portal, openPortal, closePortal, isOpen } = usePortal();
+describe('PortalTestComponent', () => {
+  it('renders portal content when open', () => {
+    render(<PortalTestComponent />);
+    const openButton = screen.getByText('Open Portal');
+    fireEvent.click(openButton);
 
-  return (
-    <div>
-      <button onClick={openPortal}>Open Portal</button>
-      <button onClick={closePortal}>Close Portal</button>
-      <Portal>
-        <div data-testid="portal-content">Portal Content</div>
-      </Portal>
-      {isOpen && <div data-testid="backdrop">Backdrop</div>}
-    </div>
-  );
-}
-
-describe('usePortal Hook', () => {
-  let appendChildMock: any;
-  let removeChildMock: any;
-
-  beforeEach(() => {
-    const originalCreateElement = document.createElement.bind(document);
-    document.createElement = jest.fn((tagName) => {
-      return tagName === 'div' ? originalCreateElement('div') : originalCreateElement(tagName);
-    });
-
-    appendChildMock = jest.spyOn(document.body, 'appendChild');
-    removeChildMock = jest.spyOn(document.body, 'removeChild');
+    const portalContent = screen.getByText('This is portal content');
+    expect(portalContent).toBeInTheDocument();
+    expect(portalContent.parentNode).not.toBe(document.body);
   });
 
-  afterEach(() => {
-    document.createElement = document.createElement.bind(document);
-    appendChildMock.mockRestore();
-    removeChildMock.mockRestore();
+  it('does not render portal content when closed', () => {
+    render(<PortalTestComponent />);
+    const closeButton = screen.getByText('Close Portal');
+    fireEvent.click(closeButton);
+
+    expect(screen.queryByText('This is portal content')).not.toBeInTheDocument();
   });
 
-  it('opens and closes the portal correctly', () => {
-    const { getByText, getByTestId, queryByTestId } = render(<TestComponent />);
+  it('indicates when the portal is open', () => {
+    render(<PortalTestComponent />);
+    const openButton = screen.getByText('Open Portal');
+    fireEvent.click(openButton);
 
-    act(() => {
-      getByText('Open Portal').click();
-    });
-
-    expect(getByTestId('portal-content')).toBeInTheDocument();
-    expect(getByTestId('backdrop')).toBeInTheDocument();
-
-    act(() => {
-      getByText('Close Portal').click();
-    });
-
-    expect(queryByTestId('portal-content')).not.toBeInTheDocument();
-    expect(queryByTestId('backdrop')).not.toBeInTheDocument();
+    expect(screen.getByText('Portal is open')).toBeInTheDocument();
   });
 });

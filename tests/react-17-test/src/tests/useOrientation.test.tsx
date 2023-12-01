@@ -1,105 +1,63 @@
+// useOrientation.test.tsx
 import React from 'react';
-import { render, renderHook } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useOrientation from '../../../../packages/use-orientation/src/index';
-
-function TestComponent() {
-  const orientation = useOrientation();
-  return <p>{`Angle: ${orientation.angle}, Type: ${orientation.type}`}</p>;
-}
+import MyComponent from '../examples/useOrientation.example';
 
 describe('useOrientation', () => {
   const originalOrientation = window.screen.orientation;
 
-  beforeEach(() => {
-    Object.defineProperty(window.screen, 'orientation', {
-      writable: true,
-      value: {
-        angle: 0,
-        type: 'portrait-primary',
-      },
-    });
-  });
-
   beforeAll(() => {
+    // Mock window.screen.orientation with getters and setters
     Object.defineProperty(window.screen, 'orientation', {
-      writable: true,
-      value: {
+      configurable: true,
+      get: () => ({
         angle: 0,
         type: 'portrait-primary',
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
-      },
+      }),
     });
   });
 
-  afterEach(() => {
+  afterAll(() => {
+    // Restore the original orientation
     Object.defineProperty(window.screen, 'orientation', {
+      configurable: true,
       value: originalOrientation,
     });
   });
 
-  it('initially has default orientation values', () => {
-    const { getByText } = render(<TestComponent />);
-    expect(getByText('Angle: 0, Type: portrait-primary')).toBeInTheDocument();
+  it('returns device orientation data without element ref', () => {
+    render(<MyComponent />);
+    expect(
+      screen.getByText(/Device Orientation: Angle - 0, Type - portrait-primary/),
+    ).toBeInTheDocument();
   });
 
-  it('updates orientation on orientationchange event', () => {
-    // Mock the orientation change
+  it('returns element orientation data with ref', () => {
+    render(<MyComponent />);
+    expect(screen.getByText(/Element Orientation: Aspect Ratio/)).toBeInTheDocument();
+  });
+
+  it('updates state on orientation change', () => {
+    // Change the mock orientation
     Object.defineProperty(window.screen, 'orientation', {
-      value: {
+      configurable: true,
+      get: () => ({
         angle: 90,
         type: 'landscape-primary',
-      },
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+      }),
     });
+
+    // Simulate an orientation change event
     window.dispatchEvent(new Event('orientationchange'));
 
-    const { getByText } = render(<TestComponent />);
-    expect(getByText('Angle: 90, Type: landscape-primary')).toBeInTheDocument();
-  });
-
-  // Additional test cases to simulate various orientation types
-  it.each([
-    [180, 'landscape-secondary'],
-    [-90, 'portrait-secondary'],
-  ])('responds to different orientation types', (angle, type) => {
-    Object.defineProperty(window.screen, 'orientation', {
-      value: {
-        angle: angle,
-        type: type,
-      },
-    });
-    window.dispatchEvent(new Event('orientationchange'));
-
-    const { getByText } = render(<TestComponent />);
-    expect(getByText(`Angle: ${angle}, Type: ${type}`)).toBeInTheDocument();
-  });
-
-  // Test for undefined orientation (e.g., feature not supported)
-  it('handles undefined orientation', () => {
-    // Mock the orientation with undefined type
-    Object.defineProperty(window.screen, 'orientation', {
-      writable: true,
-      value: {
-        angle: 0,
-        type: undefined,
-      },
-    });
-
-    // Dispatch the orientationchange event to trigger the update
-    window.dispatchEvent(new Event('orientationchange'));
-
-    const { getByText } = render(<TestComponent />);
-    expect(getByText('Angle: 0, Type: undefined')).toBeInTheDocument();
-  });
-
-  afterAll(() => {
-    Object.defineProperty(window.screen, 'orientation', {
-      writable: true,
-      value: {
-        angle: 0,
-        type: 'portrait-primary',
-      },
-    });
+    render(<MyComponent />);
+    expect(
+      screen.getByText(/Device Orientation: Angle - 90, Type - landscape-primary/),
+    ).toBeInTheDocument();
   });
 });

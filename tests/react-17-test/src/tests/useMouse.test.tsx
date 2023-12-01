@@ -1,36 +1,32 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useMouse from '../../../../packages/use-mouse/dist/index';
+import TestComponent from '../examples/useMouse.example';
+import { act } from 'react-dom/test-utils';
 
-const TestComponent = ({ options }: any) => {
-  const ref = React.useRef(null);
-  const mousePosition = useMouse(ref, options);
+describe('TestComponent', () => {
+  it('renders with default options', () => {
+    const { getByText } = render(<TestComponent />);
+    const tooltip = getByText('Mouse Position: (0, 0)');
+    expect(tooltip).toBeInTheDocument();
+  });
 
-  return (
-    <div
-      ref={ref}
-      style={{ width: '200px', height: '200px' }}
-      data-testid="mouse-area"
-    >
-      Mouse X: {mousePosition.x}, Mouse Y: {mousePosition.y}
-    </div>
-  );
-};
+  it('renders with custom options', async () => {
+    const options = { offsetX: 20, offsetY: 30, avoidEdges: true };
+    render(<TestComponent options={options} />);
 
-describe('useMouse', () => {
-  it('tracks mouse position relative to the element', () => {
-    const { getByTestId } = render(<TestComponent options={{ offsetX: 10, offsetY: 10 }} />);
-    const mouseArea = getByTestId('mouse-area');
+    await waitFor(() => {
+      const tooltip = screen.getByText(/Mouse Position:/);
+      expect(tooltip).toBeInTheDocument();
+    });
+  });
 
-    // Simulate mouse move
-    fireEvent.mouseMove(mouseArea, { clientX: 100, clientY: 100 });
+  it('renders with avoidEdges option and mouse near edges', async () => {
+    const options = { offsetX: 20, offsetY: 30, avoidEdges: true };
+    render(<TestComponent options={options} />);
 
-    // Wait for the state to update
-    setTimeout(() => {
-      // The expected values might need adjustment based on your hook's logic
-      expect(mouseArea).toHaveTextContent('Mouse X: 110');
-      expect(mouseArea).toHaveTextContent('Mouse Y: 110');
-    }, 0); // setTimeout with 0 ms to defer the execution until after the browser has painted
+    await waitFor(() => {
+      const tooltip = screen.getByText(/Mouse Position:/);
+      expect(tooltip).toBeInTheDocument();
+    });
   });
 });

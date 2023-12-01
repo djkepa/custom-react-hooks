@@ -1,26 +1,48 @@
-import { renderHook, act } from '@testing-library/react';
-import useClipboard from '../../../../packages/use-clipboard/dist/index';
+import React from 'react';
+import { render, fireEvent, waitFor, screen, act } from '@testing-library/react';
+import ClipboardComponent from '../examples/useClipboard.example';
+import '@testing-library/jest-dom';
 
-describe('useClipboard', () => {
-  it('can perform copy operation', async () => {
-    const { result } = renderHook(() => useClipboard());
+// Mock the useClipboard hook
+jest.mock('../hook/useClipboard', () => ({
+  __esModule: true, // This property is needed for proper default export mocking
+  default: () => {
+    return {
+      copyToClipboard: jest.fn(),
+      pasteFromClipboard: jest.fn().mockResolvedValue('Mocked Text'),
+      state: { success: true, error: null },
+    };
+  },
+}));
+
+describe('ClipboardComponent', () => {
+  it('should handle copy to clipboard', async () => {
+    render(<ClipboardComponent />);
+    const input = screen.getByRole('textbox');
+    const copyButton = screen.getByText('Copy to Clipboard');
+
+    fireEvent.change(input, { target: { value: 'Test' } });
 
     await act(async () => {
-      await result.current.copyToClipboard('test text');
-    });
+      fireEvent.click(copyButton);
 
-    // Check if state reflects an attempt to copy, regardless of success
-    expect(result.current.state).toBeDefined();
+      await waitFor(() => {
+        expect(screen.queryByText('Action successful!')).toBeInTheDocument();
+      });
+    });
   });
 
-  it('can perform paste operation', async () => {
-    const { result } = renderHook(() => useClipboard());
+  it('should handle paste from clipboard', async () => {
+    render(<ClipboardComponent />);
+    const pasteButton = screen.getByText('Paste from Clipboard');
 
     await act(async () => {
-      await result.current.pasteFromClipboard();
-    });
+      fireEvent.click(pasteButton);
 
-    // Check if state reflects an attempt to paste, regardless of success
-    expect(result.current.state).toBeDefined();
+      await waitFor(() => {
+        expect(screen.getByRole('textbox')).toHaveValue('Mocked Text');
+        expect(screen.queryByText('Action successful!')).toBeInTheDocument();
+      });
+    });
   });
 });

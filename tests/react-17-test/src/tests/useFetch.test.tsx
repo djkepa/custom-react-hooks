@@ -1,70 +1,67 @@
+// UserList.test.tsx
 import React from 'react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { render, act, screen, waitFor } from '@testing-library/react';
-import useFetch from '../../../../packages/use-fetch/src/index';
+import useFetch from '../hook/useFetch';
+import UserList from '../examples/useFetch.example';
 
-declare global {
-  // Extending the existing fetch, not redeclaring it
-  function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+// Mock the useFetch hook
+jest.mock('../hook/useFetch');
 
-  // Extend the fetch to include Jest's mock functions
-  namespace fetch {
-    export var mockResolvedValueOnce: (value: any) => void;
-    export var mockRejectedValueOnce: (reason?: any) => void;
-  }
-}
+const mockUsers = [
+  { id: 1, name: 'John Doe' },
+  { id: 2, name: 'Jane Doe' },
+];
 
-function TestComponent({ url, options = {} }: any) {
-  const { data, loading, error, fetchData } = useFetch(url, options);
-  return (
-    <div>
-      {loading && <div data-testid="loading">Loading...</div>}
-      {error && <div data-testid="error">{error.message}</div>}
-      {data ? <div data-testid="data">{JSON.stringify(data)}</div> : null}
-      <button
-        onClick={fetchData}
-        data-testid="fetch-button"
-      >
-        Fetch Data
-      </button>
-    </div>
-  );
-}
+describe('UserList Component', () => {
+  it('shows loading state initially', () => {
+    (useFetch as jest.Mock).mockReturnValue({
+      data: null,
+      loading: true,
+      error: null,
+      fetchData: jest.fn(),
+    });
 
-describe('useFetch Hook', () => {
-  beforeEach(() => {
-    global.fetch = jest.fn();
+    render(<UserList />);
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
-  it('should fetch data successfully', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({ data: 'mock data' }),
+  it('displays users after loading', async () => {
+    (useFetch as jest.Mock).mockReturnValue({
+      data: mockUsers,
+      loading: false,
+      error: null,
+      fetchData: jest.fn(),
     });
 
-    render(<TestComponent url="https://example.com" />);
-    await waitFor(() => expect(screen.queryByTestId('loading')).toBeInTheDocument());
+    render(<UserList />);
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+  });
 
-    await waitFor(() => expect(screen.queryByTestId('data')).toHaveTextContent('mock data'));
-    expect(screen.queryByTestId('error')).toBeNull();
-  }, 10000);
-
-  it('should manually fetch data when manual option is true', async () => {
-    global.fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve({ data: 'manual fetch data' }),
+  it('displays an error message', () => {
+    (useFetch as jest.Mock).mockReturnValue({
+      data: null,
+      loading: false,
+      error: new Error('Failed to fetch'),
+      fetchData: jest.fn(),
     });
 
-    render(
-      <TestComponent
-        url="https://example.com"
-        options={{ manual: true }}
-      />,
-    );
-    expect(screen.queryByTestId('loading')).toBeNull();
+    render(<UserList />);
+    expect(screen.getByText('Error: Failed to fetch')).toBeInTheDocument();
+  });
 
-    screen.getByTestId('fetch-button').click();
-    await waitFor(() => expect(screen.getByTestId('data')).toHaveTextContent('manual fetch data'));
-    expect(screen.queryByTestId('error')).toBeNull();
+  it('refreshes data when the button is clicked', () => {
+    const mockFetchData = jest.fn();
+    (useFetch as jest.Mock).mockReturnValue({
+      data: mockUsers,
+      loading: false,
+      error: null,
+      fetchData: mockFetchData,
+    });
+
+    render(<UserList />);
+    fireEvent.click(screen.getByText('Refresh'));
+    expect(mockFetchData).toHaveBeenCalledTimes(1);
   });
 });

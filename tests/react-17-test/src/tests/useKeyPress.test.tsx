@@ -1,24 +1,22 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useKeyPress from '../../../../packages/use-key-press/src/index';
+import TestComponent from '../examples/useKeyPress.example';
 
-function TestComponent({ targetKey }: any) {
-  const keyPressed = useKeyPress(targetKey);
+describe('TestComponent', () => {
+  it('displays message when the Enter key is pressed', async () => {
+    render(<TestComponent />);
 
-  return <div data-testid="key-status">{keyPressed ? 'Key Pressed' : 'Key Not Pressed'}</div>;
-}
+    // Simulate pressing the Enter key
+    fireEvent.keyDown(document, { key: 'Enter', code: 'Enter' });
+    expect(await screen.findByText('You are pressing the "Enter" key!')).toBeInTheDocument();
 
-describe('useKeyPress Hook', () => {
-  it('should detect when a specified key is pressed and released', async () => {
-    const { getByTestId } = render(<TestComponent targetKey="Enter" />);
+    // Simulate releasing the Enter key
+    fireEvent.keyUp(document, { key: 'Enter', code: 'Enter' });
 
-    expect(getByTestId('key-status')).toHaveTextContent('Key Not Pressed');
-
-    fireEvent.keyDown(window, { key: 'Enter' });
-    await waitFor(() => expect(getByTestId('key-status')).toHaveTextContent('Key Pressed'));
-
-    fireEvent.keyUp(window, { key: 'Enter' });
-    await waitFor(() => expect(getByTestId('key-status')).toHaveTextContent('Key Not Pressed'));
+    // Wait for the message to disappear
+    await waitFor(() => {
+      expect(screen.queryByText('You are pressing the "Enter" key!')).toBeNull();
+    });
   });
 });
