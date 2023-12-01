@@ -25,19 +25,34 @@ yarn add @custom-react-hooks/use-document-title
 ## Usage
 
 ```typescript
-import React from 'react';
-import useDocumentTitle from '@custom-react-hooks/use-document-title';
+import React, { useState } from 'react';
+import useDocumentTitle from '@react-custom-hooks/useDocumentTitle';
 
-const MyPageComponent = () => {
-  useDocumentTitle("My Awesome Page");
+const DocumentTitleComponent = () => {
+  const [title, setTitle] = useState('My Awesome Page');
+  useDocumentTitle(title);
 
   return (
     <div>
       <h1>Welcome to My Awesome Page</h1>
-      {/* Additional page content */}
+      <button
+        onClick={(e) => {
+          setTitle('Clicked on the button');
+        }}
+      >
+        Click on the button
+      </button>
+      <button
+        onClick={(e) => {
+          setTitle('My Awesome Page');
+        }}
+      >
+        Restore title name
+      </button>
     </div>
   );
 };
+export default DocumentTitleComponent;
 ```
 
 In this example, the hook is used to set the document title to "My Awesome Page" when `MyPageComponent` is rendered.

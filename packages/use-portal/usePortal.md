@@ -29,21 +29,22 @@ Import the `usePortal` hook and use it in your React components to manage portal
 ```typescript
 import usePortal from '@custom-react-hooks/use-portal';
 
-const MyComponent = () => {
+const PortalTestComponent: React.FC = () => {
   const { Portal, openPortal, closePortal, isOpen } = usePortal();
 
   return (
     <div>
       <button onClick={openPortal}>Open Portal</button>
-      {isOpen && (
-        <Portal>
-          <div>Portal Content</div>
-          <button onClick={closePortal}>Close Portal</button>
-        </Portal>
-      )}
+      <button onClick={closePortal}>Close Portal</button>
+      <Portal>
+        <div id="portal-content">This is portal content</div>
+      </Portal>
+      {isOpen && <p>Portal is open</p>}
     </div>
   );
 };
+
+export default PortalTestComponent;
 ```
 
 In this example, the `usePortal` hook is used to render a modal-like component. The portal can be opened and closed using the provided functions.

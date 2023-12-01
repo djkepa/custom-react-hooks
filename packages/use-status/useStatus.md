@@ -28,22 +28,21 @@ Import and use the `useStatus` hook in your React components to get network stat
 ```typescript
 import useStatus from '@custom-react-hooks/use-status';
 
-const MyComponent = () => {
+const NetworkStatusComponent: React.FC = () => {
   const { online, downlink, effectiveType, rtt } = useStatus();
 
   return (
     <div>
+      <h1>Network Status</h1>
       <p>{online ? 'Online' : 'Offline'}</p>
-      {online && (
-        <>
-          <p>Downlink Speed: {downlink} Mbps</p>
-          <p>Effective Connection Type: {effectiveType}</p>
-          <p>Round-trip Time: {rtt} ms</p>
-        </>
-      )}
+      {downlink && <p>Downlink Speed: {downlink} Mbps</p>}
+      {effectiveType && <p>Effective Type: {effectiveType}</p>}
+      {rtt && <p>RTT: {rtt} ms</p>}
     </div>
   );
 };
+
+export default NetworkStatusComponent;
 ```
 
 In this example, the hook provides the current network status along with additional network information if the user is online.

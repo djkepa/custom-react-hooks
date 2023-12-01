@@ -29,18 +29,28 @@ yarn add @custom-react-hooks/use-mouse
 import React, { useRef } from 'react';
 import useMouse from '@custom-react-hooks/use-mouse';
 
-const MyComponent: React.FC = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { x, y } = useMouse(ref, { offsetX: 15, offsetY: 15, avoidEdges: true });
+type TestComponentProps = {
+  options?: MouseOptions;
+};
+
+const TestComponent: React.FC<TestComponentProps> = ({ options }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const mousePosition = useMouse(ref, options);
 
   return (
-    <div ref={ref} style={{ position: 'relative', height: '100vh' }}>
-      <div style={{ position: 'absolute', left: `${x}px`, top: `${y}px` }}>
-        Tooltip or Pop-up content
+    <div
+      ref={ref}
+      className="container"
+    >
+      <div className="tooltip">
+        Mouse Position: ({mousePosition.x}, {mousePosition.y})
       </div>
     </div>
   );
 };
+
+export default TestComponent;
+
 ```
 
 In this TypeScript example, the `useMouse` hook is used to track the mouse position within a `div` element and adjust the position of a tooltip or pop-up element accordingly.

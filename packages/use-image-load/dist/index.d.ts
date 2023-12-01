@@ -1,14 +1,15 @@
-interface UseImageLoadOptions {
+import { RefObject } from 'react';
+export interface UseImageLoadOptions {
     thumbnailSrc: string;
     fullSrc: string;
     lazyLoad?: boolean;
 }
-interface UseImageLoadState {
+export interface UseImageLoadState {
     src: string;
     isLoading: boolean;
     isLoaded: boolean;
     hasError: boolean;
 }
-declare function useImageLoad({ thumbnailSrc, fullSrc, lazyLoad }: UseImageLoadOptions): UseImageLoadState;
+declare function useImageLoad({ thumbnailSrc, fullSrc, lazyLoad }: UseImageLoadOptions, imgRef: RefObject<HTMLImageElement>): UseImageLoadState;
 export default useImageLoad;
 //# sourceMappingURL=index.d.ts.map

@@ -4,14 +4,16 @@ var react_1 = require("react");
 function useStorage(key, defaultValue, storageType) {
     if (storageType === void 0) { storageType = 'local'; }
     var isSSR = typeof window === 'undefined';
-    var storage = isSSR ? null : (storageType === 'local' ? localStorage : sessionStorage);
+    var storage = isSSR ? null : storageType === 'local' ? localStorage : sessionStorage;
     var getStoredValue = function () {
+        if (isSSR)
+            return defaultValue;
         try {
             var item = storage === null || storage === void 0 ? void 0 : storage.getItem(key);
             return item ? JSON.parse(item) : defaultValue;
         }
         catch (error) {
-            console.warn("Error reading localStorage key \u201C".concat(key, "\u201D:"), error);
+            console.warn("Error reading ".concat(storageType, "Storage key \u201C").concat(key, "\u201D:"), error);
             return defaultValue;
         }
     };
@@ -24,7 +26,7 @@ function useStorage(key, defaultValue, storageType) {
             storage === null || storage === void 0 ? void 0 : storage.setItem(key, valueToStore);
         }
         catch (error) {
-            console.warn("Error setting localStorage key \u201C".concat(key, "\u201D:"), error);
+            console.warn("Error setting ".concat(storageType, "Storage key \u201C").concat(key, "\u201D:"), error);
         }
     }, [key, storedValue, storage]);
     var setValue = function (value) {

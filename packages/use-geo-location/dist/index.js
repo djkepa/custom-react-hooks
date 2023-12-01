@@ -14,6 +14,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 var CustomGeoLocationError = (function (_super) {
@@ -32,31 +43,21 @@ function useGeoLocation(options, watch) {
         loading: true,
         coordinates: null,
         error: null,
-        isWatching: watch
+        isWatching: watch,
     }), geoLocationState = _a[0], setGeoLocationState = _a[1];
     var onSuccess = (0, react_1.useCallback)(function (position) {
-        setGeoLocationState({
-            loading: false,
-            coordinates: position.coords,
-            error: null,
-            isWatching: geoLocationState.isWatching
-        });
-    }, [geoLocationState.isWatching]);
+        setGeoLocationState(function (prevState) { return (__assign(__assign({}, prevState), { loading: false, coordinates: position.coords, error: null })); });
+    }, [setGeoLocationState]);
     var onError = (0, react_1.useCallback)(function (error) {
-        setGeoLocationState({
-            loading: false,
-            coordinates: null,
-            error: new CustomGeoLocationError(error.message, error.code),
-            isWatching: geoLocationState.isWatching
-        });
-    }, [geoLocationState.isWatching]);
+        setGeoLocationState(function (prevState) { return (__assign(__assign({}, prevState), { loading: false, coordinates: null, error: new CustomGeoLocationError(error.message, error.code) })); });
+    }, [setGeoLocationState]);
     (0, react_1.useEffect)(function () {
         if (!navigator.geolocation) {
             setGeoLocationState({
                 loading: false,
                 coordinates: null,
-                error: new CustomGeoLocationError("Geolocation is not supported by this browser.", 0),
-                isWatching: false
+                error: new CustomGeoLocationError('Geolocation is not supported by this browser.', 0),
+                isWatching: false,
             });
             return;
         }

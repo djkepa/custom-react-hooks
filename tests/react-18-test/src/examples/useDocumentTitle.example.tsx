@@ -1,13 +1,28 @@
-import React from 'react';
-import useDocumentTitle from "../src/hooks/useDocumentTitle";
+import React, { useState } from 'react';
+import useDocumentTitle from '../hook/useDocumentTitle';
 
-const MyPageComponent = () => {
-  useDocumentTitle("My Awesome Page");
+const DocumentTitleComponent = () => {
+  const [title, setTitle] = useState('My Awesome Page');
+  useDocumentTitle(title);
 
   return (
     <div>
       <h1>Welcome to My Awesome Page</h1>
-      {/* Page content */}
+      <button
+        onClick={(e) => {
+          setTitle('Clicked on the button');
+        }}
+      >
+        Click on the button
+      </button>
+      <button
+        onClick={(e) => {
+          setTitle('My Awesome Page');
+        }}
+      >
+        Restore title name
+      </button>
     </div>
   );
 };
+export default DocumentTitleComponent;

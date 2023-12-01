@@ -1,7 +1,8 @@
-declare function useFetch<T = unknown>(url: string, options?: RequestInit & {
+interface FetchOptions extends RequestInit {
     manual?: boolean;
-    timeout?: any;
-}, cache?: Map<string, T> | null, globalStateSetter?: (data: T | null) => void): {
+    timeout?: number;
+}
+declare function useFetch<T = unknown>(url: string, options?: FetchOptions, cache?: Map<string, T> | null, globalStateSetter?: (data: T | null) => void): {
     data: T | null;
     loading: boolean;
     error: Error | null;

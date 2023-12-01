@@ -1,20 +1,24 @@
-import React, { useEffect } from 'react';
-import useThrottle from '../src/hooks/useThrottle';
+import React, { useState } from 'react';
+import useThrottle from '../hook/useThrottle';
 
-const MyComponent = () => {
-  const handleScroll = useThrottle(() => {
-    // Throttled scroll event logic
-    console.log('Scroll event throttled');
-  }, 1000);
+const ThrottleTestComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState('');
+  const throttledValue = useThrottle(inputValue, 1000);
 
-  useEffect(() => {
-    // Attach the throttled event listener
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      // Cleanup
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
 
-  return <div>Content here</div>;
-}
+  return (
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      {throttledValue !== undefined && <div>Throttled Value: {throttledValue}</div>}
+    </div>
+  );
+};
+
+export default ThrottleTestComponent;

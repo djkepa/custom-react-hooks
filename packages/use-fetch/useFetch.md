@@ -19,24 +19,36 @@ yarn add @custom-react-hooks/use-fetch
 Here's an example of how to use the `useFetch` hook in a component:
 
 ```typescript
-import React from 'react';
-import useFetch from '@custom-react-hooks/use-fetch';
+import useFetch from '@react-custom-hooks/useFetch';
 
-const MyComponent = () => {
-  const { data, loading, error, fetchData } = useFetch('https://api.example.com/data');
+interface User {
+  id: number;
+  name: string;
+}
+
+const UserList = () => {
+  const { data, loading, error, fetchData } = useFetch<User[]>(
+    'https://jsonplaceholder.typicode.com/users',
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      <button onClick={fetchData}>Reload</button>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <button onClick={fetchData}>Refresh</button>
+      {data && (
+        <ul>
+          {data.map((user) => (
+            <li key={user.id}>{user.name}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
 
-export default MyComponent;
+export default UserList;
 ```
 
 In this example, `useFetch` is used to load data from an API. The component displays the data, a loading state, and any error that might occur. A button is provided to manually trigger the fetch request.

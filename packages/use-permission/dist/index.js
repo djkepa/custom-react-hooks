@@ -56,12 +56,15 @@ var usePermission = function (permissionName) {
     }), permission = _a[0], setPermission = _a[1];
     (0, react_1.useEffect)(function () {
         if (typeof navigator === 'undefined' || !navigator.permissions) {
-            setPermission({ state: 'denied', isLoading: false, error: 'Permissions API is not supported' });
+            setPermission({
+                state: 'denied',
+                isLoading: false,
+                error: 'Permissions API is not supported',
+            });
             return;
         }
-        var permissionStatus;
         var queryPermission = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var error_1;
+            var permissionStatus_1, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -71,10 +74,10 @@ var usePermission = function (permissionName) {
                         _a.trys.push([1, 3, , 4]);
                         return [4, navigator.permissions.query({ name: permissionName })];
                     case 2:
-                        permissionStatus = _a.sent();
-                        setPermission({ state: permissionStatus.state, isLoading: false, error: null });
-                        permissionStatus.onchange = function () {
-                            setPermission({ state: permissionStatus.state, isLoading: false, error: null });
+                        permissionStatus_1 = _a.sent();
+                        setPermission({ state: permissionStatus_1.state, isLoading: false, error: null });
+                        permissionStatus_1.onchange = function () {
+                            setPermission({ state: permissionStatus_1.state, isLoading: false, error: null });
                         };
                         return [3, 4];
                     case 3:
@@ -82,7 +85,9 @@ var usePermission = function (permissionName) {
                         setPermission({
                             state: 'denied',
                             isLoading: false,
-                            error: "Error querying ".concat(permissionName, " permission: ").concat(error_1.message),
+                            error: error_1 instanceof Error
+                                ? "Error querying ".concat(permissionName, " permission: ").concat(error_1.message)
+                                : 'Unknown error',
                         });
                         return [3, 4];
                     case 4: return [2];
@@ -90,11 +95,6 @@ var usePermission = function (permissionName) {
             });
         }); };
         queryPermission();
-        return function () {
-            if (permissionStatus) {
-                permissionStatus.onchange = null;
-            }
-        };
     }, [permissionName]);
     return permission;
 };

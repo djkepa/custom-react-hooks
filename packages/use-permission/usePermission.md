@@ -29,25 +29,25 @@ yarn add @custom-react-hooks/use-permission
 import React from 'react';
 import usePermission from '@custom-react-hooks/use-permission';
 
-const MyComponent: React.FC = () => {
-  const { state, isLoading, error } = usePermission('microphone');
+interface PermissionTestComponentProps {
+  permissionName: PermissionName;
+}
 
-  if (isLoading) {
-    return <p>Checking microphone permission...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+const PermissionTestComponent: React.FC<PermissionTestComponentProps> = ({ permissionName }) => {
+  const { state, isLoading, error } = usePermission(permissionName);
 
   return (
     <div>
-      Microphone permission status: {state}
+      <h1>Permission Status</h1>
+      <p>Permission: {permissionName}</p>
+      <p>Status: {isLoading ? 'Loading...' : state}</p>
+      {error && <p>Error: {error}</p>}
     </div>
   );
 };
 
-export default MyComponent;
+export default PermissionTestComponent;
+
 ```
 
 In this example, `usePermission` is used to check the permission status of the user's microphone.

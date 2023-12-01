@@ -10,30 +10,27 @@ import { useState, useEffect, useRef } from 'react';
  * @return - The throttled value.
  */
 
-function useThrottle<T>(value: T, limit: number, immediate: boolean = false) {
-  const [throttledValue, setThrottledValue] = useState<T>(immediate ? value : undefined);
+function useThrottle<T>(value: T, limit: number, immediate: boolean = false): T | undefined {
+  const [throttledValue, setThrottledValue] = useState<T | undefined>(
+    immediate ? value : undefined,
+  );
   const lastExecuted = useRef<number>(Date.now());
   const lastValue = useRef<T>(value);
 
   useEffect(() => {
-    if (immediate && Date.now() - lastExecuted.current >= limit) {
-      setThrottledValue(value);
-      lastExecuted.current = Date.now();
-    } else {
-      const handler = setTimeout(() => {
-        if (Date.now() - lastExecuted.current >= limit) {
-          setThrottledValue(lastValue.current);
-          lastExecuted.current = Date.now();
-        }
-      }, limit - (Date.now() - lastExecuted.current));
+    const handler = setTimeout(() => {
+      if (Date.now() - lastExecuted.current >= limit) {
+        setThrottledValue(lastValue.current);
+        lastExecuted.current = Date.now();
+      }
+    }, limit - (Date.now() - lastExecuted.current));
 
-      lastValue.current = value;
+    lastValue.current = value;
 
-      return () => {
-        clearTimeout(handler);
-      };
-    }
-  }, [value, limit, immediate]);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, limit]);
 
   return throttledValue;
 }

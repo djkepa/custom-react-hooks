@@ -27,15 +27,14 @@ Import and use the `useMediaQuery` hook in your React components:
 ```typescript
 import useMediaQuery from '@custom-react-hooks/use-media-query';
 
-const MyResponsiveComponent = () => {
+const MediaQueryTestComponent: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 600px)');
 
-  return (
-    <div>
-      {isMobile ? <p>Mobile View</p> : <p>Desktop View</p>}
-    </div>
-  );
+  return <div>{isMobile ? <p>Mobile View</p> : <p>Desktop View</p>}</div>;
 };
+
+export default MediaQueryTestComponent;
+
 ```
 
 In this example, the component renders different content based on the screen width.

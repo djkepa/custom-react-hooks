@@ -68,43 +68,43 @@ yarn add @custom-react-hooks/use-async
 
 A list of available hooks and their respective documentation can be found below:
 
-- [useAsync](#use-async)
-- [useClickOutside](#use-click-outside)
-- [useClipboard](#use-clipboard)
-- [useDebounce](#use-debounce)
-- [useDocumentTitle](#use-document-title)
-- [useDragDrop](#use-drag-drop)
-- [useEffectOnce](#use-effect-once)
-- [useElementSize](#use-element-size)
-- [useEventListener](#use-event-listener)
-- [useFetch](#use-fetch)
-- [useForm](#use-form)
-- [useGeoLocation](#use-geo-location)
-- [useHover](#use-hover)
-- [useIdle](#use-idle)
-- [useImageLoad](#use-image-load)
-- [useKeyPress](#use-key-press)
-- [useLockBodyScroll](#use-lock-body-scroll)
-- [useLongPress](#use-long-press)
-- [useMediaDevices](#use-media-devices)
-- [useMediaQuery](#use-media-query)
-- [useMouse](#use-mouse)
-- [useOnScreen](#use-on-screen)
-- [useOrientation](#use-orientation)
-- [usePermission](#use-permission)
-- [usePortal](#use-portal)
-- [useScript](#use-script)
-- [useStatus](#use-status)
-- [useStep](#use-step)
-- [useStorage](#use-storage)
-- [useThrottle](#use-throttle)
-- [useTimeout](#use-timeout)
-- [useToggle](#use-toggle)
-- [useUpdateEffect](#use-update-effect)
-- [useWindowSize](#use-window-size)
+- [useAsync](#useasync)
+- [useClickOutside](#useclick-outside)
+- [useClipboard](#useclipboard)
+- [useDebounce](#usedebounce)
+- [useDocumentTitle](#usedocument-title)
+- [useDragDrop](#usedrag-drop)
+- [useEffectOnce](#useeffect-once)
+- [useElementSize](#useelement-size)
+- [useEventListener](#useevent-listener)
+- [useFetch](#usefetch)
+- [useForm](#useform)
+- [useGeoLocation](#usegeo-location)
+- [useHover](#usehover)
+- [useIdle](#useidle)
+- [useImageLoad](#useimage-load)
+- [useKeyPress](#usekey-press)
+- [useLockBodyScroll](#uselock-body-scroll)
+- [useLongPress](#uselong-press)
+- [useMediaDevices](#usemedia-devices)
+- [useMediaQuery](#usemedia-query)
+- [useMouse](#usemouse)
+- [useOnScreen](#useon-screen)
+- [useOrientation](#useorientation)
+- [usePermission](#usepermission)
+- [usePortal](#useportal)
+- [useScript](#usescript)
+- [useStatus](#usestatus)
+- [useStep](#usestep)
+- [useStorage](#usestorage)
+- [useThrottle](#usethrottle)
+- [useTimeout](#usetimeout)
+- [useToggle](#usetoggle)
+- [useUpdateEffect](#useupdate-effect)
+- [useWindowSize](#usewindow-size)
 
 
-# useAsync Hook 
+# useAsync
 
 The `useAsync` hook simplifies the handling of asynchronous operations in React applications, such as data fetching or any other promise-returning functions. It provides a structured way to track the status and outcome of async operations.
 
@@ -134,11 +134,10 @@ yarn add @custom-react-hooks/use-async
 import useAsync from '@custom-react-hooks/use-async';
 
 const fetchData = async () => {
-  // Async function to fetch data
-  return await fetch('/api/data').then(res => res.json());
+  return await fetch('https://jsonplaceholder.typicode.com/todos/1').then((res) => res.json());
 };
 
-const MyComponent = () => {
+const TestComponent = () => {
   const { execute, status, value, error } = useAsync(fetchData, false);
 
   return (
@@ -150,6 +149,8 @@ const MyComponent = () => {
     </div>
   );
 };
+
+export default TestComponent;
 ```
 
 In this example, the `useAsync` hook is used to perform an asynchronous data fetch operation.
@@ -178,7 +179,7 @@ Contributions to enhance `useAsync` are highly encouraged. Feel free to submit i
 Certainly, I'll help you update the documentation for your `useAsync` custom hook. Below is an improved and more detailed documentation template:
 
 
-# [useClickOutside](#use-click-outside) Hook 
+# useClickOutside
 
 The `useClickOutside` hook is designed to detect and handle clicks outside of a specified element or set of elements. This is particularly useful for closing modal windows, dropdowns, and other components when a user interacts outside of them.
 
@@ -202,17 +203,37 @@ Here's an example of how to use the `useClickOutside` hook in a modal component:
 import React, { useRef } from 'react';
 import useClickOutside from '@react-custom-hooks/use-click-outside';
 
-const Modal = ({ onClose }) => {
-  const modalRef = useRef(null); // Ref for the modal content
-  useClickOutside(modalRef, onClose); // Setup the hook to call `onClose` when a click outside is detected
+const ClickOutsideComponent = ({ onClose }: { onClose: () => void }) => {
+  const modalRef = useRef<HTMLDivElement>(null); // The ref for the modal
+  const closeButtonRef = useRef<HTMLButtonElement>(null); // A ref for the close button
+
+  // Call the hook with the modal ref and the close button ref as the refs to ignore
+  useClickOutside(
+    [modalRef], // Array of refs to detect outside click
+    () => onClose(), // Callback to execute on outside click
+    ['mousedown', 'touchstart'], // Events to listen for
+    true, // Enable the outside click detection
+    [closeButtonRef], // Refs to ignore
+  );
 
   return (
-    <div ref={modalRef}>
-      {/* Your modal content goes here */}
-      <button onClick={onClose}>Close</button>
+    <div
+      ref={modalRef}
+      style={{ border: '1px solid black', padding: '20px' }}
+    >
+      {/* Modal content */}
+      <p>Modal Content Here</p>
+      <button
+        ref={closeButtonRef}
+        onClick={onClose}
+      >
+        Close
+      </button>
     </div>
   );
 };
+
+export default ClickOutsideComponent;
 ```
 
 In the above example, clicking outside the `<div>` containing the modal content will trigger the `onClose` function.
@@ -237,7 +258,7 @@ In the above example, clicking outside the `<div>` containing the modal content 
 
 Feel free to contribute to the development of this hook by submitting issues or pull requests to the repository.
 
-# [useClipboard](#use-clipboard) Hook 
+# useClipboard
 
 `useClipboard` is a React hook that provides an interface for copying to and pasting from the user's clipboard. It uses the modern Clipboard API for improved performance and flexibility.
 
@@ -266,9 +287,9 @@ yarn add @custom-react-hooks/use-clipboard
 
 ```typescript
 import React, { useState } from 'react';
-import useClipboard from '@custom-react-hooks/use-clipboard';
+import useClipboard from '@react-custom-hooks/useClipboard';
 
-function MyComponent() {
+function ClipboardComponent() {
   const [text, setText] = useState('');
   const { copyToClipboard, pasteFromClipboard, state } = useClipboard();
 
@@ -279,7 +300,7 @@ function MyComponent() {
 
   const handlePaste = async () => {
     const pastedText = await pasteFromClipboard();
-    if (state.success) {
+    if (state.success && pastedText !== undefined) {
       setText(pastedText);
     }
     // Handle errors with state.error
@@ -287,7 +308,11 @@ function MyComponent() {
 
   return (
     <div>
-      <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
       <button onClick={handleCopy}>Copy to Clipboard</button>
       <button onClick={handlePaste}>Paste from Clipboard</button>
       {state.success && <p>Action successful!</p>}
@@ -295,6 +320,7 @@ function MyComponent() {
     </div>
   );
 }
+export default ClipboardComponent;
 ```
 
 This example demonstrates how to use the `useClipboard` hook to copy text to and paste text from the clipboard using buttons.
@@ -315,7 +341,7 @@ This example demonstrates how to use the `useClipboard` hook to copy text to and
 
 We encourage contributions to enhance `useClipboard`. For bugs, feature requests, or pull requests, please reach out through the project's repository.
 
-# [useDebounce](#use-debounce) Hook 
+# useDebounce
 
 The `useDebounce` hook is used to delay the execution of a function until a specified amount of time has passed since it was last invoked. This is useful for handling rapid user input scenarios, such as search input fields or window resizing.
 
@@ -337,30 +363,33 @@ Here's an example of using `useDebounce` in a search input component:
 
 ```typescript
 import React, { useState } from 'react';
-import useDebounce from '@react-custom-hooks/use-debounce';
+import useDebounce from '@react-custom-hooks/useDebounce';
 
-const SearchInput = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearch, cancelSearch] = useDebounce(() => {
-    console.log('Searching for:', searchTerm);
-  }, 500);
+const DebounceTestComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState('');
 
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
-    debouncedSearch();
+  const debouncedLog = useDebounce((val: string) => {
+    console.log(`Debounced value: ${val}`);
+  }, 1000)[0];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    debouncedLog(e.target.value);
   };
 
   return (
-    <input
-      type="text"
-      value={searchTerm}
-      onChange={handleChange}
-      placeholder="Search..."
-    />
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleChange}
+      />
+    </div>
   );
 };
 
-export default SearchInput;
+export default DebounceTestComponent;
+
 ```
 
 In this component, the search function is debounced, which means it will only execute 500 milliseconds after the user stops typing.
@@ -391,7 +420,7 @@ In this component, the search function is debounced, which means it will only ex
 
 Your contributions are welcome! Feel free to submit issues or pull requests to improve the `useDebounce` hook.
 
-# [useDocumentTitle](#use-document-title) Hook 
+# useDocumentTitle
 
 `useDocumentTitle` is a custom React hook for dynamically setting the document title. It updates the title shown in the browser tab, enhancing the user experience by reflecting the current page or content state.
 
@@ -418,19 +447,34 @@ yarn add @custom-react-hooks/use-document-title
 ## Usage
 
 ```typescript
-import React from 'react';
-import useDocumentTitle from '@custom-react-hooks/use-document-title';
+import React, { useState } from 'react';
+import useDocumentTitle from '@react-custom-hooks/useDocumentTitle';
 
-const MyPageComponent = () => {
-  useDocumentTitle("My Awesome Page");
+const DocumentTitleComponent = () => {
+  const [title, setTitle] = useState('My Awesome Page');
+  useDocumentTitle(title);
 
   return (
     <div>
       <h1>Welcome to My Awesome Page</h1>
-      {/* Additional page content */}
+      <button
+        onClick={(e) => {
+          setTitle('Clicked on the button');
+        }}
+      >
+        Click on the button
+      </button>
+      <button
+        onClick={(e) => {
+          setTitle('My Awesome Page');
+        }}
+      >
+        Restore title name
+      </button>
     </div>
   );
 };
+export default DocumentTitleComponent;
 ```
 
 In this example, the hook is used to set the document title to "My Awesome Page" when `MyPageComponent` is rendered.
@@ -446,7 +490,7 @@ In this example, the hook is used to set the document title to "My Awesome Page"
 
 Your contributions to improve `useDocumentTitle` are appreciated. Feel free to submit issues or pull requests to enhance its functionality and usability.
 
-# [useDragDrop](#use-drag-drop) Hook 
+# useDragDrop
 
 `useDragDrop` is a combined React hook that facilitates drag-and-drop interactions in your application. It abstracts the handling of both draggable elements and drop targets, simplifying the implementation of drag-and-drop functionality.
 
@@ -476,27 +520,31 @@ yarn add @custom-react-hooks/use-drag-drop
 
 ```tsx
 import React from 'react';
-import { useDragDrop } from '@custom-react-hooks/use-drag-drop';
+import useDragDrop from '@react-custom-hooks/useDragDrop';
 
-const DraggableComponent = ({ data }) => {
-  const { bindDrag } = useDragDrop(data, (dropData) => console.log(dropData));
+const DragDropTestComponent = ({ onDrop }: any) => {
+  const dragData = { id: 1, name: 'Draggable Item' };
+  const { state, bindDrag, bindDrop } = useDragDrop(dragData, onDrop);
 
   return (
-    <div {...bindDrag}>
-      I am draggable
+    <div>
+      <div
+        {...bindDrag}
+        style={{ border: '1px solid blue', padding: '10px', marginBottom: '10px' }}
+      >
+        {state.isDragging ? 'Dragging...' : 'Drag Me'}
+      </div>
+      <div
+        {...bindDrop}
+        style={{ border: '1px solid green', padding: '10px' }}
+      >
+        {state.isOver ? 'Drop Here!' : 'Drop Area'}
+      </div>
     </div>
   );
 };
 
-const DropZoneComponent = () => {
-  const { bindDrop } = useDragDrop(null, (dropData) => console.log('Data dropped:', dropData));
-
-  return (
-    <div {...bindDrop}>
-      Drop items here
-    </div>
-  );
-};
+export default DragDropTestComponent;
 ```
 
 In this example, `useDragDrop` is used to implement both draggable and droppable components.
@@ -518,7 +566,7 @@ In this example, `useDragDrop` is used to implement both draggable and droppable
 
 Contributions to improve `useDragDrop` are welcome. Please submit issues or pull requests to the repository for any bugs or feature enhancements.
 
-# [useEffectOnce](#use-effect-once) Hook
+# useEffectOnce
 
 `useEffectOnce` is a custom hook in React designed to mimic the behavior of `componentDidMount` and `componentWillUnmount` lifecycle methods in class components. It's a modified version of `useEffect` that runs only once when the component mounts.
 
@@ -548,19 +596,21 @@ Replace `@custom-react-hooks/use-effect-once` with the actual name of your packa
 
 ```typescript
 import React from 'react';
-import useEffectOnce from '@custom-react-hooks/use-effect-once';
+import useEffectOnce from '@react-custom-hooks/useEffectOnce';
 
-const MyComponent: React.FC = () => {
+const EffectOnceComponent: React.FC = () => {
   useEffectOnce(() => {
-    console.log('Runs only once after the component mounts.');
+    console.log('This effect runs only once after the component mounts.');
 
     return () => {
-      console.log('Runs when the component unmounts.');
+      console.log('This cleanup runs when the component unmounts.');
     };
   });
 
   return <div>My Component</div>;
 };
+
+export default EffectOnceComponent;
 ```
 
 In this example, `useEffectOnce` is used to perform actions at the mounting and unmounting phases of `MyComponent`.
@@ -573,7 +623,7 @@ In this example, `useEffectOnce` is used to perform actions at the mounting and 
 
 Contributions to enhance `useEffectOnce` are always welcome. Feel free to submit issues or pull requests to the repository for further improvements.
 
-# [useElementSize](#use-element-size) Hook
+# useElementSize
 
 `useElementSize` is a React hook that enables dynamic tracking of an HTML element's dimensions. It updates the element's width and height in response to window resizing, element mounting/unmounting, and ref changes.
 
@@ -601,20 +651,60 @@ yarn add @custom-react-hooks/use-element-size
 ## Usage
 
 ```typescript
-import React, { useRef } from 'react';
-import useElementSize from '@custom-react-hooks/use-element-size';
+import React, { useRef, useState } from 'react';
+import useElementSize from '@react-custom-hooks/useElementSize';
 
-const MyComponent: React.FC = () => {
+const TestComponent: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const { width, height } = useElementSize(ref);
+  const [customWidth, setCustomWidth] = useState<number | undefined>(undefined);
+  const [customHeight, setCustomHeight] = useState<number | undefined>(undefined);
+
+  const handleInputChange = () => {
+    if (textareaRef.current) {
+      const parsedWidth = parseFloat(textareaRef.current.value);
+      if (!isNaN(parsedWidth)) {
+        setCustomWidth(parsedWidth);
+      }
+    }
+  };
+
+  const handleHeightInputChange = () => {
+    if (textareaRef.current) {
+      const parsedHeight = parseFloat(textareaRef.current.value);
+      if (!isNaN(parsedHeight)) {
+        setCustomHeight(parsedHeight);
+      }
+    }
+  };
 
   return (
-    <div ref={ref}>
-      <p>Width: {width}px</p>
-      <p>Height: {height}px</p>
+    <div>
+      <div
+        ref={ref}
+        style={{ width: customWidth || width, height: customHeight || height }}
+      >
+        <p>Width: {customWidth || width}px</p>
+        <p>Height: {customHeight || height}px</p>
+      </div>
+      <textarea
+        ref={textareaRef}
+        aria-label="Set custom width"
+        placeholder="Set custom width"
+        onChange={handleInputChange}
+      />
+      <textarea
+        ref={textareaRef}
+        aria-label="Set custom height"
+        placeholder="Set custom height"
+        onChange={handleHeightInputChange}
+      />
     </div>
   );
 };
+
+export default TestComponent;
 ```
 
 In this example, `useElementSize` is used to measure and display the dimensions of a `div` element.
@@ -634,7 +724,8 @@ In this example, `useElementSize` is used to measure and display the dimensions 
 
 Your contributions to improve `useElementSize` are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useEventListener](#use-event-listener) Hook
+
+# useEventListener
 
 The `useEventListener` hook is a custom React hook that simplifies the process of adding and removing event listeners in your React components. It handles the lifecycle of the event listener, ensuring it is cleaned up when the component unmounts or dependencies change.
 
@@ -656,28 +747,23 @@ Here's an example of how to use the `useEventListener` hook in a component:
 
 ```typescript
 import React, { useState, useRef } from 'react';
-import useEventListener from '@custom-react-hooks/use-event-listener';
+import useEventListener from '@react-custom-hooks/useEventListener';
 
-const MyComponent = () => {
-  const [keyPressed, setKeyPressed] = useState<string>('');
-  const divRef = useRef<HTMLDivElement>(null);
+const ExampleComponent: React.FC = () => {
+  const [count, setCount] = useState(0);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const handleKeyPress = (event: KeyboardEvent) => {
-    setKeyPressed(event.key);
-  };
-
-  // Using useEventListener to listen for keydown events on the div element
-  useEventListener('keydown', handleKeyPress, divRef);
+  useEventListener('click', () => setCount(count + 1), buttonRef);
 
   return (
-    <div ref={divRef}>
-      <p>Press any key!</p>
-      {keyPressed && <p>Last Key Pressed: {keyPressed}</p>}
+    <div>
+      <button ref={buttonRef}>Click Me</button>
+      <p>Click count: {count}</p>
     </div>
   );
 };
 
-export default MyComponent;
+export default ExampleComponent;
 ```
 
 In this component, `useEventListener` is used to listen for `keydown` events on the `div` element, and the state is updated with the last key pressed.
@@ -701,7 +787,7 @@ In this component, `useEventListener` is used to listen for `keydown` events on 
 
 Your contributions to the development and enhancement of this hook are welcome! Feel free to submit issues or pull requests to the repository.
 
-# [useFetch](#use-fetch) Hook
+# useFetch
 
 The `useFetch` hook is a powerful tool for making API requests in React applications. It simplifies the process of fetching data from a URL and handles various advanced features like caching, timeouts, and integration with global state management systems.
 
@@ -722,24 +808,36 @@ yarn add @custom-react-hooks/use-fetch
 Here's an example of how to use the `useFetch` hook in a component:
 
 ```typescript
-import React from 'react';
-import useFetch from '@custom-react-hooks/use-fetch';
+import useFetch from '@react-custom-hooks/useFetch';
 
-const MyComponent = () => {
-  const { data, loading, error, fetchData } = useFetch('https://api.example.com/data');
+interface User {
+  id: number;
+  name: string;
+}
+
+const UserList = () => {
+  const { data, loading, error, fetchData } = useFetch<User[]>(
+    'https://jsonplaceholder.typicode.com/users',
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      <button onClick={fetchData}>Reload</button>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <button onClick={fetchData}>Refresh</button>
+      {data && (
+        <ul>
+          {data.map((user) => (
+            <li key={user.id}>{user.name}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
 
-export default MyComponent;
+export default UserList;
 ```
 
 In this example, `useFetch` is used to load data from an API. The component displays the data, a loading state, and any error that might occur. A button is provided to manually trigger the fetch request.
@@ -770,7 +868,7 @@ An object containing:
 
 Contributions to enhance the `useFetch` hook are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useForm](#use-form) Hook
+# useForm
 
 The `useForm` hook is an advanced form management tool for React applications, providing capabilities for managing form state, validation, loading status, and submission feedback.
 
@@ -799,12 +897,11 @@ yarn add @custom-react-hooks/use-form
 
 ```typescript
 import React from 'react';
-import useForm from '@custom-react-hooks/use-form';
+import useForm from '@react-custom-hooks/useForm';
 
 interface FormValues {
   username: string;
   email: string;
-  // Define other form fields as needed
 }
 
 const MyForm = () => {
@@ -814,41 +911,54 @@ const MyForm = () => {
     const errors: Partial<Record<keyof FormValues, string>> = {};
     if (!values.username) errors.username = 'Username is required';
     if (!values.email) errors.email = 'Email is required';
-    // Implement additional validation rules here
+    // Add more validation rules as needed
     return errors as Record<keyof FormValues, string | undefined>;
   };
 
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    resetForm,
-    isSubmitting,
-    submissionStatus
-  } = useForm(initialValues, validate);
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit, resetForm } = useForm(
+    initialValues,
+    validate,
+  );
 
-  const onSubmit = async (values: FormValues) => {
-    // Handle form submission logic
+  const onSubmit = async () => {
+    // If you have asynchronous operations, place them here
+    console.log('Form submitted:', values);
   };
 
   return (
     <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
-      <input name="username" value={values.username} onChange={handleChange} onBlur={handleBlur} />
+      <label htmlFor="username">Username</label>
+      <input
+        id="username"
+        name="username"
+        value={values.username}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       {touched.username && errors.username && <div>{errors.username}</div>}
-      
-      <input name="email" value={values.email} onChange={handleChange} onBlur={handleBlur} />
+
+      <label htmlFor="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        value={values.email}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       {touched.email && errors.email && <div>{errors.email}</div>}
 
-      {/* Additional form fields */}
-
-      <button type="submit" disabled={isSubmitting}>Submit</button>
-      <button type="button" onClick={resetForm}>Reset</button>
+      <button type="submit">Submit</button>
+      <button
+        type="button"
+        onClick={resetForm}
+      >
+        Reset
+      </button>
     </form>
   );
 };
+
+export default MyForm;
 ```
 
 ## API Reference
@@ -869,7 +979,7 @@ const MyForm = () => {
 
 Your contributions to further enhance `useForm` are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useGeoLocation](#use-geo-location) Hook
+# useGeoLocation
 
 The `useGeoLocation` hook is a powerful tool for accessing and monitoring the user's geographical location in React applications. It offers features such as continuous location watching, error handling, and customizable geolocation options.
 
@@ -898,25 +1008,28 @@ yarn add @custom-react-hooks/use-geo-location
 Import and use the `useGeoLocation` hook in your React components:
 
 ```typescript
-import useGeoLocation from '@custom-react-hooks/use-geo-location';
+import useGeoLocation from '@react-custom-hooks/useGeoLocation';
 
-const MyComponent = () => {
-  const { coordinates, error, loading } = useGeoLocation();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+function GeoLocationComponent() {
+  const { loading, coordinates, error, isWatching } = useGeoLocation();
 
   return (
     <div>
-      Latitude: {coordinates?.latitude}, Longitude: {coordinates?.longitude}
+      <h1>GeoLocation Component</h1>
+      {loading && <p>Loading...</p>}
+      {!loading && error && <p>Error: {error.message}</p>}
+      {!loading && !error && coordinates && (
+        <div>
+          <p>Latitude: {coordinates.latitude}</p>
+          <p>Longitude: {coordinates.longitude}</p>
+        </div>
+      )}
+      <p>Watching: {isWatching ? 'Yes' : 'No'}</p>
     </div>
   );
-};
+}
+
+export default GeoLocationComponent;
 ```
 
 ## API Reference
@@ -931,7 +1044,7 @@ const MyComponent = () => {
 
 Contributions to improve `useGeoLocation` are welcome. Feel free to submit issues or pull requests to enhance its functionality.
 
-# [useHover](#use-hover) Hook
+# useHover
 
 The `useHover` hook is a utility for detecting hover interactions in React components. It simplifies the process of tracking when a user's mouse pointer hovers over an element.
 
@@ -961,15 +1074,22 @@ yarn add @custom-react-hooks/use-hover
 ```typescript
 import useHover from '@custom-react-hooks/use-hover';
 
-const MyComponent = () => {
-  const { ref, isHovered } = useHover();
+function HoverComponent() {
+  const { ref, isHovered } = useHover<HTMLDivElement>();
 
   return (
-    <div ref={ref}>
-      {isHovered ? 'Hovering' : 'Not Hovering'}
+    <div
+      ref={ref}
+      data-testid="hover-component"
+    >
+      <h1>Hover Component</h1>
+      <p>{isHovered ? 'Hovered' : 'Not Hovered'}</p>
     </div>
   );
-};
+}
+
+export default HoverComponent;
+
 ```
 
 In this example, the `useHover` hook provides a way to determine if a particular div is being hovered.
@@ -984,7 +1104,7 @@ In this example, the `useHover` hook provides a way to determine if a particular
 
 Contributions to enhance `useHover` are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useIdle](#use-idle) Hook
+# useIdle
 
 `useIdle` is a React hook designed to detect user inactivity or idle time in applications. It triggers a state change after a specified period of inactivity, making it useful for actions like auto-logout or activity pausing.
 
@@ -1012,18 +1132,19 @@ yarn add @custom-react-hooks/use-idle
 ## Usage
 
 ```typescript
-import React from 'react';
 import useIdle from '@custom-react-hooks/use-idle';
 
-const MyComponent = () => {
-  const isUserIdle = useIdle(3000); // 3 seconds idle time
+const TestComponent = ({ idleTime }: any) => {
+  const isIdle = useIdle(idleTime);
 
   return (
     <div>
-      {isUserIdle ? 'User is idle' : 'User is active'}
+      <p data-testid="idle-status">{isIdle ? 'Idle' : 'Not Idle'}</p>
     </div>
   );
 };
+
+export default TestComponent;
 ```
 
 In this example, the hook is used to detect when the user has been idle for more than 3 seconds.
@@ -1037,7 +1158,7 @@ In this example, the hook is used to detect when the user has been idle for more
 
 Contributions to enhance `useIdle` are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useImageLoad](#use-image-load) Hook
+# useImageLoad
 
 `useImageLoad` is a custom React hook designed to enhance the user experience by efficiently loading images. It supports lazy loading to improve performance and provides detailed status updates during the image loading process.
 
@@ -1066,26 +1187,53 @@ yarn add @custom-react-hooks/use-image-load
 ## Usage
 
 ```typescript
-import React from 'react';
 import useImageLoad from '@custom-react-hooks/use-image-load';
 
-const MyImageComponent: React.FC = () => {
-  const { src, isLoading, hasError } = useImageLoad({
-    thumbnailSrc: 'path/to/thumbnail.jpg',
-    fullSrc: 'path/to/full-image.jpg',
-    lazyLoad: true
-  });
+type ImageComponent = {
+  options: {
+    thumbnailSrc: string;
+    fullSrc: string;
+    lazyLoad?: boolean;
+  };
+};
+
+export const ImageComponent = ({ options }: ImageComponent) => {
+  const imgRef = useRef(null);
+  const { src, isLoading, isLoaded, hasError } = useImageLoad(options, imgRef);
 
   return (
     <div>
-      {hasError ? (
-        <p>Error loading image.</p>
-      ) : (
-        <img src={src} alt="Loaded image" style={{ filter: isLoading ? 'blur(10px)' : 'none' }} />
-      )}
+      {isLoading && <p>Loading...</p>}
+      {hasError && <p>Error loading image</p>}
+      <img
+        ref={imgRef}
+        src={src}
+        alt=""
+        style={{ visibility: isLoaded ? 'visible' : 'hidden' }}
+      />
     </div>
   );
 };
+
+const GalleryComponent = () => {
+  const images = [
+    { thumbnailSrc: 'path/to/thumbnail1.jpg', fullSrc: 'path/to/fullimage1.jpg' },
+    { thumbnailSrc: 'path/to/thumbnail2.jpg', fullSrc: 'path/to/fullimage2.jpg' },
+  ];
+
+  return (
+    <div>
+      {images.map((image, index) => (
+        <ImageComponent
+          key={index}
+          options={image}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default GalleryComponent;
 ```
 
 In this example, `useImageLoad` is used to load an image with a thumbnail transitioning to the full-resolution image.
@@ -1107,7 +1255,7 @@ In this example, `useImageLoad` is used to load an image with a thumbnail transi
 
 We welcome contributions to `useImageLoad`. For bugs, feature requests, or pull requests, please reach out through the project's repository.
 
-# [useKeyPress](#use-key-press) Hook
+# useKeyPress
 
 The `useKeyPress` hook is an advanced utility for detecting specific keypress events in React applications. It supports customizable debounce timing and can listen for keypress events either globally or locally within a component.
 
@@ -1137,15 +1285,18 @@ yarn add @custom-react-hooks/use-key-press
 ```typescript
 import useKeyPress from '@custom-react-hooks/use-key-press';
 
-const MyComponent = () => {
-  const keyPressed = useKeyPress('Enter', { debounce: 200, global: true });
+const TestComponent: React.FC = () => {
+  const enterPressed = useKeyPress('Enter');
 
   return (
     <div>
-      {keyPressed ? 'Enter key is pressed' : 'Press the Enter key'}
+      <p>Press the "Enter" key</p>
+      {enterPressed && <p>You are pressing the "Enter" key!</p>}
     </div>
   );
 };
+
+export default TestComponent;
 ```
 
 This example demonstrates using `useKeyPress` to detect when the Enter key is pressed with a debounce of 200 milliseconds.
@@ -1163,7 +1314,7 @@ This example demonstrates using `useKeyPress` to detect when the Enter key is pr
 
 We welcome contributions to improve `useKeyPress`. Feel free to submit issues or pull requests to the repository.
 
-# [useLockBodyScroll](#use-lock-body-scroll) Hook
+# useLockBodyScroll
 
 `useLockBodyScroll` is a React hook for controlling the scroll behavior of the body element in web applications. It's particularly useful for scenarios like opening modals or overlays where background scroll needs to be disabled.
 
@@ -1188,16 +1339,42 @@ or
 yarn add @custom-react-hooks/use-lock-body-scroll
 ```
 
+
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useLockBodyScroll from '@custom-react-hooks/use-lock-body-scroll';
 
-const Modal = ({ isOpen }) => {
-  useLockBodyScroll(isOpen);
+const ModalComponent: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  useLockBodyScroll(isModalOpen);
 
-  return isOpen ? <div className="modal">Modal Content</div> : null;
+  return (
+    <div>
+      <button onClick={() => setIsModalOpen(true)}>Open Modal</button>
+      {isModalOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          }}
+        >
+          <div style={{ background: 'white', padding: 20, margin: 50 }}>
+            <p>Modal Content</p>
+            <button onClick={() => setIsModalOpen(false)}>Close Modal</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
+
+export default ModalComponent;
 ```
 
 In this example, the hook is used to lock the body scroll when the modal is open.
@@ -1210,7 +1387,7 @@ In this example, the hook is used to lock the body scroll when the modal is open
 
 Your contributions to improve `useLockBodyScroll` are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useLongPress](#use-long-press) Hook
+# useLongPress
 
 The `useLongPress` hook is designed for adding long press interactions to elements in React applications. It provides a flexible way to handle long press events with customizable thresholds and callbacks.
 
@@ -1238,24 +1415,33 @@ yarn add @custom-react-hooks/use-long-press
 ## Usage
 
 ```typescript
-import React from 'react';
+import React, { useState } from 'react';
 import useLongPress from '@custom-react-hooks/use-long-press';
 
-const MyComponent = () => {
-  const handleLongPress = () => console.log('Long pressed!');
-  const longPressEvents = useLongPress(handleLongPress, {
-    threshold: 500, // Time in milliseconds
-    onStart: () => console.log('Press started'),
-    onFinish: () => console.log('Long press finished'),
-    onCancel: () => console.log('Press cancelled')
+const LongPressTestComponent: React.FC = () => {
+  const [status, setStatus] = useState('Ready');
+
+  const longPressCallback = () => {
+    setStatus('Long Press Finished');
+  };
+
+  const longPressEvents = useLongPress(longPressCallback, {
+    threshold: 500,
+    onStart: () => setStatus('Long Press Started'),
+    onFinish: () => setStatus('Long Press Finished'),
+    onCancel: () => setStatus('Long Press Cancelled'),
   });
 
   return (
-    <div {...longPressEvents}>
-      Press and hold me
+    <div>
+      <button {...longPressEvents}>Press and Hold</button>
+      <p>Status: {status}</p>
     </div>
   );
 };
+
+export default LongPressTestComponent;
+
 ```
 
 This example demonstrates how to use the `useLongPress` hook to add a long press interaction to a div element.
@@ -1277,7 +1463,7 @@ The hook returns an object containing event handlers (`onMouseDown`, `onMouseUp`
 
 Your contributions to improve `useLongPress` are appreciated. Feel free to submit issues or pull requests to the repository.
 
-# [useMediaDevices](#use-media-devices) Hook
+# useMediaDevices
 
 `useMediaDevices` is a React hook that provides a simple interface to access and monitor media devices like cameras and microphones. It handles user permissions and lists all available media input and output devices.
 
@@ -1313,25 +1499,31 @@ const MediaDevicesComponent: React.FC = () => {
   const { devices, isLoading, error } = useMediaDevices();
 
   if (isLoading) {
-    return <p>Loading devices...</p>;
+    return <div>Loading devices...</div>;
   }
 
   if (error) {
-    return <p>Error: {error}</p>;
+    return <div>Error: {error}</div>;
   }
 
   return (
-    <ul>
-      {devices.map(device => (
-        <li key={device.id}>
-          {device.label} - {device.kind}
-        </li>
-      ))}
-    </ul>
+    <div>
+      <h2>Media Devices</h2>
+      {devices.length === 0 ? (
+        <p>No devices found</p>
+      ) : (
+        <ul>
+          {devices.map((device) => (
+            <li key={device.id}>{`${device.kind}: ${device.label}`}</li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 };
 
 export default MediaDevicesComponent;
+
 ```
 
 In this example, `useMediaDevices` is used to list all available media devices.
@@ -1351,7 +1543,7 @@ In this example, `useMediaDevices` is used to list all available media devices.
 
 Contributions to improve `useMediaDevices` are welcome. Please submit issues or pull requests to the repository for any bugs or feature enhancements.
 
-# [useMediaQuery](#use-media-query) Hook
+# useMediaQuery
 
 The `useMediaQuery` hook is designed for responsive design in React applications. It enables components to adapt to different screen sizes or respond to media query changes.
 
@@ -1380,15 +1572,14 @@ Import and use the `useMediaQuery` hook in your React components:
 ```typescript
 import useMediaQuery from '@custom-react-hooks/use-media-query';
 
-const MyResponsiveComponent = () => {
+const MediaQueryTestComponent: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 600px)');
 
-  return (
-    <div>
-      {isMobile ? <p>Mobile View</p> : <p>Desktop View</p>}
-    </div>
-  );
+  return <div>{isMobile ? <p>Mobile View</p> : <p>Desktop View</p>}</div>;
 };
+
+export default MediaQueryTestComponent;
+
 ```
 
 In this example, the component renders different content based on the screen width.
@@ -1401,7 +1592,7 @@ In this example, the component renders different content based on the screen wid
 
 Contributions to enhance the `useMediaQuery` hook are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useMouse](#use-mouse) Hook
+# useMouse
 
 The `useMouse` hook is designed for tracking the mouse position within a specified element in React applications. It's enhanced to provide additional features such as offsetting the mouse position and avoiding edges of the screen, which is useful for tooltips and other floating elements.
 
@@ -1432,18 +1623,28 @@ yarn add @custom-react-hooks/use-mouse
 import React, { useRef } from 'react';
 import useMouse from '@custom-react-hooks/use-mouse';
 
-const MyComponent: React.FC = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { x, y } = useMouse(ref, { offsetX: 15, offsetY: 15, avoidEdges: true });
+type TestComponentProps = {
+  options?: MouseOptions;
+};
+
+const TestComponent: React.FC<TestComponentProps> = ({ options }) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const mousePosition = useMouse(ref, options);
 
   return (
-    <div ref={ref} style={{ position: 'relative', height: '100vh' }}>
-      <div style={{ position: 'absolute', left: `${x}px`, top: `${y}px` }}>
-        Tooltip or Pop-up content
+    <div
+      ref={ref}
+      className="container"
+    >
+      <div className="tooltip">
+        Mouse Position: ({mousePosition.x}, {mousePosition.y})
       </div>
     </div>
   );
 };
+
+export default TestComponent;
+
 ```
 
 In this TypeScript example, the `useMouse` hook is used to track the mouse position within a `div` element and adjust the position of a tooltip or pop-up element accordingly.
@@ -1463,7 +1664,7 @@ In this TypeScript example, the `useMouse` hook is used to track the mouse posit
 
 Contributions to enhance `useMouse` are welcome. Please feel free to submit issues or pull requests to the repository.
 
-# [useOnScreen](#use-on-screen) Hook
+# useOnScreen
 
 The `useOnScreen` hook utilizes the Intersection Observer API to detect if an element is visible within the viewport. It's ideal for scenarios such as lazy loading images, triggering animations on scroll, and implementing features like infinite scroll.
 
@@ -1495,15 +1696,28 @@ Import and use the `useOnScreen` hook in your React components. You can also spe
 ```typescript
 import useOnScreen from '@custom-react-hooks/use-on-screen';
 
-const MyComponent = () => {
-  const { ref, isIntersecting } = useOnScreen({ threshold: 0.5 }, true);
+const OnScreenTestComponent: React.FC = () => {
+  const { ref, isIntersecting } = useOnScreen<HTMLDivElement>();
 
   return (
-    <div ref={ref}>
-      {isIntersecting ? 'Element is visible' : 'Element is not visible'}
+    <div>
+      <div
+        ref={ref}
+        style={{
+          height: '100px',
+          width: '100px',
+          backgroundColor: isIntersecting ? 'green' : 'red',
+        }}
+      >
+        Test Box
+      </div>
+      <p>{isIntersecting ? 'Visible in viewport' : 'Not visible in viewport'}</p>
     </div>
   );
 };
+
+export default OnScreenTestComponent;
+
 ```
 
 In this example, the hook observes an element and updates its visibility status. When `once` is set to `true`, the element is unobserved after becoming visible for the first time.
@@ -1519,7 +1733,73 @@ In this example, the hook observes an element and updates its visibility status.
 
 Your contributions to enhance `useOnScreen` are highly appreciated. Feel free to submit issues or pull requests to improve its functionality and performance.
 
-# [usePermission](#use-permission) Hook
+# useOrientation
+
+The `useOrientation` hook provides a way to access and respond to changes in device orientation in React applications. It tracks the orientation of the device in real-time, offering both the orientation angle and type.
+
+## Features
+
+- **Real-time Orientation Data:** Updates with the current orientation angle and type as the device orientation changes.
+- **Server-Side Rendering Compatibility:** Safely handles scenarios without a `window` object, suitable for SSR.
+- **Detailed Orientation Information:** Provides the orientation angle and type (landscape or portrait).
+
+## Installation
+
+```bash
+npm install @custom-react-hooks/use-orientation
+```
+
+or
+
+```bash
+yarn add @custom-react-hooks/use-orientation
+```
+
+## Usage
+
+```typescript
+import React, { useRef } from 'react';
+import useOrientation from '@custom-react-hooks/use-orientation';
+
+const MyComponent = () => {
+  const imgRef = useRef<HTMLImageElement>(null);
+  const orientation = useOrientation();
+  const elementOrientation = useOrientation(imgRef);
+
+  return (
+    <div>
+      <p>
+        Device Orientation: Angle - {orientation.angle}, Type - {orientation.type}
+      </p>
+      <img
+        ref={imgRef}
+        src="path/to/image.jpg"
+        alt="Sample"
+      />
+      <p>
+        Element Orientation: Aspect Ratio - {elementOrientation.aspectRatio?.toFixed(2)},
+        Orientation - {elementOrientation.elementOrientation}
+      </p>
+    </div>
+  );
+};
+
+export default MyComponent;
+```
+
+This example demonstrates how to use the `useOrientation` hook to monitor and display the device's current orientation.
+
+## API Reference
+
+- Returns an object with:
+  - `angle`: The current orientation angle of the device in degrees.
+  - `type`: The current orientation type (`'landscape-primary'`, `'landscape-secondary'`, `'portrait-primary'`, `'portrait-secondary'`).
+
+## Contributing
+
+Contributions to enhance `useOrientation` are highly welcomed. Feel free to submit issues or pull requests to the repository.
+
+# usePermission
 
 `usePermission` is a React hook designed to query and monitor the status of user permissions for various browser APIs such as geolocation, notifications, microphone, and camera.
 
@@ -1550,25 +1830,25 @@ yarn add @custom-react-hooks/use-permission
 import React from 'react';
 import usePermission from '@custom-react-hooks/use-permission';
 
-const MyComponent: React.FC = () => {
-  const { state, isLoading, error } = usePermission('microphone');
+interface PermissionTestComponentProps {
+  permissionName: PermissionName;
+}
 
-  if (isLoading) {
-    return <p>Checking microphone permission...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+const PermissionTestComponent: React.FC<PermissionTestComponentProps> = ({ permissionName }) => {
+  const { state, isLoading, error } = usePermission(permissionName);
 
   return (
     <div>
-      Microphone permission status: {state}
+      <h1>Permission Status</h1>
+      <p>Permission: {permissionName}</p>
+      <p>Status: {isLoading ? 'Loading...' : state}</p>
+      {error && <p>Error: {error}</p>}
     </div>
   );
 };
 
-export default MyComponent;
+export default PermissionTestComponent;
+
 ```
 
 In this example, `usePermission` is used to check the permission status of the user's microphone.
@@ -1587,7 +1867,7 @@ In this example, `usePermission` is used to check the permission status of the u
 
 We welcome contributions to `usePermission`. Please report bugs or suggest feature enhancements through issues or pull requests in the project's repository.
 
-# [usePortal](#use-portal) Hook
+# usePortal
 
 The `usePortal` hook facilitates the creation and management of portal components in React applications. Portals provide a first-class way to render children into a DOM node that exists outside the DOM hierarchy of the parent component. This hook is particularly useful for rendering modals, dropdowns, and tooltips.
 
@@ -1618,21 +1898,22 @@ Import the `usePortal` hook and use it in your React components to manage portal
 ```typescript
 import usePortal from '@custom-react-hooks/use-portal';
 
-const MyComponent = () => {
+const PortalTestComponent: React.FC = () => {
   const { Portal, openPortal, closePortal, isOpen } = usePortal();
 
   return (
     <div>
       <button onClick={openPortal}>Open Portal</button>
-      {isOpen && (
-        <Portal>
-          <div>Portal Content</div>
-          <button onClick={closePortal}>Close Portal</button>
-        </Portal>
-      )}
+      <button onClick={closePortal}>Close Portal</button>
+      <Portal>
+        <div id="portal-content">This is portal content</div>
+      </Portal>
+      {isOpen && <p>Portal is open</p>}
     </div>
   );
 };
+
+export default PortalTestComponent;
 ```
 
 In this example, the `usePortal` hook is used to render a modal-like component. The portal can be opened and closed using the provided functions.
@@ -1648,7 +1929,7 @@ In this example, the `usePortal` hook is used to render a modal-like component. 
 
 Contributions to improve `usePortal` are welcome. If you have suggestions or enhancements, feel free to submit issues or pull requests to the repository.
 
-# [useScript](#use-script) Hook
+# useScript
 
 The `useScript` hook is an advanced tool for dynamically loading and managing external scripts in React applications. It supports loading multiple scripts, handling load and error events, custom script attributes, and optional script removal.
 
@@ -1679,26 +1960,21 @@ Import the `useScript` hook and use it in your React components. You can specify
 
 ```typescript
 import useScript from '@custom-react-hooks/use-script';
+interface ScriptTestComponentProps {
+  src: string;
+}
 
-const MyComponent = () => {
-  const scripts = useScript(
-    ['https://example.com/script1.js', 'https://example.com/script2.js'],
-    {
-      onLoad: () => console.log('Scripts loaded'),
-      onError: () => console.log('Script load error'),
-      defer: true,
-      removeOnUnmount: true
-    }
-  );
+const ScriptTestComponent: React.FC<ScriptTestComponentProps> = ({ src }) => {
+  const status = useScript(src);
 
   return (
     <div>
-      {scripts.map(script => (
-        <div key={script.src}>{script.status}</div>
-      ))}
+      <p>Script status: {status}</p>
     </div>
   );
 };
+
+export default ScriptTestComponent;
 ```
 
 In this example, the hook loads multiple scripts with additional attributes and provides callbacks for load and error events.
@@ -1719,7 +1995,7 @@ In this example, the hook loads multiple scripts with additional attributes and 
 
 Contributions to enhance the `useScript` hook are welcome. Feel free to submit issues or pull requests to improve its functionality and usability.
 
-# [useStatus](#use-status) Hook
+# useStatus
 
 The `useStatus` hook is designed to monitor the network status of a user's device in React applications. It provides real-time information on whether the user is online or offline and includes additional network details when available.
 
@@ -1749,22 +2025,21 @@ Import and use the `useStatus` hook in your React components to get network stat
 ```typescript
 import useStatus from '@custom-react-hooks/use-status';
 
-const MyComponent = () => {
+const NetworkStatusComponent: React.FC = () => {
   const { online, downlink, effectiveType, rtt } = useStatus();
 
   return (
     <div>
+      <h1>Network Status</h1>
       <p>{online ? 'Online' : 'Offline'}</p>
-      {online && (
-        <>
-          <p>Downlink Speed: {downlink} Mbps</p>
-          <p>Effective Connection Type: {effectiveType}</p>
-          <p>Round-trip Time: {rtt} ms</p>
-        </>
-      )}
+      {downlink && <p>Downlink Speed: {downlink} Mbps</p>}
+      {effectiveType && <p>Effective Type: {effectiveType}</p>}
+      {rtt && <p>RTT: {rtt} ms</p>}
     </div>
   );
 };
+
+export default NetworkStatusComponent;
 ```
 
 In this example, the hook provides the current network status along with additional network information if the user is online.
@@ -1781,7 +2056,7 @@ In this example, the hook provides the current network status along with additio
 
 Contributions to improve `useStatus` are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useStep](#use-step) Hook
+# useStep
 
 `useStep` is a custom React hook designed for handling step-based logic in applications, such as wizards or multi-step forms. It manages the current step and provides navigation functionality.
 
@@ -1813,18 +2088,26 @@ yarn add @custom-react-hooks/use-step
 import React from 'react';
 import useStep from '@custom-react-hooks/use-step';
 
-const MyStepperComponent = () => {
-  const { currentStep, nextStep, prevStep, reset } = useStep({ totalSteps: 5, loop: true });
+interface StepTestComponentProps {
+  totalSteps: number;
+  initialStep?: number;
+  loop?: boolean;
+}
+
+const StepTestComponent: React.FC<StepTestComponentProps> = ({ totalSteps, initialStep, loop }) => {
+  const { currentStep, nextStep, prevStep, reset } = useStep({ initialStep, totalSteps, loop });
 
   return (
     <div>
-      <p>Current Step: {currentStep + 1}</p>
+      <p>Current Step: {currentStep}</p>
       <button onClick={prevStep}>Previous</button>
       <button onClick={nextStep}>Next</button>
       <button onClick={reset}>Reset</button>
     </div>
   );
 };
+
+export default StepTestComponent;
 ```
 
 In this example, `useStep` is used to navigate through a series of steps with looping enabled.
@@ -1845,7 +2128,7 @@ In this example, `useStep` is used to navigate through a series of steps with lo
 
 Contributions to improve `useStep` are welcome. Please feel free to submit issues or pull requests to the repository.
 
-# [useStorage](#use-storage) Hook
+# useStorage
 
 `useStorage` is a versatile hook for interacting with Web Storage (localStorage and sessionStorage) in React applications. It simplifies storage operations and ensures compatibility with server-side rendering.
 
@@ -1874,18 +2157,35 @@ yarn add @custom-react-hooks/use-storage
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useStorage from '@custom-react-hooks/use-storage';
 
-const MyComponent = () => {
-  const [value, setValue] = useStorage('myKey', 'defaultValue', 'local');
+const StorageTestComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState('');
+  const [storedValue, setStoredValue] = useStorage('testKey', '');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSave = () => {
+    setStoredValue(inputValue);
+  };
 
   return (
     <div>
-      <p>Value: {value}</p>
-      <button onClick={() => setValue('newValue')}>Update Value</button>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      <button onClick={handleSave}>Save to Storage</button>
+      <div>Stored Value: {storedValue}</div>
     </div>
   );
 };
+
+export default StorageTestComponent;
 ```
 
 In this example, the hook manages a value in `localStorage`, providing functions to read and update it.
@@ -1901,7 +2201,7 @@ In this example, the hook manages a value in `localStorage`, providing functions
 
 Contributions to enhance `useStorage` are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useThrottle](#use-throttle) Hook
+# useThrottle
 
 The `useThrottle` hook in React is designed to limit the rate at which a function can be executed, making it ideal for handling events that fire rapidly, such as scrolling, resizing, or continuous keypresses.
 
@@ -1929,25 +2229,30 @@ yarn add @custom-react-hooks/use-throttle
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useThrottle from '@custom-react-hooks/use-throttle';
 
-const MyComponent = () => {
-  const handleScroll = useThrottle(() => {
-    // Throttled scroll event logic
-    console.log('Scroll event throttled');
-  }, 1000);
+const ThrottleTestComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState('');
+  const throttledValue = useThrottle(inputValue, 1000);
 
-  useEffect(() => {
-    // Attach the throttled event listener
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      // Cleanup
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
 
-  return <div>Content here</div>;
+  return (
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      {throttledValue !== undefined && <div>Throttled Value: {throttledValue}</div>}
+    </div>
+  );
 };
+
+export default ThrottleTestComponent;
 ```
 
 In this example, `useThrottle` is used to throttle the execution of a function handling the scroll event, thereby enhancing performance.
@@ -1963,7 +2268,7 @@ In this example, `useThrottle` is used to throttle the execution of a function h
 
 Contributions to improve `useThrottle` are welcome. Feel free to submit issues or pull requests to enhance its functionality and usability.
 
-# [useTimeout](#use-timeout) Hook
+# useTimeout
 
 `useTimeout` is a custom React hook that manages timeouts. It provides a straightforward way to handle actions that should occur after a delay, with the ability to start, reset, and stop the timeout.
 
@@ -1988,23 +2293,34 @@ yarn add @custom-react-hooks/use-timeout
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useTimeout from '@custom-react-hooks/use-timeout';
 
-const MyComponent = () => {
-  const doSomething = () => {
-    console.log('Action after timeout');
+const TimeoutTestComponent: React.FC = () => {
+  const [message, setMessage] = useState('No timeout set');
+  const { reset, clear, isActive } = useTimeout(() => setMessage('Timeout triggered'), 2000); // 2-second timeout
+
+  const handleSetTimeout = () => {
+    reset();
+    setMessage('Timeout is active...');
   };
 
-  const { reset, clear, isActive } = useTimeout(doSomething, 5000);
+  const handleClearTimeout = () => {
+    clear();
+    setMessage('Timeout cleared');
+  };
 
   return (
     <div>
-      {isActive ? <p>Timeout is active</p> : <p>Timeout is inactive</p>}
-      <button onClick={reset}>Start/Restart Timeout</button>
-      <button onClick={clear}>Stop Timeout</button>
+      <button onClick={handleSetTimeout}>Set Timeout</button>
+      <button onClick={handleClearTimeout}>Clear Timeout</button>
+      <p>Status: {isActive ? 'Active' : 'Inactive'}</p>
+      <p>{message}</p>
     </div>
   );
 };
+
+export default TimeoutTestComponent;
 ```
 
 In this example, `useTimeout` is used to manage a timeout that triggers a function after a specified delay.
@@ -2022,7 +2338,7 @@ In this example, `useTimeout` is used to manage a timeout that triggers a functi
 
 Contributions to improve `useTimeout` are welcome. Feel free to submit issues or pull requests to the repository.
 
-# [useToggle](#use-toggle) Hook
+# useToggle
 
 `useToggle` is a custom React hook for managing boolean states with enhanced control. It provides a simple and efficient way to toggle a boolean state and execute a callback function in response to the state changes.
 
@@ -2051,22 +2367,20 @@ yarn add @custom-react-hooks/use-toggle
 ```typescript
 import useToggle from '@custom-react-hooks/use-toggle';
 
-const MyComponent = () => {
-  const handleToggle = (newValue) => {
-    console.log('Toggle state is now:', newValue);
-  };
-
-  const { value, toggle, setTrue, setFalse } = useToggle(false, handleToggle);
+const ToggleTestComponent: React.FC = () => {
+  const { value, toggle, setTrue, setFalse } = useToggle(false);
 
   return (
     <div>
-      <p>The toggle state is: {value ? 'True' : 'False'}</p>
       <button onClick={toggle}>Toggle</button>
       <button onClick={setTrue}>Set True</button>
       <button onClick={setFalse}>Set False</button>
+      {value && <p>Message Visible</p>}
     </div>
   );
 };
+
+export default ToggleTestComponent;
 ```
 
 In this example, `useToggle` is used to manage a boolean state. A callback function is provided to log the new state whenever it changes.
@@ -2085,7 +2399,7 @@ In this example, `useToggle` is used to manage a boolean state. A callback funct
 
 Contributions to enhance `useToggle` are welcome. Feel free to submit issues or pull requests to improve its functionality and usability.
 
-# [useUpdateEffect](#use-update-effect) Hook
+# useUpdateEffect
 
 The `useUpdateEffect` hook is an enhanced version of React's `useEffect` that is triggered only when dependencies update, skipping the effect on the component's initial mount. This hook is particularly useful for effects that you only want to run in response to specific changes.
 
@@ -2115,20 +2429,27 @@ yarn add @custom-react-hooks/use-update-effect
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useUpdateEffect from '@custom-react-hooks/use-update-effect';
 
-const MyComponent = ({ value }) => {
+const UpdateEffectTestComponent: React.FC = () => {
+  const [count, setCount] = useState(0);
+  const [message, setMessage] = useState('');
+
   useUpdateEffect(() => {
-    // Effect logic here
-    console.log('Value updated:', value);
+    setMessage(`Effect ran at count: ${count}`);
+  }, [count]);
 
-    return () => {
-      // Optional cleanup logic
-    };
-  }, [value]);
-
-  return <div>Current Value: {value}</div>;
+  return (
+    <div>
+      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+      <p>Count: {count}</p>
+      <p>{message}</p>
+    </div>
+  );
 };
+
+export default UpdateEffectTestComponent;
 ```
 
 In this example, the `useUpdateEffect` hook is utilized to perform an action when the `value` prop changes, excluding the initial mount.
@@ -2145,7 +2466,7 @@ In this example, the `useUpdateEffect` hook is utilized to perform an action whe
 
 Your contributions to enhance `useUpdateEffect` are highly appreciated. Feel free to submit issues or pull requests to improve its functionality.
 
-# [useWindowSize](#use-window-size) Hook
+# useWindowSize
 
 The `useWindowSize` hook is designed for responsive React applications, providing an easy way to track changes in window size. It includes debouncing for performance optimization and is compatible with server-side rendering.
 
@@ -2172,16 +2493,18 @@ yarn add @custom-react-hooks/use-window-size
 ```typescript
 import useWindowSize from '@custom-react-hooks/use-window-size';
 
-const MyComponent = () => {
-  const { width, height } = useWindowSize(200); // 200ms debounce delay
+const WindowSizeTestComponent: React.FC = () => {
+  const { width, height } = useWindowSize(200); // Using a 200ms debounce delay
 
   return (
     <div>
-      <p>Window width: {width}</p>
-      <p>Window height: {height}</p>
+      <p>Window Width: {width}</p>
+      <p>Window Height: {height}</p>
     </div>
   );
 };
+
+export default WindowSizeTestComponent;
 ```
 
 In this example, the `useWindowSize` hook is used to track the size of the browser window. The debounce delay is set to 200 milliseconds to optimize performance.
@@ -2196,6 +2519,7 @@ In this example, the `useWindowSize` hook is used to track the size of the brows
 ## Contributing
 
 Contributions to enhance `useWindowSize` are welcome. Feel free to submit issues or pull requests to the repository.
+
 
 ## 🛠️ [Contributing](#contributing)
 

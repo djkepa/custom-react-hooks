@@ -28,11 +28,10 @@ yarn add @custom-react-hooks/use-async
 import useAsync from '@custom-react-hooks/use-async';
 
 const fetchData = async () => {
-  // Async function to fetch data
-  return await fetch('/api/data').then(res => res.json());
+  return await fetch('https://jsonplaceholder.typicode.com/todos/1').then((res) => res.json());
 };
 
-const MyComponent = () => {
+const TestComponent = () => {
   const { execute, status, value, error } = useAsync(fetchData, false);
 
   return (
@@ -44,6 +43,8 @@ const MyComponent = () => {
     </div>
   );
 };
+
+export default TestComponent;
 ```
 
 In this example, the `useAsync` hook is used to perform an asynchronous data fetch operation.

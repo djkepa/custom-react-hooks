@@ -5,7 +5,8 @@ interface ClipboardState {
   error: string | null;
 }
 
-const isClipboardAvailable = typeof navigator !== 'undefined' && typeof navigator.clipboard !== 'undefined';
+const isClipboardAvailable =
+  typeof navigator !== 'undefined' && typeof navigator.clipboard !== 'undefined';
 
 /**
  * `useClipboard` provides functionality to copy to and paste from the clipboard.

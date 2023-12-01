@@ -1,5 +1,5 @@
 /// <reference types="react" />
-interface MouseOptions {
+export interface MouseOptions {
     offsetX: number;
     offsetY: number;
     avoidEdges: boolean;

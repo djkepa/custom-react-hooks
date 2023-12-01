@@ -28,15 +28,18 @@ yarn add @custom-react-hooks/use-key-press
 ```typescript
 import useKeyPress from '@custom-react-hooks/use-key-press';
 
-const MyComponent = () => {
-  const keyPressed = useKeyPress('Enter', { debounce: 200, global: true });
+const TestComponent: React.FC = () => {
+  const enterPressed = useKeyPress('Enter');
 
   return (
     <div>
-      {keyPressed ? 'Enter key is pressed' : 'Press the Enter key'}
+      <p>Press the "Enter" key</p>
+      {enterPressed && <p>You are pressing the "Enter" key!</p>}
     </div>
   );
 };
+
+export default TestComponent;
 ```
 
 This example demonstrates using `useKeyPress` to detect when the Enter key is pressed with a debounce of 200 milliseconds.

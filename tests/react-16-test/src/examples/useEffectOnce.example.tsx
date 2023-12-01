@@ -1,7 +1,7 @@
 import React from 'react';
-import useEffectOnce from '../src/hooks/useEffectOnce';
+import useEffectOnce from '../hook/useEffectOnce';
 
-const MyComponent: React.FC = () => {
+const EffectOnceComponent: React.FC = () => {
   useEffectOnce(() => {
     console.log('This effect runs only once after the component mounts.');
 
@@ -12,3 +12,5 @@ const MyComponent: React.FC = () => {
 
   return <div>My Component</div>;
 };
+
+export default EffectOnceComponent;

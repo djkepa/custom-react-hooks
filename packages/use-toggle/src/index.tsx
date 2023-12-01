@@ -13,7 +13,7 @@ function useToggle(initialValue: boolean = false, onToggle?: (newValue: boolean)
   const [value, setValue] = useState(initialValue);
 
   const toggle = useCallback(() => {
-    setValue(v => {
+    setValue((v) => {
       const newValue = !v;
       if (onToggle) {
         onToggle(newValue);

@@ -27,9 +27,9 @@ yarn add @custom-react-hooks/use-clipboard
 
 ```typescript
 import React, { useState } from 'react';
-import useClipboard from '@custom-react-hooks/use-clipboard';
+import useClipboard from '@react-custom-hooks/useClipboard';
 
-function MyComponent() {
+function ClipboardComponent() {
   const [text, setText] = useState('');
   const { copyToClipboard, pasteFromClipboard, state } = useClipboard();
 
@@ -40,7 +40,7 @@ function MyComponent() {
 
   const handlePaste = async () => {
     const pastedText = await pasteFromClipboard();
-    if (state.success) {
+    if (state.success && pastedText !== undefined) {
       setText(pastedText);
     }
     // Handle errors with state.error
@@ -48,7 +48,11 @@ function MyComponent() {
 
   return (
     <div>
-      <input type="text" value={text} onChange={(e) => setText(e.target.value)} />
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
       <button onClick={handleCopy}>Copy to Clipboard</button>
       <button onClick={handlePaste}>Paste from Clipboard</button>
       {state.success && <p>Action successful!</p>}
@@ -56,6 +60,7 @@ function MyComponent() {
     </div>
   );
 }
+export default ClipboardComponent;
 ```
 
 This example demonstrates how to use the `useClipboard` hook to copy text to and paste text from the clipboard using buttons.

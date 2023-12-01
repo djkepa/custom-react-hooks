@@ -27,12 +27,11 @@ yarn add @custom-react-hooks/use-form
 
 ```typescript
 import React from 'react';
-import useForm from '@custom-react-hooks/use-form';
+import useForm from '@react-custom-hooks/useForm';
 
 interface FormValues {
   username: string;
   email: string;
-  // Define other form fields as needed
 }
 
 const MyForm = () => {
@@ -42,41 +41,54 @@ const MyForm = () => {
     const errors: Partial<Record<keyof FormValues, string>> = {};
     if (!values.username) errors.username = 'Username is required';
     if (!values.email) errors.email = 'Email is required';
-    // Implement additional validation rules here
+    // Add more validation rules as needed
     return errors as Record<keyof FormValues, string | undefined>;
   };
 
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    resetForm,
-    isSubmitting,
-    submissionStatus
-  } = useForm(initialValues, validate);
+  const { values, errors, touched, handleChange, handleBlur, handleSubmit, resetForm } = useForm(
+    initialValues,
+    validate,
+  );
 
-  const onSubmit = async (values: FormValues) => {
-    // Handle form submission logic
+  const onSubmit = async () => {
+    // If you have asynchronous operations, place them here
+    console.log('Form submitted:', values);
   };
 
   return (
     <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
-      <input name="username" value={values.username} onChange={handleChange} onBlur={handleBlur} />
+      <label htmlFor="username">Username</label>
+      <input
+        id="username"
+        name="username"
+        value={values.username}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       {touched.username && errors.username && <div>{errors.username}</div>}
-      
-      <input name="email" value={values.email} onChange={handleChange} onBlur={handleBlur} />
+
+      <label htmlFor="email">Email</label>
+      <input
+        id="email"
+        name="email"
+        value={values.email}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       {touched.email && errors.email && <div>{errors.email}</div>}
 
-      {/* Additional form fields */}
-
-      <button type="submit" disabled={isSubmitting}>Submit</button>
-      <button type="button" onClick={resetForm}>Reset</button>
+      <button type="submit">Submit</button>
+      <button
+        type="button"
+        onClick={resetForm}
+      >
+        Reset
+      </button>
     </form>
   );
 };
+
+export default MyForm;
 ```
 
 ## API Reference

@@ -28,19 +28,21 @@ Replace `@custom-react-hooks/use-effect-once` with the actual name of your packa
 
 ```typescript
 import React from 'react';
-import useEffectOnce from '@custom-react-hooks/use-effect-once';
+import useEffectOnce from '@react-custom-hooks/useEffectOnce';
 
-const MyComponent: React.FC = () => {
+const EffectOnceComponent: React.FC = () => {
   useEffectOnce(() => {
-    console.log('Runs only once after the component mounts.');
+    console.log('This effect runs only once after the component mounts.');
 
     return () => {
-      console.log('Runs when the component unmounts.');
+      console.log('This cleanup runs when the component unmounts.');
     };
   });
 
   return <div>My Component</div>;
 };
+
+export default EffectOnceComponent;
 ```
 
 In this example, `useEffectOnce` is used to perform actions at the mounting and unmounting phases of `MyComponent`.

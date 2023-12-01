@@ -23,23 +23,34 @@ yarn add @custom-react-hooks/use-timeout
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useTimeout from '@custom-react-hooks/use-timeout';
 
-const MyComponent = () => {
-  const doSomething = () => {
-    console.log('Action after timeout');
+const TimeoutTestComponent: React.FC = () => {
+  const [message, setMessage] = useState('No timeout set');
+  const { reset, clear, isActive } = useTimeout(() => setMessage('Timeout triggered'), 2000); // 2-second timeout
+
+  const handleSetTimeout = () => {
+    reset();
+    setMessage('Timeout is active...');
   };
 
-  const { reset, clear, isActive } = useTimeout(doSomething, 5000);
+  const handleClearTimeout = () => {
+    clear();
+    setMessage('Timeout cleared');
+  };
 
   return (
     <div>
-      {isActive ? <p>Timeout is active</p> : <p>Timeout is inactive</p>}
-      <button onClick={reset}>Start/Restart Timeout</button>
-      <button onClick={clear}>Stop Timeout</button>
+      <button onClick={handleSetTimeout}>Set Timeout</button>
+      <button onClick={handleClearTimeout}>Clear Timeout</button>
+      <p>Status: {isActive ? 'Active' : 'Inactive'}</p>
+      <p>{message}</p>
     </div>
   );
 };
+
+export default TimeoutTestComponent;
 ```
 
 In this example, `useTimeout` is used to manage a timeout that triggers a function after a specified delay.

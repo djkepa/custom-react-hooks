@@ -26,25 +26,30 @@ yarn add @custom-react-hooks/use-throttle
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useThrottle from '@custom-react-hooks/use-throttle';
 
-const MyComponent = () => {
-  const handleScroll = useThrottle(() => {
-    // Throttled scroll event logic
-    console.log('Scroll event throttled');
-  }, 1000);
+const ThrottleTestComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState('');
+  const throttledValue = useThrottle(inputValue, 1000);
 
-  useEffect(() => {
-    // Attach the throttled event listener
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      // Cleanup
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
 
-  return <div>Content here</div>;
+  return (
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      {throttledValue !== undefined && <div>Throttled Value: {throttledValue}</div>}
+    </div>
+  );
 };
+
+export default ThrottleTestComponent;
 ```
 
 In this example, `useThrottle` is used to throttle the execution of a function handling the scroll event, thereby enhancing performance.

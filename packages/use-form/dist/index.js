@@ -51,20 +51,12 @@ var react_1 = require("react");
 function useForm(initialValues, validate) {
     var _this = this;
     var _a = (0, react_1.useState)(initialValues), values = _a[0], setValues = _a[1];
-    var createInitialErrorsState = function () {
-        return Object.keys(initialValues).reduce(function (acc, key) {
-            acc[key] = undefined;
-            return acc;
-        }, {});
-    };
-    var _b = (0, react_1.useState)(createInitialErrorsState), errors = _b[0], setErrors = _b[1];
-    var createInitialTouchedState = function () {
-        return Object.keys(initialValues).reduce(function (acc, key) {
-            acc[key] = false;
-            return acc;
-        }, {});
-    };
-    var _c = (0, react_1.useState)(createInitialTouchedState), touched = _c[0], setTouched = _c[1];
+    var _b = (0, react_1.useState)(function () {
+        return createInitialErrorsState(initialValues);
+    }), errors = _b[0], setErrors = _b[1];
+    var _c = (0, react_1.useState)(function () {
+        return createInitialTouchedState(initialValues);
+    }), touched = _c[0], setTouched = _c[1];
     var _d = (0, react_1.useState)(false), isSubmitting = _d[0], setIsSubmitting = _d[1];
     var _e = (0, react_1.useState)('idle'), submissionStatus = _e[0], setSubmissionStatus = _e[1];
     var handleChange = (0, react_1.useCallback)(function (e) {
@@ -80,8 +72,10 @@ function useForm(initialValues, validate) {
             var _a;
             return (__assign(__assign({}, t), (_a = {}, _a[name] = true, _a)));
         });
-        var validationErrors = validate(values);
-        setErrors(validationErrors);
+        if (validate) {
+            var validationErrors = validate(values);
+            setErrors(validationErrors);
+        }
     }, [values, validate]);
     var handleSubmit = (0, react_1.useCallback)(function (e, callback) { return __awaiter(_this, void 0, void 0, function () {
         var validationErrors, isValid, error_1;
@@ -91,12 +85,10 @@ function useForm(initialValues, validate) {
                     e.preventDefault();
                     setIsSubmitting(true);
                     setSubmissionStatus('idle');
+                    if (!validate) return [3, 6];
                     validationErrors = validate(values);
                     setErrors(validationErrors);
-                    setTouched(function (t) { return Object.keys(values).reduce(function (acc, key) {
-                        var _a;
-                        return (__assign(__assign({}, acc), (_a = {}, _a[key] = true, _a)));
-                    }, t); });
+                    setTouched(function (t) { return createAllTouchedState(values, t); });
                     isValid = !Object.values(validationErrors).some(function (error) { return error; });
                     if (!isValid) return [3, 5];
                     _a.label = 1;
@@ -123,14 +115,51 @@ function useForm(initialValues, validate) {
     }); }, [values, validate]);
     var resetForm = (0, react_1.useCallback)(function () {
         setValues(initialValues);
-        setErrors(createInitialErrorsState());
-        setTouched(createInitialTouchedState());
+        setErrors(createInitialErrorsState(initialValues));
+        setTouched(createInitialTouchedState(initialValues));
         setIsSubmitting(false);
         setSubmissionStatus('idle');
     }, [initialValues]);
     (0, react_1.useEffect)(function () {
-        setErrors(validate(values));
-    }, [values, validate]);
-    return { values: values, errors: errors, touched: touched, handleChange: handleChange, handleBlur: handleBlur, handleSubmit: handleSubmit, resetForm: resetForm, isSubmitting: isSubmitting, submissionStatus: submissionStatus };
+        if (validate) {
+            var newErrors = validate(values);
+            if (!areErrorsEqual(errors, newErrors)) {
+                setErrors(newErrors);
+            }
+        }
+    }, [values, validate, errors]);
+    return {
+        values: values,
+        errors: errors,
+        touched: touched,
+        handleChange: handleChange,
+        handleBlur: handleBlur,
+        handleSubmit: handleSubmit,
+        resetForm: resetForm,
+        isSubmitting: isSubmitting,
+        submissionStatus: submissionStatus,
+    };
+}
+function areErrorsEqual(errors1, errors2) {
+    var keys = Object.keys(errors1);
+    return keys.every(function (key) { return errors1[key] === errors2[key]; });
+}
+function createInitialErrorsState(initialValues) {
+    return Object.keys(initialValues).reduce(function (acc, key) {
+        acc[key] = undefined;
+        return acc;
+    }, {});
+}
+function createInitialTouchedState(initialValues) {
+    return Object.keys(initialValues).reduce(function (acc, key) {
+        acc[key] = false;
+        return acc;
+    }, {});
+}
+function createAllTouchedState(values, currentTouched) {
+    return Object.keys(values).reduce(function (acc, key) {
+        acc[key] = true;
+        return acc;
+    }, currentTouched);
 }
 exports.default = useForm;

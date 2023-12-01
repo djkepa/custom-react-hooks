@@ -1,6 +1,6 @@
 /// <reference types="react" />
-type ValidatorFunction<T> = (values: T) => Record<keyof T, string | undefined>;
-interface UseFormReturnType<T> {
+export type ValidatorFunction<T> = (values: T) => Record<keyof T, string | undefined>;
+export interface UseFormReturnType<T> {
     values: T;
     errors: Record<keyof T, string | undefined>;
     touched: Record<keyof T, boolean>;
@@ -11,6 +11,6 @@ interface UseFormReturnType<T> {
     isSubmitting: boolean;
     submissionStatus: 'idle' | 'success' | 'error';
 }
-declare function useForm<T extends Record<string, any>>(initialValues: T, validate: ValidatorFunction<T>): UseFormReturnType<T>;
+declare function useForm<T extends Record<string, any>>(initialValues: T, validate?: ValidatorFunction<T>): UseFormReturnType<T>;
 export default useForm;
 //# sourceMappingURL=index.d.ts.map

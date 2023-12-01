@@ -1,84 +1,52 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
-import useAsync from '../../../../packages/use-async/src/index';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import AsyncComponent from '../examples/useAsync.example';
+import fetchMock from 'jest-fetch-mock';
+
+fetchMock.enableMocks();
+
+beforeEach(() => {
+  fetchMock.resetMocks();
+});
 
 describe('useAsync', () => {
-  // Mock async functions
-  const successFunction = jest.fn().mockResolvedValue('success');
-  const errorFunction = jest.fn().mockRejectedValue(new Error('error'));
-
-  it('should start with initial state', () => {
-    const { result } = renderHook(() => useAsync(successFunction, false));
-
-    expect(result.current.status).toBe('idle');
-    expect(result.current.value).toBeNull();
-    expect(result.current.error).toBeNull();
+  it('should initially be in idle state with a fetch button', () => {
+    render(<AsyncComponent />);
+    expect(screen.getByRole('button', { name: 'Fetch Data' })).toBeInTheDocument();
+    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
 
-  it('should be in pending state when async function is called', async () => {
-    let resolveFunction: any;
-    const promise = new Promise((resolve) => {
-      resolveFunction = resolve;
-    });
+  it('should show loading state when fetch is triggered', () => {
+    render(<AsyncComponent />);
+    fireEvent.click(screen.getByRole('button', { name: 'Fetch Data' }));
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
 
-    const asyncFunction = jest.fn().mockImplementation(() => promise);
-    const { result } = renderHook(() => useAsync(asyncFunction, true));
-
-    expect(result.current.status).toBe('pending');
+  it('should show data on successful fetch', async () => {
+    const mockData = { data: 'Test data' };
+    fetchMock.mockResponseOnce(JSON.stringify(mockData));
 
     await act(async () => {
-      resolveFunction('success');
+      render(<AsyncComponent />);
+      fireEvent.click(screen.getByRole('button', { name: 'Fetch Data' }));
+      await waitFor(() => screen.getByText(JSON.stringify(mockData)));
     });
 
-    await waitFor(() => {
-      expect(result.current.status).toBe('success');
-    });
+    // Assertions can be outside the act() if they are not triggering any updates
+    expect(screen.getByText(JSON.stringify(mockData))).toBeInTheDocument();
   });
 
-  it('should handle successful async operation', async () => {
-    const { result } = renderHook(() => useAsync(successFunction, true));
-
-    await waitFor(() => {
-      expect(result.current.status).toBe('success');
-      expect(result.current.value).toBe('success');
-      expect(result.current.error).toBeNull();
-    });
-  });
-
-  it('should handle failed async operation', async () => {
-    const { result } = renderHook(() => useAsync(errorFunction, true));
-
-    await waitFor(() => {
-      expect(result.current.status).toBe('error');
-      expect(result.current.value).toBeNull();
-      expect(result.current.error).toBeDefined();
-    });
-  });
-
-  it('should not execute async function immediately when immediate is false', async () => {
-    let resolveFunction: any;
-    const delayedSuccessFunction = jest.fn().mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          resolveFunction = resolve;
-        }),
-    );
-    const { result } = renderHook(() => useAsync(delayedSuccessFunction, false));
-
-    expect(result.current.status).toBe('idle');
+  it('should show error message on fetch failure', async () => {
+    const errorMessage = 'Failed to fetch';
+    fetchMock.mockRejectOnce(new Error(errorMessage));
 
     await act(async () => {
-      result.current.execute();
+      render(<AsyncComponent />);
+      fireEvent.click(screen.getByRole('button', { name: 'Fetch Data' }));
+      // The state update happens asynchronously, so you need to wait for it
+      await waitFor(() => screen.getByText(`Error: ${errorMessage}`));
     });
 
-    // After executing, expect the status to be 'pending'
-    expect(result.current.status).toBe('pending');
-
-    act(() => {
-      resolveFunction('success');
-    });
-
-    await waitFor(() => {
-      expect(result.current.status).toBe('success');
-    });
+    expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
   });
 });

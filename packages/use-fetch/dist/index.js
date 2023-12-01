@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,30 +41,33 @@ function useFetch(url, options, cache, globalStateSetter) {
     var _this = this;
     if (options === void 0) { options = {}; }
     if (cache === void 0) { cache = null; }
-    var _a = (0, react_1.useState)((cache === null || cache === void 0 ? void 0 : cache.get(url)) || null), data = _a[0], setData = _a[1];
+    var _a = (0, react_1.useState)(null), data = _a[0], setData = _a[1];
     var _b = (0, react_1.useState)(false), loading = _b[0], setLoading = _b[1];
     var _c = (0, react_1.useState)(null), error = _c[0], setError = _c[1];
     var timeoutIdRef = (0, react_1.useRef)(null);
+    var memoizedOptions = (0, react_1.useMemo)(function () { return options; }, [JSON.stringify(options)]);
     var fetchData = (0, react_1.useCallback)(function () { return __awaiter(_this, void 0, void 0, function () {
-        var controller_1, signal, response, jsonData, err_1;
+        var response, jsonData, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     setLoading(true);
-                    setData((cache === null || cache === void 0 ? void 0 : cache.get(url)) || null);
                     setError(null);
-                    if (timeoutIdRef.current) {
-                        clearTimeout(timeoutIdRef.current);
+                    if (cache && cache.has(url)) {
+                        setData(cache.get(url) || null);
+                        setLoading(false);
+                        return [2];
                     }
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, 5, 6]);
-                    controller_1 = new AbortController();
-                    signal = controller_1.signal;
-                    if (options.timeout) {
-                        timeoutIdRef.current = setTimeout(function () { return controller_1.abort(); }, options.timeout);
+                    if (memoizedOptions.timeout) {
+                        timeoutIdRef.current = setTimeout(function () {
+                            setLoading(false);
+                            setError(new Error('Timeout'));
+                        }, memoizedOptions.timeout);
                     }
-                    return [4, fetch(url, __assign(__assign({}, options), { signal: signal }))];
+                    return [4, fetch(url, memoizedOptions)];
                 case 2:
                     response = _a.sent();
                     if (!response.ok)
@@ -83,11 +75,11 @@ function useFetch(url, options, cache, globalStateSetter) {
                     return [4, response.json()];
                 case 3:
                     jsonData = _a.sent();
-                    cache === null || cache === void 0 ? void 0 : cache.set(url, jsonData);
                     setData(jsonData);
-                    if (globalStateSetter) {
-                        globalStateSetter(jsonData);
+                    if (cache) {
+                        cache.set(url, jsonData);
                     }
+                    globalStateSetter === null || globalStateSetter === void 0 ? void 0 : globalStateSetter(jsonData);
                     return [3, 6];
                 case 4:
                     err_1 = _a.sent();
@@ -104,9 +96,9 @@ function useFetch(url, options, cache, globalStateSetter) {
                 case 6: return [2];
             }
         });
-    }); }, [url, options, cache, globalStateSetter]);
+    }); }, [url, memoizedOptions, cache, globalStateSetter]);
     (0, react_1.useEffect)(function () {
-        if (options.manual || (cache === null || cache === void 0 ? void 0 : cache.has(url)))
+        if (options.manual || (cache && cache.has(url)))
             return;
         fetchData();
         return function () {
@@ -114,7 +106,7 @@ function useFetch(url, options, cache, globalStateSetter) {
                 clearTimeout(timeoutIdRef.current);
             }
         };
-    }, [fetchData, options.manual, cache, url]);
+    }, [fetchData]);
     return { data: data, loading: loading, error: error, fetchData: fetchData };
 }
 exports.default = useFetch;

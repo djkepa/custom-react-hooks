@@ -23,17 +23,37 @@ Here's an example of how to use the `useClickOutside` hook in a modal component:
 import React, { useRef } from 'react';
 import useClickOutside from '@react-custom-hooks/use-click-outside';
 
-const Modal = ({ onClose }) => {
-  const modalRef = useRef(null); // Ref for the modal content
-  useClickOutside(modalRef, onClose); // Setup the hook to call `onClose` when a click outside is detected
+const ClickOutsideComponent = ({ onClose }: { onClose: () => void }) => {
+  const modalRef = useRef<HTMLDivElement>(null); // The ref for the modal
+  const closeButtonRef = useRef<HTMLButtonElement>(null); // A ref for the close button
+
+  // Call the hook with the modal ref and the close button ref as the refs to ignore
+  useClickOutside(
+    [modalRef], // Array of refs to detect outside click
+    () => onClose(), // Callback to execute on outside click
+    ['mousedown', 'touchstart'], // Events to listen for
+    true, // Enable the outside click detection
+    [closeButtonRef], // Refs to ignore
+  );
 
   return (
-    <div ref={modalRef}>
-      {/* Your modal content goes here */}
-      <button onClick={onClose}>Close</button>
+    <div
+      ref={modalRef}
+      style={{ border: '1px solid black', padding: '20px' }}
+    >
+      {/* Modal content */}
+      <p>Modal Content Here</p>
+      <button
+        ref={closeButtonRef}
+        onClick={onClose}
+      >
+        Close
+      </button>
     </div>
   );
 };
+
+export default ClickOutsideComponent;
 ```
 
 In the above example, clicking outside the `<div>` containing the modal content will trigger the `onClose` function.

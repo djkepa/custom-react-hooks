@@ -28,20 +28,27 @@ yarn add @custom-react-hooks/use-update-effect
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useUpdateEffect from '@custom-react-hooks/use-update-effect';
 
-const MyComponent = ({ value }) => {
+const UpdateEffectTestComponent: React.FC = () => {
+  const [count, setCount] = useState(0);
+  const [message, setMessage] = useState('');
+
   useUpdateEffect(() => {
-    // Effect logic here
-    console.log('Value updated:', value);
+    setMessage(`Effect ran at count: ${count}`);
+  }, [count]);
 
-    return () => {
-      // Optional cleanup logic
-    };
-  }, [value]);
-
-  return <div>Current Value: {value}</div>;
+  return (
+    <div>
+      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+      <p>Count: {count}</p>
+      <p>{message}</p>
+    </div>
+  );
 };
+
+export default UpdateEffectTestComponent;
 ```
 
 In this example, the `useUpdateEffect` hook is utilized to perform an action when the `value` prop changes, excluding the initial mount.

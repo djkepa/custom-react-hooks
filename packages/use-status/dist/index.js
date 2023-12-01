@@ -14,30 +14,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 function useStatus() {
     var navigatorWithNetworkInfo = navigator;
-    var _a = (0, react_1.useState)(function () {
-        return __assign({ online: navigator.onLine }, (navigatorWithNetworkInfo.connection ? {
-            downlink: navigatorWithNetworkInfo.connection.downlink,
-            effectiveType: navigatorWithNetworkInfo.connection.effectiveType,
-            rtt: navigatorWithNetworkInfo.connection.rtt
-        } : {}));
-    }), status = _a[0], setStatus = _a[1];
-    var updateStatus = function () {
-        setStatus(__assign({ online: navigator.onLine }, (navigatorWithNetworkInfo.connection ? {
-            downlink: navigatorWithNetworkInfo.connection.downlink,
-            effectiveType: navigatorWithNetworkInfo.connection.effectiveType,
-            rtt: navigatorWithNetworkInfo.connection.rtt
-        } : {})));
-    };
+    var getNetworkStatus = function () { return (__assign({ online: navigator.onLine }, (navigatorWithNetworkInfo.connection && {
+        downlink: navigatorWithNetworkInfo.connection.downlink,
+        effectiveType: navigatorWithNetworkInfo.connection.effectiveType,
+        rtt: navigatorWithNetworkInfo.connection.rtt,
+    }))); };
+    var _a = (0, react_1.useState)(getNetworkStatus), status = _a[0], setStatus = _a[1];
+    var updateStatus = function () { return setStatus(getNetworkStatus); };
     (0, react_1.useEffect)(function () {
-        var _a;
         window.addEventListener('online', updateStatus);
         window.addEventListener('offline', updateStatus);
-        (_a = navigatorWithNetworkInfo.connection) === null || _a === void 0 ? void 0 : _a.addEventListener('change', updateStatus);
+        var connection = navigatorWithNetworkInfo.connection;
+        if (connection) {
+            connection.addEventListener('change', updateStatus);
+        }
         return function () {
-            var _a;
             window.removeEventListener('online', updateStatus);
             window.removeEventListener('offline', updateStatus);
-            (_a = navigatorWithNetworkInfo.connection) === null || _a === void 0 ? void 0 : _a.removeEventListener('change', updateStatus);
+            if (connection) {
+                connection.removeEventListener('change', updateStatus);
+            }
         };
     }, []);
     return status;

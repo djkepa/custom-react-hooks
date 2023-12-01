@@ -17,16 +17,19 @@ interface UseStepOptions {
 function useStep({ initialStep = 0, totalSteps, loop = false }: UseStepOptions) {
   const [currentStep, setCurrentStep] = useState(initialStep);
 
-  const goToStep = useCallback((step: number) => {
-    if (step < 0 || step >= totalSteps) {
-      if (loop) {
-        const newStep = step < 0 ? totalSteps - 1 : 0;
-        setCurrentStep(newStep);
+  const goToStep = useCallback(
+    (step: number) => {
+      if (step < 0 || step >= totalSteps) {
+        if (loop) {
+          const newStep = step < 0 ? totalSteps - 1 : 0;
+          setCurrentStep(newStep);
+        }
+        return;
       }
-      return;
-    }
-    setCurrentStep(step);
-  }, [totalSteps, loop]);
+      setCurrentStep(step);
+    },
+    [totalSteps, loop],
+  );
 
   const nextStep = useCallback(() => {
     goToStep(currentStep + 1);

@@ -59,20 +59,14 @@ var useMediaDevices = function () {
             setState(function (s) { return (__assign(__assign({}, s), { error: 'Media devices are not available' })); });
             return;
         }
-        var fetchDevices = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var handleDeviceChange = function () { return __awaiter(void 0, void 0, void 0, function () {
             var devices, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        setState(function (s) { return (__assign(__assign({}, s), { isLoading: true })); });
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 4, , 5]);
-                        return [4, navigator.mediaDevices.getUserMedia({ audio: true, video: true })];
-                    case 2:
-                        _a.sent();
+                        _a.trys.push([0, 2, , 3]);
                         return [4, navigator.mediaDevices.enumerateDevices()];
-                    case 3:
+                    case 1:
                         devices = _a.sent();
                         setState({
                             devices: devices.map(function (device) { return ({
@@ -83,16 +77,21 @@ var useMediaDevices = function () {
                             isLoading: false,
                             error: null,
                         });
-                        return [3, 5];
-                    case 4:
+                        return [3, 3];
+                    case 2:
                         error_1 = _a.sent();
-                        setState(function (s) { return (__assign(__assign({}, s), { isLoading: false, error: 'Unable to access media devices' })); });
-                        return [3, 5];
-                    case 5: return [2];
+                        setState(function (s) { return (__assign(__assign({}, s), { isLoading: false, error: 'Unable to enumerate devices' })); });
+                        return [3, 3];
+                    case 3: return [2];
                 }
             });
         }); };
-        fetchDevices();
+        setState(function (s) { return (__assign(__assign({}, s), { isLoading: true })); });
+        handleDeviceChange();
+        navigator.mediaDevices.addEventListener('devicechange', handleDeviceChange);
+        return function () {
+            navigator.mediaDevices.removeEventListener('devicechange', handleDeviceChange);
+        };
     }, []);
     return state;
 };

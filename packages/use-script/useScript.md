@@ -29,26 +29,21 @@ Import the `useScript` hook and use it in your React components. You can specify
 
 ```typescript
 import useScript from '@custom-react-hooks/use-script';
+interface ScriptTestComponentProps {
+  src: string;
+}
 
-const MyComponent = () => {
-  const scripts = useScript(
-    ['https://example.com/script1.js', 'https://example.com/script2.js'],
-    {
-      onLoad: () => console.log('Scripts loaded'),
-      onError: () => console.log('Script load error'),
-      defer: true,
-      removeOnUnmount: true
-    }
-  );
+const ScriptTestComponent: React.FC<ScriptTestComponentProps> = ({ src }) => {
+  const status = useScript(src);
 
   return (
     <div>
-      {scripts.map(script => (
-        <div key={script.src}>{script.status}</div>
-      ))}
+      <p>Script status: {status}</p>
     </div>
   );
 };
+
+export default ScriptTestComponent;
 ```
 
 In this example, the hook loads multiple scripts with additional attributes and provides callbacks for load and error events.

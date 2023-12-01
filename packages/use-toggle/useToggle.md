@@ -27,22 +27,20 @@ yarn add @custom-react-hooks/use-toggle
 ```typescript
 import useToggle from '@custom-react-hooks/use-toggle';
 
-const MyComponent = () => {
-  const handleToggle = (newValue) => {
-    console.log('Toggle state is now:', newValue);
-  };
-
-  const { value, toggle, setTrue, setFalse } = useToggle(false, handleToggle);
+const ToggleTestComponent: React.FC = () => {
+  const { value, toggle, setTrue, setFalse } = useToggle(false);
 
   return (
     <div>
-      <p>The toggle state is: {value ? 'True' : 'False'}</p>
       <button onClick={toggle}>Toggle</button>
       <button onClick={setTrue}>Set True</button>
       <button onClick={setFalse}>Set False</button>
+      {value && <p>Message Visible</p>}
     </div>
   );
 };
+
+export default ToggleTestComponent;
 ```
 
 In this example, `useToggle` is used to manage a boolean state. A callback function is provided to log the new state whenever it changes.

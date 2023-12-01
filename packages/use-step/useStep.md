@@ -30,18 +30,26 @@ yarn add @custom-react-hooks/use-step
 import React from 'react';
 import useStep from '@custom-react-hooks/use-step';
 
-const MyStepperComponent = () => {
-  const { currentStep, nextStep, prevStep, reset } = useStep({ totalSteps: 5, loop: true });
+interface StepTestComponentProps {
+  totalSteps: number;
+  initialStep?: number;
+  loop?: boolean;
+}
+
+const StepTestComponent: React.FC<StepTestComponentProps> = ({ totalSteps, initialStep, loop }) => {
+  const { currentStep, nextStep, prevStep, reset } = useStep({ initialStep, totalSteps, loop });
 
   return (
     <div>
-      <p>Current Step: {currentStep + 1}</p>
+      <p>Current Step: {currentStep}</p>
       <button onClick={prevStep}>Previous</button>
       <button onClick={nextStep}>Next</button>
       <button onClick={reset}>Reset</button>
     </div>
   );
 };
+
+export default StepTestComponent;
 ```
 
 In this example, `useStep` is used to navigate through a series of steps with looping enabled.
@@ -59,7 +67,5 @@ In this example, `useStep` is used to navigate through a series of steps with lo
   - `reset`: Function to reset to the initial step.
 
 ## Contributing
-
-
 
 Contributions to improve `useStep` are welcome. Please feel free to submit issues or pull requests to the repository.

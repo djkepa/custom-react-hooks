@@ -1,22 +1,18 @@
 import React from 'react';
-import useScript from "../src/hooks/useScript";
+import useScript from '../hook/useScript';
 
-const MyComponent = () => {
-  const scripts = useScript(
-    ['https://example.com/script1.js', 'https://example.com/script2.js'],
-    {
-      onLoad: () => console.log('Scripts loaded'),
-      onError: () => console.log('Script load error'),
-      defer: true,
-      removeOnUnmount: true
-    }
-  );
+interface ScriptTestComponentProps {
+  src: string;
+}
+
+const ScriptTestComponent: React.FC<ScriptTestComponentProps> = ({ src }) => {
+  const status = useScript(src);
 
   return (
     <div>
-      {scripts.map(script => (
-        <div key={script.src}>{script.status}</div>
-      ))}
+      <p>Script status: {status}</p>
     </div>
   );
 };
+
+export default ScriptTestComponent;

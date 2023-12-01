@@ -27,18 +27,35 @@ yarn add @custom-react-hooks/use-storage
 ## Usage
 
 ```typescript
+import React, { useState } from 'react';
 import useStorage from '@custom-react-hooks/use-storage';
 
-const MyComponent = () => {
-  const [value, setValue] = useStorage('myKey', 'defaultValue', 'local');
+const StorageTestComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState('');
+  const [storedValue, setStoredValue] = useStorage('testKey', '');
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSave = () => {
+    setStoredValue(inputValue);
+  };
 
   return (
     <div>
-      <p>Value: {value}</p>
-      <button onClick={() => setValue('newValue')}>Update Value</button>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      <button onClick={handleSave}>Save to Storage</button>
+      <div>Stored Value: {storedValue}</div>
     </div>
   );
 };
+
+export default StorageTestComponent;
 ```
 
 In this example, the hook manages a value in `localStorage`, providing functions to read and update it.

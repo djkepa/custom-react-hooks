@@ -24,30 +24,36 @@ const useDragDrop = (dragData: any, onDrop: (data: any) => void) => {
     dropData: null,
   });
 
-  const handleDragStart = useCallback((e: React.DragEvent) => {
-    setState(s => ({ ...s, isDragging: true, dragData: dragData }));
-    e.dataTransfer.setData('application/reactflow', JSON.stringify(dragData));
-    e.dataTransfer.effectAllowed = 'move';
-  }, [dragData]);
+  const handleDragStart = useCallback(
+    (e: React.DragEvent) => {
+      setState((s) => ({ ...s, isDragging: true, dragData: dragData }));
+      e.dataTransfer.setData('application/reactflow', JSON.stringify(dragData));
+      e.dataTransfer.effectAllowed = 'move';
+    },
+    [dragData],
+  );
 
   const handleDragEnd = useCallback(() => {
-    setState(s => ({ ...s, isDragging: false }));
+    setState((s) => ({ ...s, isDragging: false }));
   }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    setState(s => ({ ...s, isOver: true }));
+    setState((s) => ({ ...s, isOver: true }));
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    const data = JSON.parse(e.dataTransfer.getData('application/reactflow'));
-    setState(s => ({ ...s, isOver: false, dropData: data }));
-    onDrop(data);
-  }, [onDrop]);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      const data = JSON.parse(e.dataTransfer.getData('application/reactflow'));
+      setState((s) => ({ ...s, isOver: false, dropData: data }));
+      onDrop(data);
+    },
+    [onDrop],
+  );
 
   const handleDragLeave = useCallback(() => {
-    setState(s => ({ ...s, isOver: false }));
+    setState((s) => ({ ...s, isOver: false }));
   }, []);
 
   return {

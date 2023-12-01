@@ -1,13 +1,15 @@
 import React from 'react';
-import useWindowSize from '../src/hooks/useWindowSize';
+import useWindowSize from '../hook/useWindowSize';
 
-const MyComponent = () => {
-  const { width, height } = useWindowSize(200); // 200ms debounce delay
+const WindowSizeTestComponent: React.FC = () => {
+  const { width, height } = useWindowSize(200); // Using a 200ms debounce delay
 
   return (
     <div>
-      <p>Window width: {width}</p>
-      <p>Window height: {height}</p>
+      <p>Window Width: {width}</p>
+      <p>Window Height: {height}</p>
     </div>
   );
 };
+
+export default WindowSizeTestComponent;

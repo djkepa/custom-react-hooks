@@ -26,18 +26,19 @@ yarn add @custom-react-hooks/use-idle
 ## Usage
 
 ```typescript
-import React from 'react';
 import useIdle from '@custom-react-hooks/use-idle';
 
-const MyComponent = () => {
-  const isUserIdle = useIdle(3000); // 3 seconds idle time
+const TestComponent = ({ idleTime }: any) => {
+  const isIdle = useIdle(idleTime);
 
   return (
     <div>
-      {isUserIdle ? 'User is idle' : 'User is active'}
+      <p data-testid="idle-status">{isIdle ? 'Idle' : 'Not Idle'}</p>
     </div>
   );
 };
+
+export default TestComponent;
 ```
 
 In this example, the hook is used to detect when the user has been idle for more than 3 seconds.

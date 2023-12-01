@@ -1,20 +1,22 @@
-import React from 'react';
-import useGeoLocation from '../src/hooks/useGeoLocation';
+import useGeoLocation from '../hook/useGeoLocation';
 
-const MyComponent = () => {
-  const { coordinates, error, loading } = useGeoLocation();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+function GeoLocationComponent() {
+  const { loading, coordinates, error, isWatching } = useGeoLocation();
 
   return (
     <div>
-      Latitude: {coordinates?.latitude}, Longitude: {coordinates?.longitude}
+      <h1>GeoLocation Component</h1>
+      {loading && <p>Loading...</p>}
+      {!loading && error && <p>Error: {error.message}</p>}
+      {!loading && !error && coordinates && (
+        <div>
+          <p>Latitude: {coordinates.latitude}</p>
+          <p>Longitude: {coordinates.longitude}</p>
+        </div>
+      )}
+      <p>Watching: {isWatching ? 'Yes' : 'No'}</p>
     </div>
   );
-};
+}
+
+export default GeoLocationComponent;

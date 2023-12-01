@@ -28,27 +28,31 @@ yarn add @custom-react-hooks/use-drag-drop
 
 ```tsx
 import React from 'react';
-import { useDragDrop } from '@custom-react-hooks/use-drag-drop';
+import useDragDrop from '@react-custom-hooks/useDragDrop';
 
-const DraggableComponent = ({ data }) => {
-  const { bindDrag } = useDragDrop(data, (dropData) => console.log(dropData));
+const DragDropTestComponent = ({ onDrop }: any) => {
+  const dragData = { id: 1, name: 'Draggable Item' };
+  const { state, bindDrag, bindDrop } = useDragDrop(dragData, onDrop);
 
   return (
-    <div {...bindDrag}>
-      I am draggable
+    <div>
+      <div
+        {...bindDrag}
+        style={{ border: '1px solid blue', padding: '10px', marginBottom: '10px' }}
+      >
+        {state.isDragging ? 'Dragging...' : 'Drag Me'}
+      </div>
+      <div
+        {...bindDrop}
+        style={{ border: '1px solid green', padding: '10px' }}
+      >
+        {state.isOver ? 'Drop Here!' : 'Drop Area'}
+      </div>
     </div>
   );
 };
 
-const DropZoneComponent = () => {
-  const { bindDrop } = useDragDrop(null, (dropData) => console.log('Data dropped:', dropData));
-
-  return (
-    <div {...bindDrop}>
-      Drop items here
-    </div>
-  );
-};
+export default DragDropTestComponent;
 ```
 
 In this example, `useDragDrop` is used to implement both draggable and droppable components.

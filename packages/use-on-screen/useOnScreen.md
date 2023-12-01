@@ -30,15 +30,28 @@ Import and use the `useOnScreen` hook in your React components. You can also spe
 ```typescript
 import useOnScreen from '@custom-react-hooks/use-on-screen';
 
-const MyComponent = () => {
-  const { ref, isIntersecting } = useOnScreen({ threshold: 0.5 }, true);
+const OnScreenTestComponent: React.FC = () => {
+  const { ref, isIntersecting } = useOnScreen<HTMLDivElement>();
 
   return (
-    <div ref={ref}>
-      {isIntersecting ? 'Element is visible' : 'Element is not visible'}
+    <div>
+      <div
+        ref={ref}
+        style={{
+          height: '100px',
+          width: '100px',
+          backgroundColor: isIntersecting ? 'green' : 'red',
+        }}
+      >
+        Test Box
+      </div>
+      <p>{isIntersecting ? 'Visible in viewport' : 'Not visible in viewport'}</p>
     </div>
   );
 };
+
+export default OnScreenTestComponent;
+
 ```
 
 In this example, the hook observes an element and updates its visibility status. When `once` is set to `true`, the element is unobserved after becoming visible for the first time.

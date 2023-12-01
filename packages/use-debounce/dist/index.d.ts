@@ -1,4 +1,4 @@
-declare function useDebounce<T extends (...args: any[]) => any>(callback: T, delay: number, options?: {
+declare function useDebounce<T extends (...args: any[]) => any>(callback: T, delay?: number, options?: {
     maxWait?: number;
     leading?: boolean;
     trailing?: boolean;

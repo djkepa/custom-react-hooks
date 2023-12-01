@@ -27,25 +27,28 @@ yarn add @custom-react-hooks/use-geo-location
 Import and use the `useGeoLocation` hook in your React components:
 
 ```typescript
-import useGeoLocation from '@custom-react-hooks/use-geo-location';
+import useGeoLocation from '@react-custom-hooks/useGeoLocation';
 
-const MyComponent = () => {
-  const { coordinates, error, loading } = useGeoLocation();
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+function GeoLocationComponent() {
+  const { loading, coordinates, error, isWatching } = useGeoLocation();
 
   return (
     <div>
-      Latitude: {coordinates?.latitude}, Longitude: {coordinates?.longitude}
+      <h1>GeoLocation Component</h1>
+      {loading && <p>Loading...</p>}
+      {!loading && error && <p>Error: {error.message}</p>}
+      {!loading && !error && coordinates && (
+        <div>
+          <p>Latitude: {coordinates.latitude}</p>
+          <p>Longitude: {coordinates.longitude}</p>
+        </div>
+      )}
+      <p>Watching: {isWatching ? 'Yes' : 'No'}</p>
     </div>
   );
-};
+}
+
+export default GeoLocationComponent;
 ```
 
 ## API Reference

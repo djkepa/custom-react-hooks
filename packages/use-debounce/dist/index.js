@@ -1,60 +1,58 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 function useDebounce(callback, delay, options) {
+    if (delay === void 0) { delay = 500; }
     if (options === void 0) { options = {}; }
-    var _a = __assign({ trailing: true }, options), maxWait = _a.maxWait, leading = _a.leading, trailing = _a.trailing;
-    var _b = (0, react_1.useState)(null), lastCallTime = _b[0], setLastCallTime = _b[1];
-    var _c = (0, react_1.useState)(null), timerId = _c[0], setTimerId = _c[1];
-    var _d = (0, react_1.useState)(null), maxTimerId = _d[0], setMaxTimerId = _d[1];
+    var maxWait = options.maxWait, _a = options.leading, leading = _a === void 0 ? false : _a, _b = options.trailing, trailing = _b === void 0 ? true : _b;
+    var timerIdRef = (0, react_1.useRef)(null);
+    var maxTimerIdRef = (0, react_1.useRef)(null);
+    var lastCallTimeRef = (0, react_1.useRef)(null);
+    var callbackRef = (0, react_1.useRef)(callback);
+    (0, react_1.useEffect)(function () {
+        callbackRef.current = callback;
+    }, [callback]);
+    (0, react_1.useEffect)(function () {
+        return function () {
+            if (timerIdRef.current)
+                clearTimeout(timerIdRef.current);
+            if (maxTimerIdRef.current)
+                clearTimeout(maxTimerIdRef.current);
+        };
+    }, []);
     var debouncedFunction = (0, react_1.useCallback)(function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
         var now = Date.now();
-        var isLeading = leading && lastCallTime === null;
-        if (maxWait && !maxTimerId && trailing) {
-            var maxWaitHandler = function () {
-                setMaxTimerId(null);
-                setLastCallTime(now);
-                callback.apply(void 0, args);
-            };
-            setMaxTimerId(setTimeout(maxWaitHandler, maxWait));
-        }
+        var isLeading = leading && lastCallTimeRef.current === null;
+        var invokeCallback = function () {
+            lastCallTimeRef.current = now;
+            timerIdRef.current = null;
+            maxTimerIdRef.current = null;
+            callbackRef.current.apply(callbackRef, args);
+        };
         if (isLeading) {
-            setLastCallTime(now);
-            callback.apply(void 0, args);
+            invokeCallback();
+            return;
         }
-        else if (trailing) {
-            clearTimeout(timerId);
-            var handler = function () {
-                if (!isLeading || maxWait)
-                    setLastCallTime(now);
-                setTimerId(null);
-                callback.apply(void 0, args);
-            };
-            setTimerId(setTimeout(handler, delay));
+        if (timerIdRef.current)
+            clearTimeout(timerIdRef.current);
+        if (maxWait && !maxTimerIdRef.current && trailing) {
+            maxTimerIdRef.current = setTimeout(invokeCallback, maxWait);
         }
-    }, [callback, delay, leading, trailing, maxWait, lastCallTime, timerId, maxTimerId]);
+        timerIdRef.current = setTimeout(invokeCallback, delay);
+    }, [delay, leading, trailing, maxWait]);
     var cancel = (0, react_1.useCallback)(function () {
-        clearTimeout(timerId);
-        clearTimeout(maxTimerId);
-        setTimerId(null);
-        setMaxTimerId(null);
-        setLastCallTime(null);
-    }, [timerId, maxTimerId]);
+        if (timerIdRef.current)
+            clearTimeout(timerIdRef.current);
+        if (maxTimerIdRef.current)
+            clearTimeout(maxTimerIdRef.current);
+        timerIdRef.current = null;
+        maxTimerIdRef.current = null;
+        lastCallTimeRef.current = null;
+    }, []);
     return [debouncedFunction, cancel];
 }
 exports.default = useDebounce;

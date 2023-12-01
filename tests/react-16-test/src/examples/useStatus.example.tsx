@@ -1,19 +1,18 @@
 import React from 'react';
-import useStatus from "../src/hooks/useStatus";
+import useStatus from '../hook/useStatus';
 
-const MyComponent = () => {
+const NetworkStatusComponent: React.FC = () => {
   const { online, downlink, effectiveType, rtt } = useStatus();
 
   return (
     <div>
+      <h1>Network Status</h1>
       <p>{online ? 'Online' : 'Offline'}</p>
-      {online && (
-        <>
-          <p>Downlink Speed: {downlink} Mbps</p>
-          <p>Effective Connection Type: {effectiveType}</p>
-          <p>Round-trip Time: {rtt} ms</p>
-        </>
-      )}
+      {downlink && <p>Downlink Speed: {downlink} Mbps</p>}
+      {effectiveType && <p>Effective Type: {effectiveType}</p>}
+      {rtt && <p>RTT: {rtt} ms</p>}
     </div>
   );
 };
+
+export default NetworkStatusComponent;

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
-import useClickOutside from '../src/hooks/UseClickOutside';
+import useClickOutside from '../hook/useClickOutside';
 
-const Modal = ({ onClose }: { onClose: () => void }) => {
+const ClickOutsideComponent = ({ onClose }: { onClose: () => void }) => {
   const modalRef = useRef<HTMLDivElement>(null); // The ref for the modal
   const closeButtonRef = useRef<HTMLButtonElement>(null); // A ref for the close button
 
@@ -11,18 +11,24 @@ const Modal = ({ onClose }: { onClose: () => void }) => {
     () => onClose(), // Callback to execute on outside click
     ['mousedown', 'touchstart'], // Events to listen for
     true, // Enable the outside click detection
-    [closeButtonRef] // Refs to ignore
+    [closeButtonRef], // Refs to ignore
   );
 
   return (
-    <div ref={modalRef} style={{ border: '1px solid black', padding: '20px' }}>
+    <div
+      ref={modalRef}
+      style={{ border: '1px solid black', padding: '20px' }}
+    >
       {/* Modal content */}
       <p>Modal Content Here</p>
-      <button ref={closeButtonRef} onClick={onClose}>
+      <button
+        ref={closeButtonRef}
+        onClick={onClose}
+      >
         Close
       </button>
     </div>
   );
 };
 
-export default Modal;
+export default ClickOutsideComponent;

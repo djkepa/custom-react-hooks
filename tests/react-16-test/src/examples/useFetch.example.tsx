@@ -1,20 +1,13 @@
-import React from 'react';
-import  { useGlobalState } from '../src/context/GlobalStateContextType';
-import useFetch from '../src/hooks/useFetch';
+import useFetch from '../hook/useFetch';
 
-const cache = new Map(); // Simple in-memory cache
+interface User {
+  id: number;
+  name: string;
+}
 
-const MyComponent: React.FC = () => {
-  const {  setState } = useGlobalState();
-
-  const { data, loading, error, fetchData } = useFetch<DataType>(
-    'https://api.example.com/data',
-    { timeout: 5000 },
-    cache,
-    (newData) => {
-      // Update the global state with the fetched data
-      setState({ data: newData });
-    }
+const UserList = () => {
+  const { data, loading, error, fetchData } = useFetch<User[]>(
+    'https://jsonplaceholder.typicode.com/users',
   );
 
   if (loading) return <div>Loading...</div>;
@@ -22,16 +15,16 @@ const MyComponent: React.FC = () => {
 
   return (
     <div>
-      {data && <div>{data.someField}</div>}
-      <button onClick={() => fetchData()}>Reload Data</button>
+      <button onClick={fetchData}>Refresh</button>
+      {data && (
+        <ul>
+          {data.map((user) => (
+            <li key={user.id}>{user.name}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
 
-// Define the shape of your data using TypeScript interfaces or types
-interface DataType {
-  someField: string;
-  // ... other fields expected in the response
-}
-
-export default MyComponent;
+export default UserList;

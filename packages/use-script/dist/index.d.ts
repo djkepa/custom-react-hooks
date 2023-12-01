@@ -1,13 +1,4 @@
-type ScriptStatus = 'idle' | 'loading' | 'ready' | 'error';
-type ScriptLoadState = {
-    src: string;
-    status: ScriptStatus;
-};
-declare function useScript(src: string | string[], { onLoad, onError, removeOnUnmount, ...attributes }?: {
-    onLoad?: () => void;
-    onError?: () => void;
-    removeOnUnmount?: boolean;
-    [key: string]: any;
-}): ScriptLoadState[];
+type ScriptStatus = 'loading' | 'ready' | 'error' | 'unknown';
+declare function useScript(src: string, removeOnUnmount?: boolean): ScriptStatus;
 export default useScript;
 //# sourceMappingURL=index.d.ts.map

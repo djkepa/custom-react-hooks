@@ -1,12 +1,17 @@
-import React from 'react';
-import useHover from "../src/hooks/useHover";
+import useHover from '../hook/useHover';
 
-const MyComponent = () => {
-  const { ref, isHovered } = useHover<HTMLDivElement>(); 
+function HoverComponent() {
+  const { ref, isHovered } = useHover<HTMLDivElement>();
 
   return (
-    <div ref={ref}>
-      {isHovered ? 'Hovering' : 'Not Hovering'}
+    <div
+      ref={ref}
+      data-testid="hover-component"
+    >
+      <h1>Hover Component</h1>
+      <p>{isHovered ? 'Hovered' : 'Not Hovered'}</p>
     </div>
   );
-};
+}
+
+export default HoverComponent;

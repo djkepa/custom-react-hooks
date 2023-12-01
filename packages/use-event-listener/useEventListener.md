@@ -21,28 +21,23 @@ Here's an example of how to use the `useEventListener` hook in a component:
 
 ```typescript
 import React, { useState, useRef } from 'react';
-import useEventListener from '@custom-react-hooks/use-event-listener';
+import useEventListener from '@react-custom-hooks/useEventListener';
 
-const MyComponent = () => {
-  const [keyPressed, setKeyPressed] = useState<string>('');
-  const divRef = useRef<HTMLDivElement>(null);
+const ExampleComponent: React.FC = () => {
+  const [count, setCount] = useState(0);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const handleKeyPress = (event: KeyboardEvent) => {
-    setKeyPressed(event.key);
-  };
-
-  // Using useEventListener to listen for keydown events on the div element
-  useEventListener('keydown', handleKeyPress, divRef);
+  useEventListener('click', () => setCount(count + 1), buttonRef);
 
   return (
-    <div ref={divRef}>
-      <p>Press any key!</p>
-      {keyPressed && <p>Last Key Pressed: {keyPressed}</p>}
+    <div>
+      <button ref={buttonRef}>Click Me</button>
+      <p>Click count: {count}</p>
     </div>
   );
 };
 
-export default MyComponent;
+export default ExampleComponent;
 ```
 
 In this component, `useEventListener` is used to listen for `keydown` events on the `div` element, and the state is updated with the last key pressed.

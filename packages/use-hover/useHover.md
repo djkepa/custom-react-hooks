@@ -28,15 +28,22 @@ yarn add @custom-react-hooks/use-hover
 ```typescript
 import useHover from '@custom-react-hooks/use-hover';
 
-const MyComponent = () => {
-  const { ref, isHovered } = useHover();
+function HoverComponent() {
+  const { ref, isHovered } = useHover<HTMLDivElement>();
 
   return (
-    <div ref={ref}>
-      {isHovered ? 'Hovering' : 'Not Hovering'}
+    <div
+      ref={ref}
+      data-testid="hover-component"
+    >
+      <h1>Hover Component</h1>
+      <p>{isHovered ? 'Hovered' : 'Not Hovered'}</p>
     </div>
   );
-};
+}
+
+export default HoverComponent;
+
 ```
 
 In this example, the `useHover` hook provides a way to determine if a particular div is being hovered.

@@ -1,18 +1,26 @@
-import React from 'react';
-import useLongPress from '../packages/use-long-press/test/useLongPress.test';
+import React, { useState } from 'react';
+import useLongPress from '../hook/useLongPress';
 
-const MyComponent = () => {
-  const handleLongPress = () => console.log('Long pressed!');
-  const longPressEvents = useLongPress(handleLongPress, {
+const LongPressTestComponent: React.FC = () => {
+  const [status, setStatus] = useState('Ready');
+
+  const longPressCallback = () => {
+    setStatus('Long Press Finished');
+  };
+
+  const longPressEvents = useLongPress(longPressCallback, {
     threshold: 500,
-    onStart: () => console.log('Press started'),
-    onFinish: () => console.log('Long press finished'),
-    onCancel: () => console.log('Press cancelled')
+    onStart: () => setStatus('Long Press Started'),
+    onFinish: () => setStatus('Long Press Finished'),
+    onCancel: () => setStatus('Long Press Cancelled'),
   });
 
   return (
-    <div {...longPressEvents}>
-      Press and hold me
+    <div>
+      <button {...longPressEvents}>Press and Hold</button>
+      <p>Status: {status}</p>
     </div>
   );
 };
+
+export default LongPressTestComponent;

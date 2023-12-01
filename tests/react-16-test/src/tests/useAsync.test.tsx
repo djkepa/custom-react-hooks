@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import MyComponent from '../examples/useAsync.example';
+import AsyncComponent from '../examples/useAsync.example';
 import fetchMock from 'jest-fetch-mock';
 
 fetchMock.enableMocks();
@@ -9,15 +9,15 @@ beforeEach(() => {
   fetchMock.resetMocks();
 });
 
-describe('MyComponent', () => {
+describe('useAsync', () => {
   it('should initially be in idle state with a fetch button', () => {
-    render(<MyComponent />);
+    render(<AsyncComponent />);
     expect(screen.getByRole('button', { name: 'Fetch Data' })).toBeInTheDocument();
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
 
   it('should show loading state when fetch is triggered', () => {
-    render(<MyComponent />);
+    render(<AsyncComponent />);
     fireEvent.click(screen.getByRole('button', { name: 'Fetch Data' }));
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
@@ -27,7 +27,7 @@ describe('MyComponent', () => {
     fetchMock.mockResponseOnce(JSON.stringify(mockData));
 
     await act(async () => {
-      render(<MyComponent />);
+      render(<AsyncComponent />);
       fireEvent.click(screen.getByRole('button', { name: 'Fetch Data' }));
       await waitFor(() => screen.getByText(JSON.stringify(mockData)));
     });
@@ -41,12 +41,11 @@ describe('MyComponent', () => {
     fetchMock.mockRejectOnce(new Error(errorMessage));
 
     await act(async () => {
-      render(<MyComponent />);
+      render(<AsyncComponent />);
       fireEvent.click(screen.getByRole('button', { name: 'Fetch Data' }));
+      // The state update happens asynchronously, so you need to wait for it
+      await waitFor(() => screen.getByText(`Error: ${errorMessage}`));
     });
-
-    // The state update happens asynchronously, so you need to wait for it
-    await waitFor(() => screen.getByText(`Error: ${errorMessage}`));
 
     expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
   });

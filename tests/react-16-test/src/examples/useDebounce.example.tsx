@@ -1,15 +1,27 @@
-import useDebounce from "../src/hooks/useDebounce";
+import React, { useState } from 'react';
+import useDebounce from '../hook/useDebounce';
 
-// Function to be debounced
-const myFunction = () => {
-  console.log('Function executed');
+const DebounceTestComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState('');
+
+  const debouncedLog = useDebounce((val: string) => {
+    console.log(`Debounced value: ${val}`);
+  }, 1000)[0];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    debouncedLog(e.target.value);
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleChange}
+      />
+    </div>
+  );
 };
 
-// Using the hook
-const [debouncedFunction, cancelDebounce] = useDebounce(myFunction, 500);
-
-// Call the debounced function
-debouncedFunction();
-
-// Cancel the debounce
-cancelDebounce();
+export default DebounceTestComponent;

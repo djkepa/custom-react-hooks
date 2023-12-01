@@ -26,24 +26,33 @@ yarn add @custom-react-hooks/use-long-press
 ## Usage
 
 ```typescript
-import React from 'react';
+import React, { useState } from 'react';
 import useLongPress from '@custom-react-hooks/use-long-press';
 
-const MyComponent = () => {
-  const handleLongPress = () => console.log('Long pressed!');
-  const longPressEvents = useLongPress(handleLongPress, {
-    threshold: 500, // Time in milliseconds
-    onStart: () => console.log('Press started'),
-    onFinish: () => console.log('Long press finished'),
-    onCancel: () => console.log('Press cancelled')
+const LongPressTestComponent: React.FC = () => {
+  const [status, setStatus] = useState('Ready');
+
+  const longPressCallback = () => {
+    setStatus('Long Press Finished');
+  };
+
+  const longPressEvents = useLongPress(longPressCallback, {
+    threshold: 500,
+    onStart: () => setStatus('Long Press Started'),
+    onFinish: () => setStatus('Long Press Finished'),
+    onCancel: () => setStatus('Long Press Cancelled'),
   });
 
   return (
-    <div {...longPressEvents}>
-      Press and hold me
+    <div>
+      <button {...longPressEvents}>Press and Hold</button>
+      <p>Status: {status}</p>
     </div>
   );
 };
+
+export default LongPressTestComponent;
+
 ```
 
 This example demonstrates how to use the `useLongPress` hook to add a long press interaction to a div element.

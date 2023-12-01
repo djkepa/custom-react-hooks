@@ -1,12 +1,15 @@
 import React from 'react';
-import useKeyPress from '../src/hooks/useKeyPress';
+import useKeyPress from '../hook/useKeyPress';
 
-const MyComponent = () => {
-  const keyPressed = useKeyPress('Enter', { debounce: 200, global: true });
+const TestComponent: React.FC = () => {
+  const enterPressed = useKeyPress('Enter');
 
   return (
     <div>
-      {keyPressed ? 'Enter key is pressed' : 'Press the Enter key'}
+      <p>Press the "Enter" key</p>
+      {enterPressed && <p>You are pressing the "Enter" key!</p>}
     </div>
   );
 };
+
+export default TestComponent;

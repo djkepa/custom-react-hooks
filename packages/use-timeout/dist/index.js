@@ -21,13 +21,13 @@ function useTimeout(callback, delay) {
             setIsActive(true);
             timerId.current = setTimeout(function () {
                 savedCallback.current();
-                clear();
+                setIsActive(false);
             }, delay);
         }
     }, [delay, clear]);
     (0, react_1.useEffect)(function () {
-        return clear;
-    }, [clear]);
+        reset();
+    }, [delay, clear, reset]);
     return { isActive: isActive, reset: reset, clear: clear };
 }
 exports.default = useTimeout;

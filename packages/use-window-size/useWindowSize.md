@@ -25,16 +25,18 @@ yarn add @custom-react-hooks/use-window-size
 ```typescript
 import useWindowSize from '@custom-react-hooks/use-window-size';
 
-const MyComponent = () => {
-  const { width, height } = useWindowSize(200); // 200ms debounce delay
+const WindowSizeTestComponent: React.FC = () => {
+  const { width, height } = useWindowSize(200); // Using a 200ms debounce delay
 
   return (
     <div>
-      <p>Window width: {width}</p>
-      <p>Window height: {height}</p>
+      <p>Window Width: {width}</p>
+      <p>Window Height: {height}</p>
     </div>
   );
 };
+
+export default WindowSizeTestComponent;
 ```
 
 In this example, the `useWindowSize` hook is used to track the size of the browser window. The debounce delay is set to 200 milliseconds to optimize performance.

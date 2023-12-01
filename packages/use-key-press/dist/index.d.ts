@@ -1,6 +1,6 @@
 declare function useKeyPress(targetKey: string, options?: {
     debounce?: number;
-    global?: boolean;
+    targetElement?: EventTarget | null;
 }): boolean;
 export default useKeyPress;
 //# sourceMappingURL=index.d.ts.map

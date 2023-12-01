@@ -13,18 +13,17 @@ function useLockBodyScroll(lock: boolean = true) {
       return;
     }
 
-    const originalStyle = window.getComputedStyle(document.body).overflow;  
+    const originalStyle = window.getComputedStyle(document.body).overflow;
     if (lock) {
       document.body.style.overflow = 'hidden';
     }
 
     return () => {
       if (lock) {
-    
         document.body.style.overflow = originalStyle;
       }
     };
-  }, [lock]); 
+  }, [lock]);
 }
 
 export default useLockBodyScroll;

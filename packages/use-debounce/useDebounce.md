@@ -20,30 +20,33 @@ Here's an example of using `useDebounce` in a search input component:
 
 ```typescript
 import React, { useState } from 'react';
-import useDebounce from '@react-custom-hooks/use-debounce';
+import useDebounce from '@react-custom-hooks/useDebounce';
 
-const SearchInput = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [debouncedSearch, cancelSearch] = useDebounce(() => {
-    console.log('Searching for:', searchTerm);
-  }, 500);
+const DebounceTestComponent: React.FC = () => {
+  const [inputValue, setInputValue] = useState('');
 
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value);
-    debouncedSearch();
+  const debouncedLog = useDebounce((val: string) => {
+    console.log(`Debounced value: ${val}`);
+  }, 1000)[0];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    debouncedLog(e.target.value);
   };
 
   return (
-    <input
-      type="text"
-      value={searchTerm}
-      onChange={handleChange}
-      placeholder="Search..."
-    />
+    <div>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleChange}
+      />
+    </div>
   );
 };
 
-export default SearchInput;
+export default DebounceTestComponent;
+
 ```
 
 In this component, the search function is debounced, which means it will only execute 500 milliseconds after the user stops typing.
