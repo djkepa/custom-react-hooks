@@ -13,7 +13,9 @@ function useEventListener(eventName, handler, element, options, condition) {
         var targetElement = (element === null || element === void 0 ? void 0 : element.current) || window;
         if (!targetElement.addEventListener)
             return;
-        var eventListener = function (event) { return savedHandler.current && savedHandler.current(event); };
+        var eventListener = function (event) {
+            return savedHandler.current && savedHandler.current(event);
+        };
         var events = Array.isArray(eventName) ? eventName : [eventName];
         events.forEach(function (e) { return targetElement.addEventListener(e, eventListener, options); });
         return function () {

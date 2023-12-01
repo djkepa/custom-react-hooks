@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-type ScriptStatus = 'loading' | 'ready' | 'error' | 'unknown';
+export type ScriptStatus = 'loading' | 'ready' | 'error' | 'unknown';
 
 /**
  * `useScript` is a hook for dynamically loading external JavaScript scripts into a page.

@@ -1,5 +1,5 @@
 import { DependencyList } from 'react';
-type UseUpdateEffectOptions = {
+export type UseUpdateEffectOptions = {
     skipInitialEffect?: boolean;
     delay?: number;
     condition?: () => boolean;

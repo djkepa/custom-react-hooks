@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 
-type Status = 'idle' | 'pending' | 'success' | 'error';
-type AsyncFunction<T> = () => Promise<T>;
+export type Status = 'idle' | 'pending' | 'success' | 'error';
+export type AsyncFunction<T> = () => Promise<T>;
 
-interface UseAsyncReturn<T> {
+export interface UseAsyncReturn<T> {
   execute: () => void;
   status: Status;
   value: T | null;

@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 
-interface NetworkStatus {
+export interface NetworkStatus {
   online: boolean;
   downlink?: number;
   effectiveType?: string;
   rtt?: number;
 }
 
-interface NetworkInformation extends EventTarget {
+export interface NetworkInformation extends EventTarget {
   downlink?: number;
   effectiveType?: string;
   rtt?: number;
 }
 
-interface NavigatorWithNetworkInformation extends Navigator {
+export interface NavigatorWithNetworkInformation extends Navigator {
   connection?: NetworkInformation;
 }
 

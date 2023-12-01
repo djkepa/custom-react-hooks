@@ -1,4 +1,4 @@
-type GeoLocationState = {
+export type GeoLocationState = {
     loading: boolean;
     coordinates: GeolocationCoordinates | null;
     error: Error | null;

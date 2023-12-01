@@ -1,4 +1,4 @@
-interface DragDropState {
+export interface DragDropState {
     isDragging: boolean;
     isOver: boolean;
     dragData: any;

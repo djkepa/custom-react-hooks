@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-interface LongPressOptions {
+export interface LongPressOptions {
   threshold?: number;
   onStart?: () => void;
   onFinish?: () => void;

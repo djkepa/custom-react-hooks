@@ -1,4 +1,4 @@
-interface ClipboardState {
+export interface ClipboardState {
     success: boolean;
     error: string | null;
 }

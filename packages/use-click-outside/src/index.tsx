@@ -1,6 +1,6 @@
 import { useEffect, RefObject } from 'react';
 
-type ValidEvent = MouseEvent | TouchEvent;
+export type ValidEvent = MouseEvent | TouchEvent;
 
 /**
  * `useClickOutside` detects clicks outside of specified element(s). Useful for closing modal, dropdown, etc.

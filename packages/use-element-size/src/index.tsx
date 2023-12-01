@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useLayoutEffect } from 'react';
 
-interface Size {
+export interface Size {
   width: number | undefined;
   height: number | undefined;
 }

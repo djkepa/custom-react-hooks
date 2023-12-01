@@ -1,9 +1,9 @@
-interface MediaDevice {
+export interface MediaDevice {
     id: string;
     kind: string;
     label: string;
 }
-interface UseMediaDevicesState {
+export interface UseMediaDevicesState {
     devices: MediaDevice[];
     isLoading: boolean;
     error: string | null;

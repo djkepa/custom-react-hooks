@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-type StorageType = 'local' | 'session';
+export type StorageType = 'local' | 'session';
 
 /**
  * `useStorage` is a hook for interfacing with web storage APIs (localStorage or sessionStorage).

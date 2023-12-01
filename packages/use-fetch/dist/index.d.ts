@@ -1,4 +1,4 @@
-interface FetchOptions extends RequestInit {
+export interface FetchOptions extends RequestInit {
     manual?: boolean;
     timeout?: number;
 }

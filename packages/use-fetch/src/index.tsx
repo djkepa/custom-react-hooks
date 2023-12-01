@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
-interface FetchOptions extends RequestInit {
+export interface FetchOptions extends RequestInit {
   manual?: boolean;
   timeout?: number;
 }

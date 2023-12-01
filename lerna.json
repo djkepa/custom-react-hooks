@@ -1,7 +1,6 @@
 {
   "version": "independent",
   "npmClient": "npm",
-  "useWorkspaces": true,
   "commands": {
     "run": {
       "stream": true

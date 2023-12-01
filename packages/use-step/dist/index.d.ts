@@ -1,4 +1,4 @@
-interface UseStepOptions {
+export interface UseStepOptions {
     initialStep?: number;
     totalSteps: number;
     loop?: boolean;

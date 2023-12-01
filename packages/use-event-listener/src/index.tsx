@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 
-type EventHandler<E extends Event = Event> = (event: E) => void;
+export type EventHandler<E extends Event = Event> = (event: E) => void;
 
 /**
  * `useEventListener` is a hook for adding event listeners to a DOM element.
@@ -18,7 +18,7 @@ function useEventListener<T extends HTMLElement = HTMLDivElement, E extends Even
   handler: EventHandler<E>,
   element?: React.RefObject<T>,
   options?: boolean | AddEventListenerOptions,
-  condition: boolean = true 
+  condition: boolean = true,
 ): void {
   const savedHandler = useRef<EventHandler<E>>();
 
@@ -27,18 +27,19 @@ function useEventListener<T extends HTMLElement = HTMLDivElement, E extends Even
   }, [handler]);
 
   useEffect(() => {
-    if (!condition) return; 
+    if (!condition) return;
 
     const targetElement: T | Window = element?.current || window;
     if (!targetElement.addEventListener) return;
 
-    const eventListener = (event: Event) => savedHandler.current && savedHandler.current(event as E);
-    
-    const events = Array.isArray(eventName) ? eventName : [eventName]; 
-    events.forEach(e => targetElement.addEventListener(e, eventListener, options));
+    const eventListener = (event: Event) =>
+      savedHandler.current && savedHandler.current(event as E);
+
+    const events = Array.isArray(eventName) ? eventName : [eventName];
+    events.forEach((e) => targetElement.addEventListener(e, eventListener, options));
 
     return () => {
-      events.forEach(e => targetElement.removeEventListener(e, eventListener, options));
+      events.forEach((e) => targetElement.removeEventListener(e, eventListener, options));
     };
   }, [eventName, element, options, condition]);
 }

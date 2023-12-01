@@ -1,5 +1,5 @@
 /// <reference types="react" />
-interface Size {
+export interface Size {
     width: number | undefined;
     height: number | undefined;
 }

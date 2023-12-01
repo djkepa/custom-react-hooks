@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-interface ClipboardState {
+export interface ClipboardState {
   success: boolean;
   error: string | null;
 }
