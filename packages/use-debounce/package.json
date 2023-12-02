@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-debounce",
-  "version": "1.4.12",
+  "version": "1.4.13",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",

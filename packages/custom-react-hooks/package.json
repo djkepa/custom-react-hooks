@@ -1,9 +1,10 @@
 {
   "name": "custom-react-hooks",
-  "version": "1.4.12",
+  "version": "1.4.82",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "description": "A collection of reusable React hooks.",
+  "description": "A collection of reusable React hooks by custom-react-hooks.",
+  "private": false,
   "keywords": [
     "react",
     "hooks",
@@ -16,11 +17,11 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@custom-react-hooks/use-async": "1.4.12",
-    "@custom-react-hooks/use-click-outside": "1.4.12",
-    "@custom-react-hooks/use-clipboard": "1.4.12",
-    "@custom-react-hooks/use-debounce": "1.4.12",
-    "@custom-react-hooks/use-document-title": "1.4.12",
+    "@custom-react-hooks/use-async": "1.4.13",
+    "@custom-react-hooks/use-click-outside": "1.4.13",
+    "@custom-react-hooks/use-clipboard": "1.4.13",
+    "@custom-react-hooks/use-debounce": "1.4.13",
+    "@custom-react-hooks/use-document-title": "1.4.13",
     "@custom-react-hooks/use-drag-drop": "1.4.12",
     "@custom-react-hooks/use-effect-once": "1.4.12",
     "@custom-react-hooks/use-element-size": "1.4.12",
