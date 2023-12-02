@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-effect-once",
-  "version": "1.4.12",
+  "version": "1.4.14",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
@@ -22,5 +22,13 @@
   "gitHead": "6aacf4ded1bc9022cef991782b62ee75aef3be35",
   "publishConfig": {
     "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/djkepa/custom-react-hooks/issues"
+  },
+  "homepage": "https://github.com/djkepa/custom-react-hooks#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djkepa/custom-react-hooks.git"
   }
 }
