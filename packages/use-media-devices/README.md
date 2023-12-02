@@ -12,7 +12,7 @@
 
 ## Installation
 
-To integrate `useMediaDevices` into your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-media-devices
@@ -22,6 +22,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-media-devices
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

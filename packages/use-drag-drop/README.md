@@ -12,7 +12,9 @@
 
 ## Installation
 
-To integrate `useDragDrop` into your project:
+Choose and install individual hooks that suit your project needs, or install the entire collection for a full suite of utilities.
+
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-drag-drop
@@ -22,6 +24,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-drag-drop
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

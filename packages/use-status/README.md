@@ -11,6 +11,8 @@ The `useStatus` hook is designed to monitor the network status of a user's devic
 
 ## Installation
 
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-status
 ```
@@ -19,6 +21,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-status
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

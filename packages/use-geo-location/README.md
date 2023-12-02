@@ -10,7 +10,7 @@ The `useGeoLocation` hook is a powerful tool for accessing and monitoring the us
 
 ## Installation
 
-To use `useGeoLocation`, install the package containing the hook:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-geo-location
@@ -20,6 +20,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-geo-location
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

@@ -10,7 +10,7 @@
 
 ## Installation
 
-To integrate `useToggle` into your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-toggle
@@ -20,6 +20,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-toggle
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

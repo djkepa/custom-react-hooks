@@ -11,7 +11,7 @@ The `useOnScreen` hook utilizes the Intersection Observer API to detect if an el
 
 ## Installation
 
-To include `useOnScreen` in your project, install the package containing the hook:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-on-screen
@@ -21,6 +21,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-on-screen
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

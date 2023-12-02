@@ -10,7 +10,7 @@ The `usePortal` hook facilitates the creation and management of portal component
 
 ## Installation
 
-To use the `usePortal` hook, include it in your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-portal
@@ -20,6 +20,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-portal
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

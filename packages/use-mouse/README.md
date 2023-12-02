@@ -11,7 +11,7 @@ The `useMouse` hook is designed for tracking the mouse position within a specifi
 
 ## Installation
 
-To integrate `useMouse` into your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-mouse
@@ -21,6 +21,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-mouse
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

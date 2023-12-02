@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-script",
-  "version": "1.4.14",
+  "version": "1.4.15",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest --config jest.config.js",

@@ -10,6 +10,8 @@ The `useOrientation` hook provides a way to access and respond to changes in dev
 
 ## Installation
 
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-orientation
 ```
@@ -18,6 +20,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-orientation
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

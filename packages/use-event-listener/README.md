@@ -5,6 +5,8 @@ The `useEventListener` hook is a custom React hook that simplifies the process o
 
 ## Installation
 
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-event-listener
 ```
@@ -13,6 +15,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-event-listener
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

@@ -11,7 +11,7 @@ The `useThrottle` hook in React is designed to limit the rate at which a functio
 
 ## Installation
 
-To integrate `useThrottle` into your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-throttle
@@ -21,6 +21,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-throttle
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

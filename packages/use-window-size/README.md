@@ -10,6 +10,8 @@ The `useWindowSize` hook is designed for responsive React applications, providin
 
 ## Installation
 
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-window-size
 ```
@@ -18,6 +20,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-window-size
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

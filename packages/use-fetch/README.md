@@ -4,6 +4,8 @@ The `useFetch` hook is a powerful tool for making API requests in React applicat
 
 ## Installation
 
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-fetch
 ```
@@ -12,6 +14,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-fetch
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

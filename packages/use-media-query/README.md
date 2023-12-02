@@ -10,6 +10,8 @@ The `useMediaQuery` hook is designed for responsive design in React applications
 
 ## Installation
 
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-media-query
 ```
@@ -18,6 +20,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-media-query
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

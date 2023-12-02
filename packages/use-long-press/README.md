@@ -11,7 +11,7 @@ The `useLongPress` hook is designed for adding long press interactions to elemen
 
 ## Installation
 
-To use `useLongPress` in your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-long-press
@@ -21,6 +21,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-long-press
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

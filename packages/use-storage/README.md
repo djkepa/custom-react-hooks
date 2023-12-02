@@ -12,7 +12,7 @@
 
 ## Installation
 
-Include `useStorage` in your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-storage
@@ -22,6 +22,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-storage
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

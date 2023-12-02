@@ -4,6 +4,10 @@ The `useDebounce` hook is used to delay the execution of a function until a spec
 
 ## Installation
 
+Choose and install individual hooks that suit your project needs, or install the entire collection for a full suite of utilities.
+
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-debounce
 ```
@@ -12,6 +16,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-debounce
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

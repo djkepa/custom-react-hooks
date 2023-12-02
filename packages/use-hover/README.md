@@ -11,7 +11,7 @@ The `useHover` hook is a utility for detecting hover interactions in React compo
 
 ## Installation
 
-To use `useHover` in your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-hover
@@ -21,6 +21,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-hover
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

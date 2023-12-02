@@ -12,6 +12,10 @@ The `useAsync` hook simplifies the handling of asynchronous operations in React 
 
 ## Installation
 
+Choose and install individual hooks that suit your project needs, or install the entire collection for a full suite of utilities.
+
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-async
 ```
@@ -20,6 +24,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-async
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

@@ -5,6 +5,10 @@ The `useClickOutside` hook is designed to detect and handle clicks outside of a 
 
 ## Installation
 
+Choose and install individual hooks that suit your project needs, or install the entire collection for a full suite of utilities.
+
+### Installing Only Current Hooks
+
 ```bash
 npm install @custom-react-hooks/use-click-outside
 ```
@@ -13,6 +17,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-click-outside
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

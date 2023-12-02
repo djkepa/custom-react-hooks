@@ -11,7 +11,7 @@ The `useForm` hook is an advanced form management tool for React applications, p
 
 ## Installation
 
-To integrate `useForm` into your project:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-form
@@ -21,6 +21,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-form
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

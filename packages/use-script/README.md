@@ -11,7 +11,7 @@ The `useScript` hook is an advanced tool for dynamically loading and managing ex
 
 ## Installation
 
-To include `useScript` in your project, install the package containing the hook:
+### Installing Only Current Hooks
 
 ```bash
 npm install @custom-react-hooks/use-script
@@ -21,6 +21,18 @@ or
 
 ```bash
 yarn add @custom-react-hooks/use-script
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
 ```
 
 ## Usage

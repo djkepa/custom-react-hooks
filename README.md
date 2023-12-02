@@ -590,8 +590,6 @@ or
 yarn add @custom-react-hooks/use-effect-once
 ```
 
-Replace `@custom-react-hooks/use-effect-once` with the actual name of your package.
-
 ## Usage
 
 ```typescript
