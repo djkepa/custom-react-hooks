@@ -41,13 +41,13 @@ Choose and install individual hooks that suit your project needs, or install the
 If you prefer to have all hooks at your disposal, you can install the entire collection:
 
 ```sh
-npm install custom-react-hooks
+npm install @custom-react-hooks/all
 ```
 
 or
 
 ```sh
-yarn add custom-react-hooks
+yarn add @custom-react-hooks/all
 ```
 
 ### Installing Specific Hooks
