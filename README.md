@@ -66,8 +66,6 @@ yarn add @custom-react-hooks/use-async
 
 ## 📚 [Hooks List](#hooks-list)
 
-A list of available hooks and their respective documentation can be found below:
-
 - [useAsync](#useasync)
 - [useClickOutside](#useclickoutside)
 - [useClipboard](#useclipboard)
@@ -82,7 +80,7 @@ A list of available hooks and their respective documentation can be found below:
 - [useGeoLocation](#usegeolocation)
 - [useHover](#usehover)
 - [useIdle](#useidle)
-- [useImageLoad](#useimage-load)
+- [useImageLoad](#useimageload)
 - [useKeyPress](#usekeypress)
 - [useLockBodyScroll](#uselockbodyscroll)
 - [useLongPress](#uselongpress)
@@ -103,7 +101,8 @@ A list of available hooks and their respective documentation can be found below:
 - [useUpdateEffect](#useupdateeffect)
 - [useWindowSize](#usewindowsize)
 
-# useAsync Hook
+
+# useAsync Hook {#useAsync}
 
 The `useAsync` hook simplifies the handling of asynchronous operations in React applications, such as data fetching or any other promise-returning functions. It provides a structured way to track the status and outcome of async operations.
 
@@ -251,7 +250,7 @@ Contributions to enhance `useAsync` are highly encouraged. Feel free to submit i
 Certainly, I'll help you update the documentation for your `useAsync` custom hook. Below is an improved and more detailed documentation template:
 
 
-# useClickOutside Hook
+# useClickOutside Hook {#useClickOutside}
 
 The `useClickOutside` hook is designed to detect and handle clicks outside of a specified element or set of elements. This is particularly useful for closing modal windows, dropdowns, and other components when a user interacts outside of them.
 
