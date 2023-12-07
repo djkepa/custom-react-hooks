@@ -247,7 +247,6 @@ An object with the following properties:
 
 Contributions to enhance `useAsync` are highly encouraged. Feel free to submit issues or pull requests to the repository.
 
-Certainly, I'll help you update the documentation for your `useAsync` custom hook. Below is an improved and more detailed documentation template:
 
 # useClickOutside Hook 
 
@@ -1046,8 +1045,6 @@ or
 yarn add @custom-react-hooks/all
 ```
 
-Certainly! Here's a detailed feature description for the `useEventListener` hook based on the provided information:
-
 ## Features
 
 - **Effortless Event Handling:** Streamlines the process of adding and removing event listeners in React components, making it easier to handle user interactions and other events.
@@ -1172,8 +1169,6 @@ or
 ```sh
 yarn add @custom-react-hooks/all
 ```
-
-Certainly! Based on the provided `useFetch` hook, here are some detailed features that you can include in your documentation:
 
 ## Features
 
