@@ -66,43 +66,43 @@ yarn add @custom-react-hooks/use-async
 
 ## 📚 [Hooks List](#hooks-list)
 
-- [useAsync](#useasync)
-- [useClickOutside](#useclickoutside)
-- [useClipboard](#useclipboard)
-- [useDebounce](#usedebounce)
-- [useDocumentTitle](#usedocumenttitle)
-- [useDragDrop](#usedragdrop)
-- [useEffectOnce](#useeffectonce)
-- [useElementSize](#useelementsize)
-- [useEventListener](#useeventlistener)
-- [useFetch](#usefetch)
-- [useForm](#useform)
-- [useGeoLocation](#usegeolocation)
-- [useHover](#usehover)
-- [useIdle](#useidle)
-- [useImageLoad](#useimageload)
-- [useKeyPress](#usekeypress)
-- [useLockBodyScroll](#uselockbodyscroll)
-- [useLongPress](#uselongpress)
-- [useMediaDevices](#usemediadevices)
-- [useMediaQuery](#usemediaquery)
-- [useMouse](#usemouse)
-- [useOnScreen](#useonscreen)
-- [useOrientation](#useorientation)
-- [usePermission](#usepermission)
-- [usePortal](#useportal)
-- [useScript](#usescript)
-- [useStatus](#usestatus)
-- [useStep](#usestep)
-- [useStorage](#usestorage)
-- [useThrottle](#usethrottle)
-- [useTimeout](#usetimeout)
-- [useToggle](#usetoggle)
-- [useUpdateEffect](#useupdateeffect)
-- [useWindowSize](#usewindowsize)
+- [useAsync](#useasync-hook)
+- [useClickOutside](#useclickoutside-hook)
+- [useClipboard](#useclipboard-hook)
+- [useDebounce](#usedebounce-hook)
+- [useDocumentTitle](#usedocumenttitle-hook)
+- [useDragDrop](#usedragdrop-hook)
+- [useEffectOnce](#useeffectonce-hook)
+- [useElementSize](#useelementsize-hook)
+- [useEventListener](#useeventlistener-hook)
+- [useFetch](#usefetch-hook)
+- [useForm](#useform-hook)
+- [useGeoLocation](#usegeolocation-hook)
+- [useHover](#usehover-hook)
+- [useIdle](#useidle-hook)
+- [useImageLoad](#useimageload-hook)
+- [useKeyPress](#usekeypress-hook)
+- [useLockBodyScroll](#uselockbodyscroll-hook)
+- [useLongPress](#uselongpress-hook)
+- [useMediaDevices](#usemediadevices-hook)
+- [useMediaQuery](#usemediaquery-hook)
+- [useMouse](#usemouse-hook)
+- [useOnScreen](#useonscreen-hook)
+- [useOrientation](#useorientation-hook)
+- [usePermission](#usepermission-hook)
+- [usePortal](#useportal-hook)
+- [useScript](#usescript-hook)
+- [useStatus](#usestatus-hook)
+- [useStep](#usestep-hook)
+- [useStorage](#usestorage-hook)
+- [useThrottle](#usethrottle-hook)
+- [useTimeout](#usetimeout-hook)
+- [useToggle](#usetoggle-hook)
+- [useUpdateEffect](#useupdateeffect-hook)
+- [useWindowSize](#usewindowsize-hook)
 
 
-# useAsync Hook {#useAsync}
+# useAsync Hook
 
 The `useAsync` hook simplifies the handling of asynchronous operations in React applications, such as data fetching or any other promise-returning functions. It provides a structured way to track the status and outcome of async operations.
 
@@ -249,8 +249,7 @@ Contributions to enhance `useAsync` are highly encouraged. Feel free to submit i
 
 Certainly, I'll help you update the documentation for your `useAsync` custom hook. Below is an improved and more detailed documentation template:
 
-
-# useClickOutside Hook {#useClickOutside}
+# useClickOutside Hook 
 
 The `useClickOutside` hook is designed to detect and handle clicks outside of a specified element or set of elements. This is particularly useful for closing modal windows, dropdowns, and other components when a user interacts outside of them.
 
@@ -358,7 +357,7 @@ In the above example, clicking outside the `<div>` containing the modal content 
 
 Feel free to contribute to the development of this hook by submitting issues or pull requests to the repository.
 
-# `useClipboard` Hook
+# useClipboard Hook
 
 `useClipboard` is a React hook that provides an interface for copying to and pasting from the user's clipboard. It uses the modern Clipboard API for improved performance and flexibility.
 
