@@ -29,8 +29,6 @@ or
 yarn add @custom-react-hooks/all
 ```
 
-Certainly! Here's a detailed feature description for the `useEventListener` hook based on the provided information:
-
 ## Features
 
 - **Effortless Event Handling:** Streamlines the process of adding and removing event listeners in React components, making it easier to handle user interactions and other events.

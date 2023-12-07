@@ -30,8 +30,6 @@ or
 yarn add @custom-react-hooks/all
 ```
 
-Sure! Here's a detailed feature description for the `useDebounce` hook based on the provided information:
-
 ## Features
 
 - **Function Execution Delay:** Delays the execution of a function until a certain amount of time has passed since its last invocation, effectively controlling the rate at which the function fires.

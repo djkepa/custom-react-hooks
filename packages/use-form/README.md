@@ -35,8 +35,6 @@ or
 yarn add @custom-react-hooks/all
 ```
 
-Sure, here's a comprehensive feature description for the `useForm` hook based on the provided information:
-
 ## Features
 
 - **Comprehensive Form State Management:** Efficiently manages the state of form fields including values, validation errors, and touched status, ensuring a smooth form handling experience.

@@ -142,5 +142,3 @@ An object with the following properties:
 ## Contributing
 
 Contributions to enhance `useAsync` are highly encouraged. Feel free to submit issues or pull requests to the repository.
-
-Certainly, I'll help you update the documentation for your `useAsync` custom hook. Below is an improved and more detailed documentation template:

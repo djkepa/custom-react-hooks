@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-debounce",
-  "version": "1.4.16",
+  "version": "1.4.17",
   "author": "Bane Grozdanovic <banegrozdanovic@gmail.com>",
   "license": "MIT",
   "main": "dist/index.js",
