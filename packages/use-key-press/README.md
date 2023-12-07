@@ -38,32 +38,44 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```typescript
-import useKeyPress from '@custom-react-hooks/use-key-press';
+import { useKeyPress } from '@custom-react-hooks/all';
 
-const TestComponent: React.FC = () => {
-  const enterPressed = useKeyPress('Enter');
+const KeyPressComponent = () => {
+  const isPressed = useKeyPress('Enter');
 
   return (
     <div>
       <p>Press the "Enter" key</p>
-      {enterPressed && <p>You are pressing the "Enter" key!</p>}
+      <button>
+        Enter
+      </button>
+      {isPressed && <p>You are pressing the "Enter" key!</p>}
     </div>
   );
 };
 
-export default TestComponent;
+export default KeyPressComponent;
 ```
 
 This example demonstrates using `useKeyPress` to detect when the Enter key is pressed with a debounce of 200 milliseconds.
 
 ## API Reference
 
+### Parameters
 - `targetKey`: The key for which the press event should be detected.
 - `options`: An object that may contain:
-  - `debounce`: Optional number specifying the debounce time in milliseconds.
-  - `global`: Optional boolean indicating whether to listen for the event globally.
+- `debounce`: Optional number specifying the debounce time in milliseconds.
+- `global`: Optional boolean indicating whether to listen for the event globally.
   
+### Returns
 - Returns a boolean state indicating whether the specified key is currently pressed.
+
+## Use Cases
+
+- **Keyboard Shortcuts**: Implement custom keyboard shortcuts for enhanced user interaction.
+- **Game Controls**: Handle key presses for browser-based games.
+- **Navigation**: Navigate through components or pages using keyboard keys.
+- **Accessibility Enhancements**: Improve accessibility by providing keyboard interactions.
 
 ## Contributing
 

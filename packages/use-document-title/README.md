@@ -40,7 +40,7 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React, { useState } from 'react';
-import useDocumentTitle from '@custom-react-hooks/useDocumentTitle';
+import { useDocumentTitle } from '@custom-react-hooks/all';
 
 const DocumentTitleComponent = () => {
   const [title, setTitle] = useState('My Awesome Page');
@@ -69,7 +69,7 @@ const DocumentTitleComponent = () => {
 export default DocumentTitleComponent;
 ```
 
-In this example, the hook is used to set the document title to "My Awesome Page" when `MyPageComponent` is rendered.
+In this example, the hook is used to set the document title to "My Awesome Page" when `DocumentTitleComponent` is rendered.
 
 ## API Reference
 
@@ -77,6 +77,13 @@ In this example, the hook is used to set the document title to "My Awesome Page"
 
 - `title`: The string to set as the document title.
 - `revertOnUnmount`: (optional) A boolean that determines whether to revert to the original title on component unmount.
+
+## Use Cases
+
+- **Page Titling**: Update the document title based on the current page or view in a Single Page Application (SPA).
+- **Contextual Information**: Show contextual information (like unread message count) in the title.
+- **Feedback on User Actions**: Reflect changes in application state (like a successful form submission).
+- **SEO Optimization**: For server-side rendered applications, dynamically setting titles can help with SEO.
 
 ## Contributing
 

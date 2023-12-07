@@ -7,7 +7,7 @@ We welcome contributions to the React Custom Hooks library! Here's how you can c
 1. **Fork and clone the repository:**
 
    ```
-   git clone https://github.com/your-username/custom-react-hooks.git
+   git clone https://github.com/djkepa/custom-react-hooks.git
    cd custom-react-hooks
    ```
 

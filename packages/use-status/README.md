@@ -40,34 +40,55 @@ yarn add @custom-react-hooks/all
 Import and use the `useStatus` hook in your React components to get network status:
 
 ```typescript
-import useStatus from '@custom-react-hooks/use-status';
+import { useStatus } from '@custom-react-hooks/all';
 
-const NetworkStatusComponent: React.FC = () => {
+const StatusComponent = () => {
   const { online, downlink, effectiveType, rtt } = useStatus();
 
   return (
     <div>
       <h1>Network Status</h1>
       <p>{online ? 'Online' : 'Offline'}</p>
-      {downlink && <p>Downlink Speed: {downlink} Mbps</p>}
-      {effectiveType && <p>Effective Type: {effectiveType}</p>}
-      {rtt && <p>RTT: {rtt} ms</p>}
+      {downlink && (
+        <p>
+          Downlink Speed:
+          <span>{downlink}Mbps</span>
+        </p>
+      )}
+      {effectiveType && (
+        <p>
+          Effective Type:
+          <span>{effectiveType}</span>
+        </p>
+      )}
+      {rtt && (
+        <p>
+          RTT: <span>{rtt}ms</span>
+        </p>
+      )}
     </div>
   );
 };
 
-export default NetworkStatusComponent;
+export default StatusComponent;
 ```
 
 In this example, the hook provides the current network status along with additional network information if the user is online.
 
 ## API Reference
 
-- The hook returns an object with the following properties:
+### Returns
   - `online`: Boolean indicating if the user is online.
   - `downlink`: The downlink speed in Mbps (optional).
   - `effectiveType`: The effective type of the network connection (e.g., '4g', '3g') (optional).
   - `rtt`: The round-trip time in milliseconds (optional).
+
+## Use Cases
+
+- **Online/Offline Indicators**: Display indicators showing whether the user is currently online or offline.
+- **Adaptive Content Loading**: Adjust the amount of data loaded based on network speed (e.g., lower-quality images for slow connections).
+- **Handling Disconnections**: Gracefully handle disconnections, e.g., by saving user progress or pausing activities.
+- **User Experience Optimization**: Optimize user experience based on network conditions, such as simplifying interfaces under poor connectivity.
 
 ## Contributing
 

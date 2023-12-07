@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, RefObject } from 'react';
 
 export interface MouseOptions {
   offsetX: number;
@@ -6,6 +6,13 @@ export interface MouseOptions {
   avoidEdges: boolean;
   tooltipWidth?: number;
   tooltipHeight?: number;
+  relativeToWindow?: boolean;
+}
+
+export interface UseMouseState {
+  x: number;
+  y: number;
+  position: 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft';
 }
 
 /**
@@ -18,63 +25,73 @@ export interface MouseOptions {
  */
 
 function useMouse<T extends HTMLElement>(
-  ref: React.RefObject<T>,
-  options: MouseOptions = { offsetX: 10, offsetY: 10, avoidEdges: false },
-) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const frameId = useRef<number | null>(null);
+  ref: RefObject<T>,
+  options: MouseOptions = { offsetX: 10, offsetY: 10, avoidEdges: false, relativeToWindow: false },
+): UseMouseState {
+  const [mousePosition, setMousePosition] = useState<UseMouseState>({
+    x: 0,
+    y: 0,
+    position: 'bottomRight',
+  });
 
   const updateMousePosition = useCallback(
     (ev: MouseEvent) => {
-      if (frameId.current !== null) {
-        cancelAnimationFrame(frameId.current);
-      }
+      const {
+        offsetX,
+        offsetY,
+        avoidEdges,
+        tooltipWidth = 100,
+        tooltipHeight = 50,
+        relativeToWindow,
+      } = options;
 
-      frameId.current = requestAnimationFrame(() => {
-        let newX = ev.clientX + options.offsetX;
-        let newY = ev.clientY + options.offsetY;
+      let newX = ev.clientX + offsetX;
+      let newY = ev.clientY + offsetY;
+      let newPosition: UseMouseState['position'] = 'bottomRight';
 
-        if (options.avoidEdges) {
-          const screenWidth = window.innerWidth;
-          const screenHeight = window.innerHeight;
-          const tooltipWidth = options.tooltipWidth || 100;
-          const tooltipHeight = options.tooltipHeight || 50;
-
-          if (newX + tooltipWidth > screenWidth) {
-            newX = ev.clientX - tooltipWidth;
+      if (avoidEdges) {
+        if (relativeToWindow) {
+          if (newX + tooltipWidth > window.innerWidth) {
+            newX = ev.clientX - tooltipWidth - offsetX;
+            newPosition = 'bottomLeft';
           }
-
-          if (newY + tooltipHeight > screenHeight) {
-            newY = ev.clientY - tooltipHeight;
+          if (newY + tooltipHeight > window.innerHeight) {
+            newY = ev.clientY - tooltipHeight - offsetY;
+            newPosition = newPosition === 'bottomLeft' ? 'topLeft' : 'topRight';
+          }
+        } else {
+          const rect = ref.current?.getBoundingClientRect();
+          if (rect) {
+            if (newX + tooltipWidth > rect.right) {
+              newX = ev.clientX - tooltipWidth - offsetX;
+              newPosition = 'bottomLeft';
+            }
+            if (newY + tooltipHeight > rect.bottom) {
+              newY = ev.clientY - tooltipHeight - offsetY;
+              newPosition = newPosition === 'bottomLeft' ? 'topLeft' : 'topRight';
+            }
           }
         }
+      }
 
-        setMousePosition({ x: newX, y: newY });
-      });
+      setMousePosition({ x: newX, y: newY, position: newPosition });
     },
-    [options],
+    [options, ref],
   );
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !ref.current) {
-      return;
-    }
-
     const handleMouseMove = (ev: MouseEvent) => {
-      if (ref.current && ref.current.contains(ev.target as Node)) {
+      if (options.relativeToWindow || (ref.current && ref.current.contains(ev.target as Node))) {
         updateMousePosition(ev);
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mousemove', handleMouseMove);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (frameId.current !== null) {
-        cancelAnimationFrame(frameId.current);
-      }
+      document.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [ref, updateMousePosition]);
+  }, [updateMousePosition, options.relativeToWindow, ref]);
 
   return mousePosition;
 }

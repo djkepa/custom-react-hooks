@@ -39,45 +39,72 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```typescript
-import React, { useState } from 'react';
-import useStorage from '@custom-react-hooks/use-storage';
+import React from 'react';
+import { useStorage } from '@custom-react-hooks/all';
 
-const StorageTestComponent: React.FC = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [storedValue, setStoredValue] = useStorage('testKey', '');
+const StorageList = ({ storageType }: { storageType: 'local' | 'session' }) => {
+  const [items, setItems] = useStorage(`${storageType}-items`, [], storageType);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+  const addItem = (item) => {
+    setItems((prevItems) => [...prevItems, item]);
   };
 
-  const handleSave = () => {
-    setStoredValue(inputValue);
+  const removeItem = (index) => {
+    setItems((prevItems) => prevItems.filter((_, i) => i !== index));
   };
 
   return (
     <div>
       <input
         type="text"
-        value={inputValue}
-        onChange={handleInputChange}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && e.currentTarget.value) {
+            addItem(e.currentTarget.value);
+            e.currentTarget.value = '';
+          }
+        }}
+        placeholder={`Add to ${storageType} storage`}
       />
-      <button onClick={handleSave}>Save to Storage</button>
-      <div>Stored Value: {storedValue}</div>
+      <h2>{storageType === 'local' ? 'LocalStorage' : 'SessionStorage'} List</h2>
+      <ol>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item} <XCircleIcon onClick={() => removeItem(index)} />
+          </li>
+        ))}
+      </ol>
     </div>
   );
 };
 
-export default StorageTestComponent;
+const StorageComponent = () => (
+  <div className="storage">
+    <StorageList storageType="local" />
+    <StorageList storageType="session" />
+  </div>
+);
+
+return default StorageComponent;
 ```
 
 In this example, the hook manages a value in `localStorage`, providing functions to read and update it.
 
 ## API Reference
 
+### Parameters
 - `key`: The key under which to store the value in storage.
 - `defaultValue`: The default value to use if no item is found in storage.
 - `storageType`: Type of storage to use (`'local'` for `localStorage`, `'session'` for `sessionStorage`).
+
+### Returns
 - Returns an array with the stored value and a setter function to update it.
+
+## Use Cases
+
+- **State Persistence**: Persist state between page reloads, such as user preferences or session data.
+- **Form Data Saving**: Save form data in the browser to prevent loss on page refresh.
+- **Local Data Caching**: Cache data locally to reduce API calls and improve loading times.
+- **Feature Toggling**: Store feature flags or toggles in the browser for conditional feature rendering.
 
 ## Contributing
 

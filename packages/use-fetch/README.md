@@ -28,41 +28,79 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+Certainly! Based on the provided `useFetch` hook, here are some detailed features that you can include in your documentation:
+
+## Features
+
+- **Automatic Data Fetching:** The hook initiates a fetch request as soon as the component mounts, making it effortless to load data from APIs or servers. This behavior can be controlled with the `manual` option for more specific use cases.
+
+- **Manual Fetch Control:** Provides the flexibility to manually trigger fetch requests using the `fetchData` function. This is particularly useful for cases where data needs to be re-fetched based on user interactions or other events.
+
+- **Built-in Loading and Error States:** Manages loading and error states internally, simplifying the process of rendering different UI components based on the status of the API request.
+
+- **Configurable Fetch Options:** Extends the standard `fetch` API options, allowing customization of request headers, method, body, and other settings. This makes it versatile for various types of API requests.
+
+- **Timeout Support:** Includes a timeout feature, enabling the specification of a maximum time to wait for a response. This helps in handling scenarios where the server response might be delayed.
+
+- **Response Caching:** Offers an optional caching mechanism to store and retrieve responses. This reduces redundant network requests, optimizing performance for frequently accessed data.
+
+- **Global State Integration:** Allows for the integration with global state management systems by providing an optional setter function. This is useful for updating global states like Redux or Context API with the fetched data.
+
+- **Automatic Cleanup:** Handles the cleanup of timeouts and aborts ongoing fetch requests to prevent memory leaks and unwanted side effects, especially important in dynamic and complex applications.
+
+- **Error Handling:** Captures and returns errors encountered during the fetch process, facilitating robust error handling and user feedback mechanisms in the application.
+
+- **Flexible Return Types:** The hook is generic, making it capable of returning data in any format (e.g., JSON, text), depending on the needs of the application.
+
+- **Server-Side Rendering Compatibility:** Designed to be safely used in server-side rendering environments, avoiding errors related to the absence of a `window` or browser-specific APIs.
+
+
 ## Usage
 
 Here's an example of how to use the `useFetch` hook in a component:
 
 ```typescript
-import useFetch from '@custom-react-hooks/useFetch';
+import { useFetch } from '@custom-react-hooks/all';
 
-interface User {
-  id: number;
-  name: string;
-}
+const FetchComponent = () => {
+  const [url, setUrl] = useState('https://jsonplaceholder.typicode.com/users/1');
+  const { data, loading, error, fetchData } = useFetch(url, { manual: true });
 
-const UserList = () => {
-  const { data, loading, error, fetchData } = useFetch<User[]>(
-    'https://jsonplaceholder.typicode.com/users',
-  );
+  const handleChange = (event) => {
+    setUrl(event.target.value);
+  };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  const handleFetch = () => {
+    fetchData();
+  };
 
   return (
     <div>
-      <button onClick={fetchData}>Refresh</button>
+      <input
+        type="text"
+        value={url}
+        onChange={handleChange}
+      />
+      <button
+        onClick={handleFetch}
+        disabled={loading}
+      >
+        Fetch Data
+      </button>
+
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error.message}</p>}
       {data && (
-        <ul>
-          {data.map((user) => (
-            <li key={user.id}>{user.name}</li>
-          ))}
-        </ul>
+        <div>
+          <p>Data:</p>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
       )}
     </div>
   );
 };
 
-export default UserList;
+export default FetchComponent;
 ```
 
 In this example, `useFetch` is used to load data from an API. The component displays the data, a loading state, and any error that might occur. A button is provided to manually trigger the fetch request.
@@ -83,6 +121,14 @@ An object containing:
 - `loading` (boolean): The loading state of the request.
 - `error` (Error | null): Any error encountered during the request.
 - `fetchData` (() => Promise<void>): A function to manually trigger the fetch request.
+
+## Use Cases
+
+- **Data Fetching**: Load data from an API or server, handling loading states and errors.
+- **Caching Responses**: Implement caching strategies to reduce redundant network requests.
+- **Global State Updates**: Update global state (like in Redux or Context API) with fetched data.
+- **Polling Mechanism**: Implement polling for real-time updates from a server.
+- **Conditional Requests**: Make API requests based on user actions or component lifecycle.
 
 ## Notes
 

@@ -40,40 +40,37 @@ yarn add @custom-react-hooks/all
 Import and use the `useOnScreen` hook in your React components. You can also specify whether the element should be unobserved after first being visible by setting the `once` parameter.
 
 ```typescript
-import useOnScreen from '@custom-react-hooks/use-on-screen';
+import { useOnScreen } from '@custom-react-hooks/all';
 
-const OnScreenTestComponent: React.FC = () => {
-  const { ref, isIntersecting } = useOnScreen<HTMLDivElement>();
+const OnScreenComponent = () => {
+  const { ref, isIntersecting } = useOnScreen({ threshold: 1 }, false);
 
   return (
-    <div>
-      <div
-        ref={ref}
-        style={{
-          height: '100px',
-          width: '100px',
-          backgroundColor: isIntersecting ? 'green' : 'red',
-        }}
-      >
-        Test Box
-      </div>
-      <p>{isIntersecting ? 'Visible in viewport' : 'Not visible in viewport'}</p>
+    <div ref={ref}>
+      {isIntersecting ? 'Element is visible!' : 'Scroll down...'}
     </div>
   );
 };
 
-export default OnScreenTestComponent;
-
+export default OnScreenComponent;
 ```
-
-In this example, the hook observes an element and updates its visibility status. When `once` is set to `true`, the element is unobserved after becoming visible for the first time.
 
 ## API Reference
 
+### Parameters
 - `options`: Optional `IntersectionObserverInit` object to customize the observer.
 - `once`: Boolean flag indicating if the element should be unobserved after it becomes visible for the first time.
+
+### Returns
 - `ref`: Ref object to be attached to the element you want to observe.
 - `isIntersecting`: Boolean indicating whether the observed element is in the viewport.
+
+## Use Cases
+
+- **Lazy Loading**: Load content (like images or videos) only when they enter the viewport.
+- **Animation on Scroll**: Trigger animations or transitions when an element comes into view.
+- **Infinite Scrolling**: Load more content as the user scrolls down a page.
+- **Visibility Tracking**: Track which components are visible on the screen for analytics.
 
 ## Contributing
 

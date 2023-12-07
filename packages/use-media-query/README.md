@@ -39,23 +39,36 @@ yarn add @custom-react-hooks/all
 Import and use the `useMediaQuery` hook in your React components:
 
 ```typescript
-import useMediaQuery from '@custom-react-hooks/use-media-query';
+import { useMediaQuery } from '@custom-react-hooks/all';
 
-const MediaQueryTestComponent: React.FC = () => {
-  const isMobile = useMediaQuery('(max-width: 600px)');
+const MediaQueryComponent = () => {
+  const isWide = useMediaQuery('(min-width: 600px)');
 
-  return <div>{isMobile ? <p>Mobile View</p> : <p>Desktop View</p>}</div>;
+  return (
+    <div>
+      {isWide ? 'Wide viewport detected' : 'Narrow viewport detected'}
+      <br />
+      <span>
+        <i>Resize to see the effect</i>
+      </span>
+    </div>
+  );
 };
 
-export default MediaQueryTestComponent;
-
+export default MediaQueryComponent;
 ```
-
-In this example, the component renders different content based on the screen width.
 
 ## API Reference
 
+### Parameters
 - `query`: A string representing the media query to evaluate.
+
+## Use Cases 
+
+- **Responsive Design**: Dynamically adjust the layout or functionality based on viewport size.
+- **Dark Mode Toggle**: Switch between light and dark themes based on user's system preferences.
+- **Adaptive Rendering**: Render different components or content based on media query matches.
+- **Performance Optimization**: Load resources conditionally based on the media query (e.g., images for mobile).
 
 ## Contributing
 

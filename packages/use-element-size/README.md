@@ -41,59 +41,34 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React, { useRef, useState } from 'react';
-import useElementSize from '@custom-react-hooks/useElementSize';
+import { useElementSize } from '@custom-react-hooks/all';
 
-const TestComponent: React.FC = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { width, height } = useElementSize(ref);
-  const [customWidth, setCustomWidth] = useState<number | undefined>(undefined);
-  const [customHeight, setCustomHeight] = useState<number | undefined>(undefined);
-
-  const handleInputChange = () => {
-    if (textareaRef.current) {
-      const parsedWidth = parseFloat(textareaRef.current.value);
-      if (!isNaN(parsedWidth)) {
-        setCustomWidth(parsedWidth);
-      }
-    }
-  };
-
-  const handleHeightInputChange = () => {
-    if (textareaRef.current) {
-      const parsedHeight = parseFloat(textareaRef.current.value);
-      if (!isNaN(parsedHeight)) {
-        setCustomHeight(parsedHeight);
-      }
-    }
-  };
+const ElementSizeComponent = () => {
+  const [setRef, size] = useElementSize();
 
   return (
-    <div>
+    <div className="element-size">
       <div
-        ref={ref}
-        style={{ width: customWidth || width, height: customHeight || height }}
+        ref={setRef}
+        className="resize"
       >
-        <p>Width: {customWidth || width}px</p>
-        <p>Height: {customHeight || height}px</p>
+        <p>Drag from the bottom-right corner to resize.</p>
       </div>
-      <textarea
-        ref={textareaRef}
-        aria-label="Set custom width"
-        placeholder="Set custom width"
-        onChange={handleInputChange}
-      />
-      <textarea
-        ref={textareaRef}
-        aria-label="Set custom height"
-        placeholder="Set custom height"
-        onChange={handleHeightInputChange}
-      />
+      <br />
+      <div>Current Size:</div>
+      <div className="btns">
+        <p>
+          Width: <span>{size.width}px</span>
+        </p>
+        <p>
+          Height: <span>{size.height}px</span>
+        </p>
+      </div>
     </div>
   );
 };
 
-export default TestComponent;
+export default ElementSizeComponent;
 ```
 
 In this example, `useElementSize` is used to measure and display the dimensions of a `div` element.
@@ -108,6 +83,15 @@ In this example, `useElementSize` is used to measure and display the dimensions 
 
 - `width`: width of the element
 - `height`: height of the element.
+
+## Use cases
+
+- **Responsive Components**: Adjust component behavior or style based on its size.
+- **Layout Calculations**: Calculate layout for items like grids or masonry layouts that depend on element sizes.
+- **Size-dependent Rendering**: Render different content or components based on available size.
+- **Animations and Transitions**: Trigger animations or transitions when an element's size changes.
+- **Optimizing Canvas or SVG**: Adjust dimensions for canvas or SVG elements based on their container size.
+
 
 ## Contributing
 

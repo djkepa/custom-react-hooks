@@ -12,7 +12,6 @@ function usePortal() {
   const [isOpen, setIsOpen] = useState(false);
   const portalRef = useRef<HTMLDivElement | null>(null);
 
-  // Lazy initialization to avoid creating the div on server-side rendering
   if (!portalRef.current && typeof document !== 'undefined') {
     portalRef.current = document.createElement('div');
   }

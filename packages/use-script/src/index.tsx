@@ -11,24 +11,33 @@ export type ScriptStatus = 'loading' | 'ready' | 'error' | 'unknown';
  * @return - An array of objects, each representing the load state of a script.
  */
 
+const cachedScriptStatuses: Record<string, ScriptStatus> = {};
+
 function useScript(src: string, removeOnUnmount: boolean = false): ScriptStatus {
-  // Check if the script is already in the DOM
   const isScriptExisting = document.querySelector(`script[src="${src}"]`);
-  console.log('isScriptExisting', isScriptExisting);
-  const [status, setStatus] = useState<ScriptStatus>(isScriptExisting ? 'unknown' : 'loading');
+  const cachedStatus = cachedScriptStatuses[src];
+
+  const [status, setStatus] = useState<ScriptStatus>(
+    cachedStatus || (isScriptExisting ? 'ready' : 'loading'),
+  );
 
   useEffect(() => {
-    // If the script is already in the DOM, we won't load it again
-    if (isScriptExisting) {
+    if (typeof window === 'undefined' || isScriptExisting) {
       return;
     }
-    console.log('status', status);
 
     const script = document.createElement('script');
     script.src = src;
+    script.async = true;
 
-    const handleLoad = () => setStatus('ready');
-    const handleError = () => setStatus('error');
+    const handleLoad = () => {
+      setStatus('ready');
+      cachedScriptStatuses[src] = 'ready';
+    };
+    const handleError = () => {
+      setStatus('error');
+      cachedScriptStatuses[src] = 'error';
+    };
 
     script.addEventListener('load', handleLoad);
     script.addEventListener('error', handleError);

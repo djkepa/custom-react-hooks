@@ -3,6 +3,15 @@
 
 The `useClickOutside` hook is designed to detect and handle clicks outside of a specified element or set of elements. This is particularly useful for closing modal windows, dropdowns, and other components when a user interacts outside of them.
 
+## Features
+
+- **Element Focus Management:** Detects clicks outside of the specified element(s), which is essential for managing the focus and closing modal windows, dropdowns, and other components.
+- **Customizable Event Listening:** Listens for specific events like `mousedown` and `touchstart` to determine outside clicks, with the option to customize the events.
+- **Dynamic Detection Control:** Provides the ability to enable or disable the click outside detection dynamically, which offers flexible integration with various UI state requirements.
+- **Ref Exclusion:** Allows for the exclusion of certain elements (by refs) from triggering the outside click logic, which is useful when certain elements within the component should not close it.
+- **Multiple Element Support:** Can handle multiple elements as an array of refs, which is great for complex components that may consist of disjointed elements.
+- **Simple Integration:** Easy to integrate into existing components with minimal changes required to the existing structure.
+
 ## Installation
 
 Choose and install individual hooks that suit your project needs, or install the entire collection for a full suite of utilities.
@@ -36,35 +45,32 @@ yarn add @custom-react-hooks/all
 Here's an example of how to use the `useClickOutside` hook in a modal component:
 
 ```typescript
-import React, { useRef } from 'react';
-import useClickOutside from 'custom-react-hooks/use-click-outside';
+import React, { useState, useRef } from 'react';
+import { useClickOutside } from '@custom-react-hooks/all';
 
-const ClickOutsideComponent = ({ onClose }: { onClose: () => void }) => {
-  const modalRef = useRef<HTMLDivElement>(null); // The ref for the modal
-  const closeButtonRef = useRef<HTMLButtonElement>(null); // A ref for the close button
+const Modal = ({ onClose }) => {
+  const modalRef = useRef(null);
 
-  // Call the hook with the modal ref and the close button ref as the refs to ignore
-  useClickOutside(
-    [modalRef], // Array of refs to detect outside click
-    () => onClose(), // Callback to execute on outside click
-    ['mousedown', 'touchstart'], // Events to listen for
-    true, // Enable the outside click detection
-    [closeButtonRef], // Refs to ignore
-  );
+  useClickOutside(modalRef, onClose);
 
   return (
-    <div
-      ref={modalRef}
-      style={{ border: '1px solid black', padding: '20px' }}
-    >
-      {/* Modal content */}
-      <p>Modal Content Here</p>
-      <button
-        ref={closeButtonRef}
-        onClick={onClose}
-      >
-        Close
-      </button>
+    <div ref={modalRef}>
+      <p>Modal content goes here</p>
+      <button onClick={onClose}>Close Modal</button>
+    </div>
+  );
+};
+
+const ClickOutsideComponent = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  return (
+    <div>
+      <button onClick={openModal}>Open Modal</button>
+      {isModalOpen && <Modal onClose={closeModal} />}
     </div>
   );
 };
@@ -84,6 +90,13 @@ In the above example, clicking outside the `<div>` containing the modal content 
 - `enableDetection` (boolean, optional): A boolean to enable or disable click detection. Defaults to `true`.
 - `ignoreRefs` (RefObject[], optional): An array of ref objects for elements that, when clicked, should not trigger the callback.
 
+## Use Cases
+
+- **Closing Modals or Popups**: Automatically close a modal or popup when a user clicks outside of it.
+- **Dropdown Menus**: Collapse dropdown menus when the user interacts with other parts of the application.
+- **Context Menus**: Hide context menus or custom right-click menus when clicking elsewhere on the page.
+- **Form Validation or Submission**: Trigger form validation or submission when clicking outside of a form area.
+- **Toggling UI Elements**: Toggle the visibility of UI elements like sidebars or tooltips when clicking outside of them.
 
 ## Notes
 

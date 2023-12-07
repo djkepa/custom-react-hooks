@@ -40,37 +40,67 @@ yarn add @custom-react-hooks/all
 Import the `useScript` hook and use it in your React components. You can specify multiple scripts and custom attributes:
 
 ```typescript
-import useScript from '@custom-react-hooks/use-script';
-interface ScriptTestComponentProps {
-  src: string;
-}
+import { useScript } from '@custom-react-hooks/all';
 
-const ScriptTestComponent: React.FC<ScriptTestComponentProps> = ({ src }) => {
-  const status = useScript(src);
+const ScriptComponent = () => {
+  const status = useScript(
+    'https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.js',
+  );
+
+  const triggerConfetti = () => {
+    if (status === 'ready' && window.confetti) {
+      window.confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
+    }
+  };
 
   return (
     <div>
-      <p>Script status: {status}</p>
+      <h1>Confetti Script Loader</h1>
+
+      <p>Script Loading Status: {status}</p>
+
+      <button
+        onClick={triggerConfetti}
+        disabled={status !== 'ready'}
+      >
+        Trigger Confetti
+      </button>
+      {status === 'error' && (
+        <p>Failed to load the script. Please check the URL.</p>
+      )}
     </div>
   );
 };
 
-export default ScriptTestComponent;
+export default ScriptComponent;
 ```
 
 In this example, the hook loads multiple scripts with additional attributes and provides callbacks for load and error events.
 
 ## API Reference
 
+### Parameters
 - `src`: A string or an array of strings representing the script source URLs.
 - `options`: An object containing:
   - `onLoad`: Callback function triggered when the script loads.
   - `onError`: Callback function triggered on script load error.
   - `removeOnUnmount`: Boolean indicating whether to remove the script tags on unmount.
   - Additional attributes (e.g., `defer`, `async`) to be set on the script tags.
-- Returns an array of script load states, each with:
+
+### Returns
   - `src`: Script source URL.
   - `status`: Load status of the script (`'loading'`, `'ready'`, or `'error'`).
+
+## Use Cases
+
+- **Third-Party Integrations**: Load external libraries or widgets, like social media sharing buttons or analytics scripts.
+- **Conditional Script Loading**: Load scripts only when certain conditions are met, optimizing performance.
+- **Feature Enhancement**: Enhance your application with additional features available via external scripts.
+- **Asynchronous Script Loading**: Manage asynchronous loading of scripts without blocking the rendering of your application.
 
 ## Contributing
 

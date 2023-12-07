@@ -39,48 +39,64 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React, { useState } from 'react';
-import useLongPress from '@custom-react-hooks/use-long-press';
+import { useLongPress } from '@custom-react-hooks/all';
 
-const LongPressTestComponent: React.FC = () => {
+const LongPressTestComponent = () => {
   const [status, setStatus] = useState('Ready');
 
   const longPressCallback = () => {
-    setStatus('Long Press Finished');
+    setStatus('Finished');
   };
 
   const longPressEvents = useLongPress(longPressCallback, {
     threshold: 500,
-    onStart: () => setStatus('Long Press Started'),
-    onFinish: () => setStatus('Long Press Finished'),
-    onCancel: () => setStatus('Long Press Cancelled'),
+    onStart: () => setStatus('Started'),
+    onFinish: () => setStatus('Finished'),
+    onCancel: () => setStatus('Cancelled'),
   });
 
   return (
     <div>
-      <button {...longPressEvents}>Press and Hold</button>
-      <p>Status: {status}</p>
+      <button {...longPressEvents}>
+        Press and Hold
+      </button>
+      <p>
+        Status: <span>{status}</span>
+      </p>
     </div>
   );
 };
 
 export default LongPressTestComponent;
-
 ```
 
-This example demonstrates how to use the `useLongPress` hook to add a long press interaction to a div element.
+This example demonstrates how to use the `useLongPress` hook to add a long press interaction to a button element.
 
 ## API Reference
+
+### Parameters
 
 - `callback`: The function to execute when a long press event is successfully detected.
 - `options`: Configuration object with the following optional properties:
   - `threshold`: Time in milliseconds the user must press and hold to trigger a long press event.
   - `onStart`: Function called when the user starts pressing.
   - `onFinish`: Function called when a long press event finishes successfully.
-  - `onCancel`: Function called when a press event
+  - `onCancel`: Function called when a press event is cancelled.
 
- is cancelled.
+### Returns
 
-The hook returns an object containing event handlers (`onMouseDown`, `onMouseUp`, `onMouseLeave`, `onTouchStart`, `onTouchEnd`) to be spread on the target element.
+- `onMouseDown`: Event handler for mouse down event to start detecting long press.
+- `onMouseUp`: Event handler for mouse up event to cancel long press detection.
+- `onMouseLeave`: Event handler for mouse leave event to cancel long press detection.
+- `onTouchStart`: Event handler for touch start event to start detecting long press.
+- `onTouchEnd`: Event handler for touch end event to cancel long press detection.
+
+## Use Cases
+
+- **Mobile Interaction**: Implement long press interactions common in mobile interfaces.
+- **Context Menus**: Display custom context menus on long press.
+- **Drag-and-Drop Initiation**: Start a drag-and-drop process after a long press.
+- **Gesture Recognition**: Recognize specific user gestures for advanced UI interactions.
 
 ## Contributing
 

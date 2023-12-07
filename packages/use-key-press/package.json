@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-key-press",
-  "version": "1.4.15",
+  "version": "1.4.16",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",

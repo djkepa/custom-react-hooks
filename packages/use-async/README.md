@@ -41,26 +41,62 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```typescript
-import useAsync from '@custom-react-hooks/use-async';
+import React, { useState } from 'react';
+import { useAsync } from '@custom-react-hooks/all';
 
-const fetchData = async () => {
-  return await fetch('https://jsonplaceholder.typicode.com/todos/1').then((res) => res.json());
+const fetchData = async (endpoint) => {
+  const response = await fetch(endpoint);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch from ${endpoint}`);
+  }
+  return response.json();
 };
 
-const TestComponent = () => {
-  const { execute, status, value, error } = useAsync(fetchData, false);
+const AsyncComponent = () => {
+  const [endpoint, setEndpoint] = useState('');
+  const [simulateError, setSimulateError] = useState(false);
+  const { execute, status, value: data, error } = useAsync(() => fetchData(endpoint), false);
+
+  const handleFetch = () => {
+    if (simulateError) {
+      setEndpoint('https://jsonplaceholder.typicode.com/todos/1');
+    }
+    execute();
+  };
 
   return (
     <div>
-      {status === 'idle' && <button onClick={execute}>Fetch Data</button>}
-      {status === 'pending' && <p>Loading...</p>}
-      {status === 'success' && <div>{JSON.stringify(value)}</div>}
-      {status === 'error' && <p>Error: {error?.message}</p>}
+      <input
+        type="text"
+        value={endpoint}
+        onChange={(e) => setEndpoint(e.target.value)}
+        placeholder="Enter API endpoint"
+      />
+      <button onClick={handleFetch}>Fetch Data</button>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={simulateError}
+            onChange={() => setSimulateError(!simulateError)}
+          />
+          Simulate Error
+        </label>
+      </div>
+
+      {status === 'pending' && <div>Loading...</div>}
+      {status === 'error' && <div>Error: {error?.message}</div>}
+      {status === 'success' && (
+        <div>
+          <h3>Data:</h3>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 };
 
-export default TestComponent;
+export default AsyncComponent;
 ```
 
 In this example, the `useAsync` hook is used to perform an asynchronous data fetch operation.
@@ -81,6 +117,27 @@ An object with the following properties:
 - `value` (Any): The value returned from the async operation.
 - `error` (Error | null): Any error that occurred during the execution.
 
+## Use Cases
+
+1. **API Data Fetching**: Fetching data from an API when a component mounts or based on user actions.
+
+2. **Form Submission Handling**: Managing asynchronous form submissions to a server, including loading states and error handling.
+
+3. **Lazy Loading**: Dynamically loading components or data based on certain conditions or user interactions.
+
+4. **Web API Interactions**: Simplifying the use of asynchronous Web APIs (like geolocation or camera access).
+
+5. **File Uploads**: Handling the asynchronous process of file uploads, including progress tracking and error management.
+
+6. **Real-time Data Updates**: Managing WebSocket connections or server polling for live data updates.
+
+7. **Complex Calculations/Processing**: Executing and managing state for asynchronous complex calculations, such as those using Web Workers.
+
+8. **Third-party Service Integration**: Facilitating interactions with asynchronous third-party services (e.g., payment gateways, social media APIs).
+
+9. **Conditional Async Operations**: Executing asynchronous tasks based on specific conditions or inputs.
+
+10. **Sequencing Async Operations**: Coordinating multiple dependent asynchronous operations in sequence.
 
 ## Contributing
 

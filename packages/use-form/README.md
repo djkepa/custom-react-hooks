@@ -35,26 +35,48 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+Sure, here's a comprehensive feature description for the `useForm` hook based on the provided information:
+
+## Features
+
+- **Comprehensive Form State Management:** Efficiently manages the state of form fields including values, validation errors, and touched status, ensuring a smooth form handling experience.
+
+- **Customizable Validation Logic:** Supports custom validation functions, allowing for flexible and complex validation rules tailored to specific form requirements.
+
+- **Real-Time Feedback on Form State:** Tracks the `isSubmitting` state, providing real-time feedback on the form's submission process, which is particularly useful for implementing loading indicators.
+
+- **Detailed Submission Status Tracking:** Maintains a `submissionStatus` state with values like `idle`, `success`, or `error`, offering precise feedback on the outcome of form submissions.
+
+- **Dynamic Form Field Handling:** Capable of managing dynamic form fields, allowing for adding, removing, or updating fields as needed within the form.
+
+- **Synchronous and Asynchronous Validation:** Supports both synchronous and asynchronous validation, making it suitable for a variety of validation scenarios including server-side validation checks.
+
+- **Event Handlers for Form Interactions:** Provides built-in handlers for common form events like changes (`handleChange`), blurs (`handleBlur`), and submissions (`handleSubmit`), simplifying form interaction logic.
+
+- **Form Reset Functionality:** Includes a `resetForm` function to easily reset the form to its initial state, enhancing user experience in scenarios like form cancellation or reinitialization.
+
+- **Declarative Form Submission:** The `handleSubmit` function allows for declarative handling of form submissions, including support for asynchronous operations like API calls.
+
+- **Enhanced User Experience:** Improves user experience by providing immediate feedback on input validation and submission status, reducing user errors and confusion.
+
+- **Optimized for Complex Forms:** Ideal for handling complex forms, such as multi-step forms or forms with conditional logic, due to its comprehensive state management and flexible validation capabilities.
+
 ## Usage
 
 ```typescript
 import React from 'react';
-import useForm from '@custom-react-hooks/useForm';
+import useForm from '@custom-react-hooks/use-form';
 
-interface FormValues {
-  username: string;
-  email: string;
-}
+const FormComponent = () => {
+  const initialValues = { username: '', email: '' };
+  const [submitting, setSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState('');
 
-const MyForm = () => {
-  const initialValues: FormValues = { username: '', email: '' };
-
-  const validate = (values: FormValues) => {
-    const errors: Partial<Record<keyof FormValues, string>> = {};
+  const validate = (values) => {
+    const errors = {};
     if (!values.username) errors.username = 'Username is required';
     if (!values.email) errors.email = 'Email is required';
-    // Add more validation rules as needed
-    return errors as Record<keyof FormValues, string | undefined>;
+    return errors;
   };
 
   const { values, errors, touched, handleChange, handleBlur, handleSubmit, resetForm } = useForm(
@@ -63,47 +85,73 @@ const MyForm = () => {
   );
 
   const onSubmit = async () => {
-    // If you have asynchronous operations, place them here
+    setSubmitting(true);
     console.log('Form submitted:', values);
+
+    setTimeout(() => {
+      setSubmitResult('Form submitted successfully!');
+      setSubmitting(false);
+    }, 2000);
   };
 
   return (
-    <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
-      <label htmlFor="username">Username</label>
-      <input
-        id="username"
-        name="username"
-        value={values.username}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      {touched.username && errors.username && <div>{errors.username}</div>}
-
-      <label htmlFor="email">Email</label>
-      <input
-        id="email"
-        name="email"
-        value={values.email}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      {touched.email && errors.email && <div>{errors.email}</div>}
-
-      <button type="submit">Submit</button>
-      <button
-        type="button"
-        onClick={resetForm}
+    <>
+      {submitting && <div>Loading...</div>}
+      {!submitting && submitResult && <div>{submitResult}</div>}
+      <form
+        onSubmit={(e) => handleSubmit(e, onSubmit)}
+        className="form"
       >
-        Reset
-      </button>
-    </form>
+        <div className="input-field">
+          <label htmlFor="username">Username</label>
+          <input
+            id="username"
+            name="username"
+            value={values.username}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {touched.username && errors.username && <span className="error">{errors.username}</span>}
+        </div>
+
+        <div className="input-field">
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {touched.email && errors.email && <span className="error">{errors.email}</span>}
+        </div>
+
+        <div className="pair">
+          <button
+            type="submit"
+            disabled={submitting}
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            onClick={resetForm}
+            disabled={submitting}
+          >
+            Reset
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
 
-export default MyForm;
+export default FormComponent;
 ```
 
 ## API Reference
+
+### Parameters
 
 - `initialValues`: Object representing the initial state of the form fields.
 - `validate`: Function for custom validation logic, returning error messages for each field.
@@ -116,6 +164,14 @@ export default MyForm;
 - `resetForm`: Function to reset the form to its initial state.
 - `isSubmitting`: Boolean indicating the submitting state of the form.
 - `submissionStatus`: String representing the status of the form submission (`idle`, `success`, or `error`).
+
+## Use Cases
+
+- **Form State Management**: Handle input values, errors, and touched fields.
+- **Dynamic Form Handling**: Dynamically add, remove, or update form fields.
+- **Form Validation**: Implement synchronous or asynchronous form validation.
+- **Form Submission**: Manage form submission status and handle submit events.
+- **Multi-Step Forms**: Control multi-step or wizard-like form processes.
 
 ## Contributing
 

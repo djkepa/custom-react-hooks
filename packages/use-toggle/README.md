@@ -37,35 +37,50 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```typescript
-import useToggle from '@custom-react-hooks/use-toggle';
+import { useToggle } from '@custom-react-hooks/all';
 
-const ToggleTestComponent: React.FC = () => {
+const ToggleComponent = () => {
   const { value, toggle, setTrue, setFalse } = useToggle(false);
 
   return (
     <div>
-      <button onClick={toggle}>Toggle</button>
-      <button onClick={setTrue}>Set True</button>
-      <button onClick={setFalse}>Set False</button>
-      {value && <p>Message Visible</p>}
+      <div>
+        <button onClick={toggle}>Toggle</button>
+        <button onClick={setTrue}>
+          Set True
+        </button>
+        <button onClick={setFalse}>
+          Set False
+        </button>
+      </div>
+      {value && <h2>Message Visible</h2>}
     </div>
   );
 };
 
-export default ToggleTestComponent;
+export default ToggleComponent;
 ```
 
 In this example, `useToggle` is used to manage a boolean state. A callback function is provided to log the new state whenever it changes.
 
 ## API Reference
 
+### Parameters
 - `initialValue`: (optional) The initial boolean value (default is `false`).
 - `onToggle`: (optional) A callback function that gets called with the new value whenever the toggle state changes.
-- Returns an object with:
+
+### Returns
   - `value`: The current boolean value.
   - `toggle`: Function to toggle the value.
   - `setTrue`: Function to set the value to true.
   - `setFalse`: Function to set the value to false.
+
+## Use Cases 
+
+- **Toggle UI Elements**: Manage the state of toggleable UI elements like dropdowns, modals, or switches.
+- **Feature Flags**: Implement feature toggling within your application for enabling or disabling features.
+- **Conditional Rendering**: Control the rendering of components based on a toggle state.
+- **User Preferences**: Manage user preferences such as dark mode or layout options.
 
 ## Contributing
 

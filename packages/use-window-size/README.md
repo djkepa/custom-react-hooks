@@ -37,30 +37,46 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```typescript
-import useWindowSize from '@custom-react-hooks/use-window-size';
+import { useWindowSize } from '@custom-react-hooks/all';
 
-const WindowSizeTestComponent: React.FC = () => {
-  const { width, height } = useWindowSize(200); // Using a 200ms debounce delay
+const WindowSizeComponent = () => {
+  const { width, height } = useWindowSize(100);
 
   return (
     <div>
-      <p>Window Width: {width}</p>
-      <p>Window Height: {height}</p>
+      <h2>Current Window Size:</h2>
+      <div>
+        <p>
+          Width: <span>{width}</span>
+        </p>
+        <p>
+          Height: <span>{height}</span>
+        </p>
+      </div>
     </div>
   );
 };
-
-export default WindowSizeTestComponent;
+export default WindowSizeComponent;
 ```
 
 In this example, the `useWindowSize` hook is used to track the size of the browser window. The debounce delay is set to 200 milliseconds to optimize performance.
 
 ## API Reference
 
+### Parameters
 - `debounceDelay`: (optional) The delay in milliseconds for debouncing the resize event.
-- Returns an object with:
+
+### Returns
   - `width`: The current width of the window.
   - `height`: The current height of the window.
+
+
+## Use Cases
+
+- **Responsive Components**: Create components that respond to changes in window size.
+- **Layout Adjustments**: Adjust layout dynamically based on the window size, enhancing responsiveness.
+- **Visibility Control**: Show or hide elements based on the available viewport size.
+- **Size-Dependent Functionality**: Implement functionality that depends on the size of the window, like different navigation styles for mobile and desktop.
 
 ## Contributing
 

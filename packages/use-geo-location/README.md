@@ -39,7 +39,7 @@ yarn add @custom-react-hooks/all
 Import and use the `useGeoLocation` hook in your React components:
 
 ```typescript
-import useGeoLocation from '@custom-react-hooks/useGeoLocation';
+import { useGeoLocation } from '@custom-react-hooks/all';
 
 function GeoLocationComponent() {
   const { loading, coordinates, error, isWatching } = useGeoLocation();
@@ -65,11 +65,21 @@ export default GeoLocationComponent;
 
 ## API Reference
 
+### Parameters
+
 - `options`: Optional `PositionOptions` object to configure geolocation queries.
 - `watch`: Boolean flag to continuously watch the user's location.
 - `coordinates`: The current geographical position of the user.
 - `error`: Error object containing details in case of a failure.
 - `loading`: Boolean indicating whether the location data is being fetched.
+
+## Use Cases
+
+- **User Location Tracking**: Get the current location of the user for services like maps or local information.
+- **Continuous Location Monitoring**: Continuously monitor user's location for real-time tracking applications.
+- **Geofencing**: Implement geofencing features, triggering actions when the user enters or leaves a region.
+- **Location-Based Services**: Provide services or content based on the user’s geographical location.
+- **Error Handling**: Manage errors related to geolocation access, like permission denial or unavailable services.
 
 ## Contributing
 

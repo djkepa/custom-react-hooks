@@ -39,39 +39,51 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React, { useState } from 'react';
-import useThrottle from '@custom-react-hooks/use-throttle';
+import { useThrottle } from '@custom-react-hooks/all';
 
-const ThrottleTestComponent: React.FC = () => {
+const ThrottleComponent = () => {
   const [inputValue, setInputValue] = useState('');
   const throttledValue = useThrottle(inputValue, 1000);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
   };
 
   return (
     <div>
+      <h2>Throttled Input Example</h2>
       <input
         type="text"
         value={inputValue}
-        onChange={handleInputChange}
+        onChange={handleChange}
+        placeholder="Type here..."
       />
-      {throttledValue !== undefined && <div>Throttled Value: {throttledValue}</div>}
+      <p>Input Value: {inputValue}</p>
+      <p>Throttled Value: {throttledValue}</p>
     </div>
   );
 };
 
-export default ThrottleTestComponent;
+export default ThrottleComponent;
 ```
 
 In this example, `useThrottle` is used to throttle the execution of a function handling the scroll event, thereby enhancing performance.
 
 ## API Reference
 
+### Parameters
 - `callback`: The function to be throttled.
 - `limit`: The time limit (in milliseconds) that determines how often the `callback` can be executed.
 - `immediate`: (optional) A boolean indicating whether to execute the function immediately on the first call.
+
+### Returns
 - Returns a throttled version of the provided function.
+
+## Use Cases
+
+- **Input Rate Limiting**: Limit the rate at which input values are processed, useful in search inputs or sliders.
+- **Performance Optimization**: Reduce the number of updates in response to frequent events like window resizing or scrolling.
+- **Data Fetching**: Throttle API calls made in response to user input or other rapidly changing states.
 
 ## Contributing
 

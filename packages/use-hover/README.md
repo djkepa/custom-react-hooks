@@ -38,33 +38,37 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```typescript
-import useHover from '@custom-react-hooks/use-hover';
+import { useHover } from '@custom-react-hooks/all';
 
 function HoverComponent() {
-  const { ref, isHovered } = useHover<HTMLDivElement>();
+  const { ref, isHovered } = useHover();
 
   return (
-    <div
-      ref={ref}
-      data-testid="hover-component"
-    >
-      <h1>Hover Component</h1>
-      <p>{isHovered ? 'Hovered' : 'Not Hovered'}</p>
+    <div ref={ref}>
+      <h3>
+        {isHovered ? 'Hovered' : 'Hover Me!'}
+      </h3>
     </div>
   );
 }
 
 export default HoverComponent;
-
 ```
 
 In this example, the `useHover` hook provides a way to determine if a particular div is being hovered.
 
 ## API Reference
 
-- Returns an object with:
+### Returns
   - `ref`: A React `ref` that should be attached to the element you want to monitor for hover.
   - `isHovered`: A boolean state indicating whether the element is currently being hovered.
+
+## Use Cases
+
+- **UI Feedback**: Change styles or display additional information when an element is hovered.
+- **Dropdown Menus**: Show dropdown menus or submenus when a user hovers over a menu item.
+- **Tooltip Display**: Show tooltips on hover for buttons, links, or other UI elements.
+- **Interactive Elements**: Enhance interactivity for elements like cards or images in a gallery.
 
 ## Contributing
 

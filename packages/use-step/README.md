@@ -40,43 +40,48 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React from 'react';
-import useStep from '@custom-react-hooks/use-step';
+import { useStep } from '@custom-react-hooks/all';
 
-interface StepTestComponentProps {
-  totalSteps: number;
-  initialStep?: number;
-  loop?: boolean;
-}
-
-const StepTestComponent: React.FC<StepTestComponentProps> = ({ totalSteps, initialStep, loop }) => {
+const StepComponent = ({ totalSteps, initialStep, loop }) => {
   const { currentStep, nextStep, prevStep, reset } = useStep({ initialStep, totalSteps, loop });
 
   return (
     <div>
-      <p>Current Step: {currentStep}</p>
-      <button onClick={prevStep}>Previous</button>
-      <button onClick={nextStep}>Next</button>
-      <button onClick={reset}>Reset</button>
+      <h2>Current Step: {currentStep}</h2>
+      <div>
+        <button onClick={prevStep}>Previous</button>
+        <button onClick={nextStep}>Next</button>
+      </div>
+      <button onClick={reset}>
+        Reset
+      </button>
     </div>
   );
 };
 
-export default StepTestComponent;
+export default StepComponent;
 ```
-
-In this example, `useStep` is used to navigate through a series of steps with looping enabled.
 
 ## API Reference
 
+### Parameters
 - `initialStep`: (optional) The starting step index.
 - `totalSteps`: The total number of steps.
 - `loop`: (optional) A boolean indicating if navigation should loop around.
-- Returns an object containing:
+
+### Returns
   - `currentStep`: The index of the current step.
   - `goToStep`: Function to navigate to a specific step.
   - `nextStep`: Function to go to the next step.
   - `prevStep`: Function to go to the previous step.
   - `reset`: Function to reset to the initial step.
+
+## Use Cases
+
+- **Wizard or Form Navigation**: Navigate through multi-step forms or wizards, like checkout processes or surveys.
+- **Step-by-Step Guides**: Create step-by-step user guides or tutorials.
+- **Progress Tracking**: Track and display progress in a multi-step process.
+- **Looping Slideshows or Carousels**: Control the navigation of items in a looping carousel or slideshow.
 
 ## Contributing
 

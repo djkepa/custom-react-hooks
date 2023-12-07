@@ -38,45 +38,69 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React, { useState } from 'react';
-import useTimeout from '@custom-react-hooks/use-timeout';
+import { useTimeout } from '@custom-react-hooks/all';
 
-const TimeoutTestComponent: React.FC = () => {
-  const [message, setMessage] = useState('No timeout set');
-  const { reset, clear, isActive } = useTimeout(() => setMessage('Timeout triggered'), 2000); // 2-second timeout
+const TimeoutComponent = () => {
+  const [message, setMessage] = useState('');
+  const showMessage = () => setMessage('Hello! The timeout has completed.');
 
-  const handleSetTimeout = () => {
+  const { isActive, reset, clear } = useTimeout(showMessage, 3000);
+
+  const handleStart = () => {
+    setMessage('');
     reset();
-    setMessage('Timeout is active...');
   };
 
-  const handleClearTimeout = () => {
+  const resetMessage = () => {
     clear();
-    setMessage('Timeout cleared');
+    setMessage('');
   };
 
   return (
-    <div>
-      <button onClick={handleSetTimeout}>Set Timeout</button>
-      <button onClick={handleClearTimeout}>Clear Timeout</button>
-      <p>Status: {isActive ? 'Active' : 'Inactive'}</p>
+    <div className="center">
+      <h2>Timeout Example</h2>
+      <div className="btns">
+        <button
+          onClick={handleStart}
+          disabled={isActive}
+        >
+          {isActive ? 'Timeout is active...' : 'Start Timeout'}
+        </button>
+        <button
+          onClick={resetMessage}
+          disabled={!isActive}
+        >
+          Clear Timeout
+        </button>
+      </div>
+
       <p>{message}</p>
     </div>
   );
 };
 
-export default TimeoutTestComponent;
+export default TimeoutComponent;
 ```
 
 In this example, `useTimeout` is used to manage a timeout that triggers a function after a specified delay.
 
 ## API Reference
 
+### Parameters
 - `callback`: The function to be executed after the timeout.
 - `delay`: The delay in milliseconds before the timeout is triggered. Pass `null` to deactivate the timeout.
-- Returns an object with:
+
+### Returns
   - `isActive`: Boolean indicating if the timeout is currently active.
   - `reset`: Function to start or restart the timeout.
   - `clear`: Function to stop the timeout.
+
+## Use Cases 
+
+- **Delayed Actions**: Perform actions after a specified delay, like showing a tooltip or closing a modal.
+- **Debouncing User Input**: Implement a delay in processing input to wait for user typing to pause or finish.
+- **Timeout-based Transitions**: Create animations or transitions that are triggered after a timeout.
+- **Polling Mechanism**: Set up a polling mechanism where a function is executed repeatedly with a delay.
 
 ## Contributing
 

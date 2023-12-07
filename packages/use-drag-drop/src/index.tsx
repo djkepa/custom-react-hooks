@@ -3,8 +3,8 @@ import { useState, useCallback } from 'react';
 export interface DragDropState {
   isDragging: boolean;
   isOver: boolean;
-  dragData: any;
-  dropData: any;
+  draggedItemId: string | null;
+  overDropId: string | null;
 }
 
 /**
@@ -16,58 +16,67 @@ export interface DragDropState {
  * @return - An object containing the drag and drop state and binding functions for draggable and droppable elements.
  */
 
-const useDragDrop = (dragData: any, onDrop: (data: any) => void) => {
+const useDragDrop = (onDrop: (dragId: string, dropId: string) => void) => {
   const [state, setState] = useState<DragDropState>({
     isDragging: false,
     isOver: false,
-    dragData: null,
-    dropData: null,
+    draggedItemId: null,
+    overDropId: null,
   });
 
-  const handleDragStart = useCallback(
-    (e: React.DragEvent) => {
-      setState((s) => ({ ...s, isDragging: true, dragData: dragData }));
-      e.dataTransfer.setData('application/reactflow', JSON.stringify(dragData));
-      e.dataTransfer.effectAllowed = 'move';
+  const handleDragStart = useCallback((e: React.DragEvent, dragId: string) => {
+    e.dataTransfer.setData('text/plain', dragId);
+    e.dataTransfer.effectAllowed = 'move';
+    setState({ isDragging: true, isOver: false, draggedItemId: dragId, overDropId: null });
+  }, []);
+
+  const handleDragOver = useCallback(
+    (e: React.DragEvent, dropId: string) => {
+      e.preventDefault();
+      if (state.overDropId !== dropId) {
+        setState((s) => ({ ...s, isOver: true, overDropId: dropId }));
+      }
     },
-    [dragData],
+    [state.overDropId],
   );
 
-  const handleDragEnd = useCallback(() => {
-    setState((s) => ({ ...s, isDragging: false }));
+  const handleDragEnter = useCallback((e: React.DragEvent, dropId: string) => {
+    e.preventDefault();
+    setState((s) => ({ ...s, isOver: true, overDropId: dropId }));
   }, []);
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setState((s) => ({ ...s, isOver: true }));
-  }, []);
+  const handleDragLeave = useCallback(
+    (e: React.DragEvent, dropId: string) => {
+      e.preventDefault();
+      if (state.overDropId === dropId) {
+        setState((s) => ({ ...s, isOver: false, overDropId: null }));
+      }
+    },
+    [state.overDropId],
+  );
 
   const handleDrop = useCallback(
-    (e: React.DragEvent) => {
+    (e: React.DragEvent, dropId: string) => {
       e.preventDefault();
-      const data = JSON.parse(e.dataTransfer.getData('application/reactflow'));
-      setState((s) => ({ ...s, isOver: false, dropData: data }));
-      onDrop(data);
+      const dragId = e.dataTransfer.getData('text/plain');
+      setState({ isDragging: false, isOver: false, draggedItemId: dragId, overDropId: dropId });
+      onDrop(dragId, dropId);
     },
     [onDrop],
   );
 
-  const handleDragLeave = useCallback(() => {
-    setState((s) => ({ ...s, isOver: false }));
-  }, []);
-
   return {
     state,
-    bindDrag: {
+    bindDrag: (dragId: string) => ({
       draggable: true,
-      onDragStart: handleDragStart,
-      onDragEnd: handleDragEnd,
-    },
-    bindDrop: {
-      onDragOver: handleDragOver,
-      onDrop: handleDrop,
-      onDragLeave: handleDragLeave,
-    },
+      onDragStart: (e: React.DragEvent) => handleDragStart(e, dragId),
+    }),
+    bindDrop: (dropId: string) => ({
+      onDragOver: (e: React.DragEvent) => handleDragOver(e, dropId),
+      onDragEnter: (e: React.DragEvent) => handleDragEnter(e, dropId),
+      onDragLeave: (e: React.DragEvent) => handleDragLeave(e, dropId),
+      onDrop: (e: React.DragEvent) => handleDrop(e, dropId),
+    }),
   };
 };
 

@@ -40,18 +40,34 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React from 'react';
-import useEffectOnce from '@custom-react-hooks/useEffectOnce';
+import { useEffectOnce } from '@custom-react-hooks/all';
 
-const EffectOnceComponent: React.FC = () => {
+const EffectOnceComponent = () => {
+  const [fibonacciSequence, setFibonacciSequence] = useState([]);
+
+  const calculateFibonacci = (n) => {
+    let sequence = [0, 1];
+    for (let i = 2; i < n; i++) {
+      sequence[i] = sequence[i - 1] + sequence[i - 2];
+    }
+    return sequence.slice(0, n);
+  };
+
   useEffectOnce(() => {
-    console.log('This effect runs only once after the component mounts.');
-
-    return () => {
-      console.log('This cleanup runs when the component unmounts.');
-    };
+    const sequence = calculateFibonacci(5);
+    setFibonacciSequence(sequence);
   });
 
-  return <div>My Component</div>;
+  return (
+    <div>
+      <p>First {5} numbers in the Fibonacci sequence:</p>
+      <ul>
+        {fibonacciSequence.map((number, index) => (
+          <li key={index}>{number}</li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default EffectOnceComponent;
@@ -61,7 +77,16 @@ In this example, `useEffectOnce` is used to perform actions at the mounting and 
 
 ## API Reference
 
+### Parameters
+
 - `effect`: A function that will be executed once when the component mounts. This function can optionally return a cleanup function, which will be executed when the component unmounts.
+
+## Use Cases
+
+- **Initial Setup**: Perform setup operations like fetching initial data or setting up listeners.
+- **One-time Calculations**: Compute values needed only once during the component's lifecycle.
+- **Single API Calls**: Make a single API call when a component is rendered for the first time.
+- **Non-Recurring Subscriptions**: Subscribe to a service or event listener that should only be initialized once.
 
 ## Contributing
 

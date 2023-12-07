@@ -32,51 +32,50 @@ function useImageLoad(
     hasError: false,
   });
 
-  // Using useCallback to memoize loadImage function
   const loadImage = useCallback(
     (imageSrc: string) => {
-      if (!imgRef.current) return; // Guard clause for unmounted component
+      if (!imgRef.current) return;
+
+      setState((prevState) => ({ ...prevState, isLoading: true }));
 
       const img = new Image();
       img.src = imageSrc;
 
       img.onload = () => {
-        if (imgRef.current) {
-          // Checking if component is still mounted
-          setState({
-            src: imageSrc === thumbnailSrc ? fullSrc : imageSrc,
-            isLoading: false,
-            isLoaded: true,
-            hasError: false,
-          });
+        setState({
+          src: imageSrc,
+          isLoading: false,
+          isLoaded: true,
+          hasError: false,
+        });
+        if (imageSrc === thumbnailSrc && fullSrc) {
+          loadImage(fullSrc);
         }
       };
 
       img.onerror = () => {
-        if (imgRef.current) {
-          // Checking if component is still mounted
-          setState((prevState) => ({ ...prevState, isLoading: false, hasError: true }));
-        }
+        setState((prevState) => ({ ...prevState, isLoading: false, hasError: true }));
       };
     },
     [thumbnailSrc, fullSrc, imgRef],
   );
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !lazyLoad || !imgRef.current) {
+    if (typeof window === 'undefined') return;
+    if (!lazyLoad) {
       loadImage(thumbnailSrc);
-    } else {
+    } else if (imgRef.current) {
       const observer = new IntersectionObserver(
-        (entries, observer) => {
+        (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               loadImage(thumbnailSrc);
-              observer.unobserve(imgRef.current!);
+              observer.unobserve(entry.target);
             }
           });
         },
         { threshold: 0.1 },
-      ); // Example threshold
+      );
 
       observer.observe(imgRef.current);
 

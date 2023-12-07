@@ -39,34 +39,41 @@ yarn add @custom-react-hooks/all
 Import the `usePortal` hook and use it in your React components to manage portals:
 
 ```typescript
-import usePortal from '@custom-react-hooks/use-portal';
+import { usePortal } from '@custom-react-hooks/all';
 
-const PortalTestComponent: React.FC = () => {
-  const { Portal, openPortal, closePortal, isOpen } = usePortal();
+const PortalComponent = () => {
+  const { openPortal, closePortal, isOpen } = usePortal();
 
   return (
     <div>
       <button onClick={openPortal}>Open Portal</button>
-      <button onClick={closePortal}>Close Portal</button>
-      <Portal>
-        <div id="portal-content">This is portal content</div>
-      </Portal>
-      {isOpen && <p>Portal is open</p>}
+      <button onClick={closePortal}>
+        Close Portal
+      </button>
+      {isOpen && <div className="modal">This is portal content</div>}
     </div>
   );
 };
 
-export default PortalTestComponent;
+export default PortalComponent;
 ```
 
 In this example, the `usePortal` hook is used to render a modal-like component. The portal can be opened and closed using the provided functions.
 
 ## API Reference
 
+### Returns
 - `Portal`: A component for rendering the portal's children. It only renders its children when the portal is open.
 - `openPortal`: A function to open the portal.
 - `closePortal`: A function to close the portal.
 - `isOpen`: A state variable indicating whether the portal is currently open.
+
+## Use Cases
+
+- **Modals and Dialogs**: Render modals, popups, or dialogs in a DOM node outside of the parent component's hierarchy.
+- **Tooltips and Popovers**: Create tooltips or popovers that need to break out of their parent's z-index or overflow context.
+- **Layered UI Elements**: Manage layered UI elements like notifications or full-screen overlays.
+- **Dynamic Content Rendering**: Render content dynamically in different parts of the document for layout or styling purposes.
 
 ## Contributing
 

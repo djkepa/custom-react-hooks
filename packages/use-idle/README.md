@@ -38,27 +38,53 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```typescript
-import useIdle from '@custom-react-hooks/use-idle';
+import React from 'react';
+import { useIdle } from '@custom-react-hooks/all';
+import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 
-const TestComponent = ({ idleTime }: any) => {
-  const isIdle = useIdle(idleTime);
+
+const IdleComponent = () => {
+  const isIdle = useIdle(1000);
 
   return (
-    <div>
-      <p data-testid="idle-status">{isIdle ? 'Idle' : 'Not Idle'}</p>
+    <div className="center">
+      {isIdle ? (
+        <div className="btns">
+          <MoonIcon/>
+          <p>Away</p>
+        </div>
+      ) : (
+        <div className="btns">
+          <SunIcon/>
+          <p>Online</p>
+        </div>
+      )}
+      <br />
+      <p>To see the effect, do not move the mouse or touch the keyboard!</p>
     </div>
   );
 };
 
-export default TestComponent;
+export default IdleComponent;
 ```
 
 In this example, the hook is used to detect when the user has been idle for more than 3 seconds.
 
 ## API Reference
 
+### Parameters
+
 - `idleTime`: The time in milliseconds to wait before considering the user as idle.
+
+### Returns
 - Returns a boolean state indicating if the user is idle.
+
+## Use Cases
+
+- **Auto Logout**: Automatically log users out after a period of inactivity for security purposes.
+- **Pause Background Activities**: Pause or reduce background activities like animations or data fetching.
+- **User Activity Monitoring**: Track user activity to understand usage patterns or for analytics.
+- **Energy Saving**: Reduce energy consumption by dimming the screen or reducing resource-intensive tasks.
 
 ## Contributing
 

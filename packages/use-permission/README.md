@@ -38,41 +38,62 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```tsx
-import React from 'react';
-import usePermission from '@custom-react-hooks/use-permission';
+import React, { useState } from 'react';
+import { usePermission } from '@custom-react-hooks/all';
 
-interface PermissionTestComponentProps {
-  permissionName: PermissionName;
-}
-
-const PermissionTestComponent: React.FC<PermissionTestComponentProps> = ({ permissionName }) => {
-  const { state, isLoading, error } = usePermission(permissionName);
+const PermissionComponent = () => {
+  const [selectedPermission, setSelectedPermission] = useState('geolocation');
+  const { state, isLoading, error } = usePermission(selectedPermission);
 
   return (
     <div>
-      <h1>Permission Status</h1>
-      <p>Permission: {permissionName}</p>
-      <p>Status: {isLoading ? 'Loading...' : state}</p>
-      {error && <p>Error: {error}</p>}
+      <h2>Check Browser Permission Status</h2>
+      <label htmlFor="permission-select">Choose a permission: </label>
+      <select
+        id="permission-select"
+        value={selectedPermission}
+        onChange={(e) => setSelectedPermission(e.target.value)}
+      >
+        <option value="geolocation">Geolocation</option>
+        <option value="notifications">Notifications</option>
+        <option value="microphone">Microphone</option>
+        <option value="camera">Camera</option>
+      </select>
+
+      <div>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
+          <p>
+            Permission status for {selectedPermission}:
+            <span> {state}</span>
+          </p>
+        )}
+        {error && <p>Error: {error}</p>}
+      </div>
     </div>
   );
 };
 
-export default PermissionTestComponent;
-
+export default PermissionComponent;
 ```
-
-In this example, `usePermission` is used to check the permission status of the user's microphone.
 
 ## API Reference
 
-- `usePermission(permissionName: PermissionName)`: A function that accepts a permission name and returns the permission state.
-- Parameters:
+### Parameters
   - `permissionName`: A string that represents the permission to query. It must be one of the supported permission names defined by the Permissions API.
-- Returns an object with:
+
+### Returns
   - `state`: A string representing the permission state (`'prompt'`, `'granted'`, or `'denied'`).
   - `isLoading`: A boolean indicating if the permission query is in progress.
   - `error`: A string containing an error message if the query fails or if the Permissions API is not supported.
+
+## Use Cases
+
+- **Feature Availability Checks**: Check if a user has granted permission for features like geolocation, notifications, or camera access.
+- **Conditional Feature Access**: Enable or disable features based on permission status.
+- **User Permission Management**: Prompt users for necessary permissions or provide feedback on their status.
+- **Privacy Compliance**: Ensure compliance with privacy practices by checking permissions before accessing sensitive features.
 
 ## Contributing
 

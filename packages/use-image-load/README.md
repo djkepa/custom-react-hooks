@@ -39,56 +39,45 @@ yarn add @custom-react-hooks/all
 ## Usage
 
 ```typescript
-import useImageLoad from '@custom-react-hooks/use-image-load';
+import { useImageLoad } from '@custom-react-hooks/all';
 
-type ImageComponent = {
-  options: {
-    thumbnailSrc: string;
-    fullSrc: string;
-    lazyLoad?: boolean;
-  };
-};
+const ImageLoadComponent = ({ thumbnailSrc, fullSrc }) => {
+  const thumbnailOnlyRef = useRef(null);
+  const lazyLoadRef = useRef(null);
 
-export const ImageComponent = ({ options }: ImageComponent) => {
-  const imgRef = useRef(null);
-  const { src, isLoading, isLoaded, hasError } = useImageLoad(options, imgRef);
+  const thumbnailOnlyState = useImageLoad({ thumbnailSrc, fullSrc: '' }, thumbnailOnlyRef);
+  const lazyLoadState = useImageLoad({ thumbnailSrc, fullSrc, lazyLoad: true }, lazyLoadRef);
 
   return (
     <div>
-      {isLoading && <p>Loading...</p>}
-      {hasError && <p>Error loading image</p>}
-      <img
-        ref={imgRef}
-        src={src}
-        alt=""
-        style={{ visibility: isLoaded ? 'visible' : 'hidden' }}
-      />
-    </div>
-  );
-};
-
-const GalleryComponent = () => {
-  const images = [
-    { thumbnailSrc: 'path/to/thumbnail1.jpg', fullSrc: 'path/to/fullimage1.jpg' },
-    { thumbnailSrc: 'path/to/thumbnail2.jpg', fullSrc: 'path/to/fullimage2.jpg' },
-  ];
-
-  return (
-    <div>
-      {images.map((image, index) => (
-        <ImageComponent
-          key={index}
-          options={image}
+      <div>
+        <h3>Thumbnail Only</h3>
+        {thumbnailOnlyState.isLoading && <p>Loading thumbnail...</p>}
+        {thumbnailOnlyState.hasError && <p>Error loading thumbnail.</p>}
+        <img
+          ref={thumbnailOnlyRef}
+          src={thumbnailOnlyState.src}
+          alt="Thumbnail Only"
         />
-      ))}
+      </div>
+      <p>Scroll down to trigger lazy load</p>
+
+      <div>
+        <h3>Lazy Loading Image</h3>
+        {lazyLoadState.isLoading && <p>Loading image...</p>}
+        {lazyLoadState.hasError && <p>Error loading image.</p>}
+        <img
+          ref={lazyLoadRef}
+          src={lazyLoadState.src}
+          alt="Lazy Loading"
+        />
+      </div>
     </div>
   );
 };
 
-export default GalleryComponent;
+export default ImageLoadComponent;
 ```
-
-In this example, `useImageLoad` is used to load an image with a thumbnail transitioning to the full-resolution image.
 
 ## API Reference
 
@@ -102,6 +91,13 @@ In this example, `useImageLoad` is used to load an image with a thumbnail transi
   - `isLoading`: Indicates if the image is currently loading.
   - `isLoaded`: Indicates if the image has fully loaded.
   - `hasError`: Indicates if there was an error during loading.
+
+## Use Cases
+
+- **Progressive Image Loading**: Show a low-quality image or placeholder while the full image loads.
+- **Lazy Loading**: Load images only when they are in or near the viewport, improving page load times.
+- **Error Handling**: Handle image load errors gracefully with fallbacks or error messages.
+- **Loading State Indicators**: Display a loading indicator while images are being fetched.
 
 ## Contributing
 

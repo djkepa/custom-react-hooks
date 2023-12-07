@@ -41,39 +41,41 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React, { useState } from 'react';
-import useClipboard from 'custom-react-hooks/useClipboard';
+import { useClipboard } from '@custom-react-hooks/all';
 
-function ClipboardComponent() {
-  const [text, setText] = useState('');
+const ClipboardComponent = () => {
   const { copyToClipboard, pasteFromClipboard, state } = useClipboard();
+  const [textToCopy, setTextToCopy] = useState('');
+  const [pastedText, setPastedText] = useState('');
 
   const handleCopy = async () => {
-    await copyToClipboard(text);
-    // Handle feedback with state.success and state.error
+    await copyToClipboard(textToCopy);
   };
 
   const handlePaste = async () => {
-    const pastedText = await pasteFromClipboard();
-    if (state.success && pastedText !== undefined) {
-      setText(pastedText);
-    }
-    // Handle errors with state.error
+    const text = await pasteFromClipboard();
+    setPastedText(text);
   };
 
   return (
     <div>
       <input
         type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        value={textToCopy}
+        onChange={(e) => setTextToCopy(e.target.value)}
+        placeholder="Text to copy"
       />
       <button onClick={handleCopy}>Copy to Clipboard</button>
       <button onClick={handlePaste}>Paste from Clipboard</button>
-      {state.success && <p>Action successful!</p>}
+
+      {state.success && <p>Operation successful!</p>}
       {state.error && <p>Error: {state.error}</p>}
+
+      <p>Pasted Text: {pastedText}</p>
     </div>
   );
-}
+};
+
 export default ClipboardComponent;
 ```
 
@@ -90,6 +92,14 @@ This example demonstrates how to use the `useClipboard` hook to copy text to and
 
   - `success`: A boolean indicating if the last operation was successful.
   - `error`: A string containing an error message if the operation failed.
+
+## Use Cases
+
+- **Copy to Clipboard**: Copy text like URLs, codes, or user-generated content to the clipboard.
+- **Paste from Clipboard**: Retrieve and use data from the clipboard, useful in form fields or for data import.
+- **Clipboard Integration in Editors**: Use in text editors or note-taking apps for enhanced clipboard interactions.
+- **Sharing Content**: Enable users to easily copy shareable content or links to their clipboard.
+- **Data Export/Import**: Simplify copying and pasting data for export/import operations within an application.
 
 ## Contributing
 

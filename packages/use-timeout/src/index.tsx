@@ -38,7 +38,7 @@ function useTimeout(callback: () => void, delay: number | null) {
   }, [delay, clear]);
 
   useEffect(() => {
-    reset(); // Reset the timer when delay or clear changes
+    reset();
   }, [delay, clear, reset]);
 
   return { isActive, reset, clear };

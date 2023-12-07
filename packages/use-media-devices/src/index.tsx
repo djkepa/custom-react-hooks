@@ -19,7 +19,7 @@ export interface UseMediaDevicesState {
  * @return - An object containing the array of media devices, loading status, and error information.
  */
 
-const useMediaDevices = (): UseMediaDevicesState => {
+const useMediaDevices = (requestPermission: boolean = false): UseMediaDevicesState => {
   const [state, setState] = useState<UseMediaDevicesState>({
     devices: [],
     isLoading: false,
@@ -34,6 +34,10 @@ const useMediaDevices = (): UseMediaDevicesState => {
 
     const handleDeviceChange = async () => {
       try {
+        if (requestPermission) {
+          await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+        }
+
         const devices = await navigator.mediaDevices.enumerateDevices();
         setState({
           devices: devices.map((device) => ({
@@ -57,7 +61,7 @@ const useMediaDevices = (): UseMediaDevicesState => {
     return () => {
       navigator.mediaDevices.removeEventListener('devicechange', handleDeviceChange);
     };
-  }, []);
+  }, [requestPermission]);
 
   return state;
 };

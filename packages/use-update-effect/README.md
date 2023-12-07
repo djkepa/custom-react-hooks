@@ -1,19 +1,16 @@
 # useUpdateEffect Hook
 
-The `useUpdateEffect` hook is an enhanced version of React's `useEffect` that is triggered only when dependencies update, skipping the effect on the component's initial mount. This hook is particularly useful for effects that you only want to run in response to specific changes.
+The `useUpdateEffect` hook is an enhanced version of React's `useEffect` that is triggered only when dependencies update, skipping the effect on the component's initial mount. It's particularly useful for effects that need to run in response to specific changes after the initial rendering.
 
 ## Features
 
-- **Update-Only Execution:** Runs the effect only when dependencies change, not on the initial render.
-- **Custom Cleanup Support:** Allows for a cleanup function to be returned from the effect, similar to `useEffect`.
-- **Server-Side Rendering Compatibility:** Fully compatible with SSR environments.
-- **Conditional Execution:** Introduces an optional `condition` function. The effect only runs if this function returns `true`.
-- **Delay Execution:** Adds an optional `delay` parameter to delay the execution of the effect.
-- **Skip Initial Effect Option:** Allows the user to choose whether to skip the effect on the initial mount. This is set to `true` by default for backward compatibility.
+- **Skips Initial Render:** Executes the effect only on updates, not during the initial component mount.
+- **Custom Cleanup Function:** Similar to `useEffect`, it allows for a cleanup function to be returned from the effect.
+- **Compatible with SSR:** Designed to work seamlessly in server-side rendering environments.
 
 ## Installation
 
-### Installing Only Current Hooks
+### Installing Specific Hook
 
 ```bash
 npm install @custom-react-hooks/use-update-effect
@@ -25,7 +22,7 @@ or
 yarn add @custom-react-hooks/use-update-effect
 ```
 
-### Installing All Hooks
+### Installing Complete Package
 
 ```sh
 npm install @custom-react-hooks/all
@@ -41,9 +38,9 @@ yarn add @custom-react-hooks/all
 
 ```typescript
 import React, { useState } from 'react';
-import useUpdateEffect from '@custom-react-hooks/use-update-effect';
+import { useUpdateEffect } from '@custom-react-hooks/all';
 
-const UpdateEffectTestComponent: React.FC = () => {
+const UpdateEffectComponent = () => {
   const [count, setCount] = useState(0);
   const [message, setMessage] = useState('');
 
@@ -53,26 +50,27 @@ const UpdateEffectTestComponent: React.FC = () => {
 
   return (
     <div>
-      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
+      <button onClick={() => setCount(c => c + 1)}>Increment</button>
       <p>Count: {count}</p>
       <p>{message}</p>
     </div>
   );
 };
 
-export default UpdateEffectTestComponent;
+export default UpdateEffectComponent;
 ```
-
-In this example, the `useUpdateEffect` hook is utilized to perform an action when the `value` prop changes, excluding the initial mount.
 
 ## API Reference
 
-- `effect`: The effect function to run when dependencies update.
-- `deps`: An array of dependencies that trigger the effect when they change.
-- `delay`: This parameter allows you to specify a delay (in milliseconds) before the effect function is executed. When the dependencies of the effect change, the effect won't run immediately; instead, it waits for the specified delay time before executing. This is useful for debouncing or throttling the effect execution.
-- `condition`: This is a function that returns a boolean. The effect will only run if this function returns true. This allows conditional execution of the effect based on custom logic, providing greater control over when the effect should run.
-- `skipInitialEffect`: When set to true, this parameter ensures that the effect does not run on the initial render of the component. It's useful when you want the effect to run only in response to updates after the initial mount, not on the initial mount itself.
+### Parameters
+- `effect` (EffectCallback): The effect function to execute upon updates.
+- `deps` (DependencyList): An array of dependencies that, when changed, trigger the effect.
+
+## Use Cases
+
+- **Conditional Execution:** Run effects based on specific conditions or changes.
+- **Efficient Updates:** Optimize component behavior by limiting effects to only necessary renders.
 
 ## Contributing
 
-Your contributions to enhance `useUpdateEffect` are highly appreciated. Feel free to submit issues or pull requests to improve its functionality.
+Contributions to `useUpdateEffect` are welcome. Please submit issues or pull requests to enhance its functionality or address any concerns.

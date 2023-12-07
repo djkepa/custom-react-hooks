@@ -24,6 +24,11 @@ function useClipboard() {
       return;
     }
 
+    if (!text.trim()) {
+      setState({ success: false, error: 'Cannot copy empty or whitespace text' });
+      return;
+    }
+
     try {
       await navigator.clipboard.writeText(text);
       setState({ success: true, error: null });
@@ -40,6 +45,9 @@ function useClipboard() {
 
     try {
       const text = await navigator.clipboard.readText();
+      if (!text.trim()) {
+        return '';
+      }
       setState({ success: true, error: null });
       return text;
     } catch (error) {
