@@ -1,6 +1,8 @@
 {
   "name": "@custom-react-hooks/use-on-screen",
   "version": "1.4.16",
+"author": "Bane Grozdanovic <banegrozdanovic@gmail.com>",
+  "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
