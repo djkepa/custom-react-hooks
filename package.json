@@ -31,7 +31,7 @@
   "bugs": {
     "url": "https://github.com/djkepa/custom-react-hooks/issues"
   },
-  "homepage": "https://github.com/djkepa/custom-react-hooks#readme",
+  "homepage": "https://custom-react-hooks-live.vercel.app/",
   "devDependencies": {
     "jest-environment-jsdom": "^29.7.0",
     "lerna": "^5.3.2"

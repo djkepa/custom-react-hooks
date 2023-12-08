@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-async",
-  "version": "1.4.17",
+  "version": "1.4.18",
   "author": "Bane Grozdanovic <banegrozdanovic@gmail.com>",
   "license": "MIT",
   "main": "dist/index.js",
@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/djkepa/custom-react-hooks/issues"
   },
-  "homepage": "https://github.com/djkepa/custom-react-hooks#readme",
+  "homepage": "https://custom-react-hooks-live.vercel.app/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/djkepa/custom-react-hooks.git"
