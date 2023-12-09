@@ -1,20 +1,20 @@
 export interface DragDropState {
     isDragging: boolean;
     isOver: boolean;
-    dragData: any;
-    dropData: any;
+    draggedItemId: string | null;
+    overDropId: string | null;
 }
-declare const useDragDrop: (dragData: any, onDrop: (data: any) => void) => {
+declare const useDragDrop: (onDrop: (dragId: string, dropId: string) => void) => {
     state: DragDropState;
-    bindDrag: {
+    bindDrag: (dragId: string) => {
         draggable: boolean;
         onDragStart: (e: React.DragEvent) => void;
-        onDragEnd: () => void;
     };
-    bindDrop: {
+    bindDrop: (dropId: string) => {
         onDragOver: (e: React.DragEvent) => void;
+        onDragEnter: (e: React.DragEvent) => void;
+        onDragLeave: (e: React.DragEvent) => void;
         onDrop: (e: React.DragEvent) => void;
-        onDragLeave: () => void;
     };
 };
 export default useDragDrop;

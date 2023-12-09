@@ -50,6 +50,10 @@ function useClipboard() {
                         setState({ success: false, error: 'Clipboard is not available' });
                         return [2];
                     }
+                    if (!text.trim()) {
+                        setState({ success: false, error: 'Cannot copy empty or whitespace text' });
+                        return [2];
+                    }
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
@@ -81,6 +85,9 @@ function useClipboard() {
                     return [4, navigator.clipboard.readText()];
                 case 2:
                     text = _a.sent();
+                    if (!text.trim()) {
+                        return [2, ''];
+                    }
                     setState({ success: true, error: null });
                     return [2, text];
                 case 3:

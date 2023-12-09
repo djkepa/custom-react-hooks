@@ -32,15 +32,15 @@ describe('useTimeout Hook', () => {
     const { result } = renderHook(() => useTimeout(callback, 1000));
 
     act(() => {
-      jest.advanceTimersByTime(500); // Halfway through the timeout
+      jest.advanceTimersByTime(500);
     });
 
     act(() => {
-      result.current.reset(); // Reset the timeout
+      result.current.reset();
     });
 
     act(() => {
-      jest.advanceTimersByTime(1000); // Advance by the full delay after reset
+      jest.advanceTimersByTime(1000);
     });
 
     expect(callback).toHaveBeenCalled();

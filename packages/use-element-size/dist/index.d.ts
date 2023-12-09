@@ -1,8 +1,10 @@
-/// <reference types="react" />
 export interface Size {
-    width: number | undefined;
-    height: number | undefined;
+    width: number;
+    height: number;
 }
-declare function useElementSize<T extends HTMLElement>(ref: React.RefObject<T>): Size;
+declare function useElementSize<T extends HTMLElement = HTMLDivElement>(): [
+    (node: T | null) => void,
+    Size
+];
 export default useElementSize;
 //# sourceMappingURL=index.d.ts.map

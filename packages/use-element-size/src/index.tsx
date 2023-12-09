@@ -12,7 +12,7 @@ export interface Size {
  * @return - An object containing the `width` and `height` of the element.
  */
 
-export function useElementSize<T extends HTMLElement = HTMLDivElement>(): [
+function useElementSize<T extends HTMLElement = HTMLDivElement>(): [
   (node: T | null) => void,
   Size,
 ] {
@@ -43,3 +43,5 @@ export function useElementSize<T extends HTMLElement = HTMLDivElement>(): [
 
   return [setRef, size];
 }
+
+export default useElementSize;

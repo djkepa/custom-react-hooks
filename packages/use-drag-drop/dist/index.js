@@ -12,46 +12,52 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
-var useDragDrop = function (dragData, onDrop) {
+var useDragDrop = function (onDrop) {
     var _a = (0, react_1.useState)({
         isDragging: false,
         isOver: false,
-        dragData: null,
-        dropData: null,
+        draggedItemId: null,
+        overDropId: null,
     }), state = _a[0], setState = _a[1];
-    var handleDragStart = (0, react_1.useCallback)(function (e) {
-        setState(function (s) { return (__assign(__assign({}, s), { isDragging: true, dragData: dragData })); });
-        e.dataTransfer.setData('application/reactflow', JSON.stringify(dragData));
+    var handleDragStart = (0, react_1.useCallback)(function (e, dragId) {
+        e.dataTransfer.setData('text/plain', dragId);
         e.dataTransfer.effectAllowed = 'move';
-    }, [dragData]);
-    var handleDragEnd = (0, react_1.useCallback)(function () {
-        setState(function (s) { return (__assign(__assign({}, s), { isDragging: false })); });
+        setState({ isDragging: true, isOver: false, draggedItemId: dragId, overDropId: null });
     }, []);
-    var handleDragOver = (0, react_1.useCallback)(function (e) {
+    var handleDragOver = (0, react_1.useCallback)(function (e, dropId) {
         e.preventDefault();
-        setState(function (s) { return (__assign(__assign({}, s), { isOver: true })); });
+        if (state.overDropId !== dropId) {
+            setState(function (s) { return (__assign(__assign({}, s), { isOver: true, overDropId: dropId })); });
+        }
+    }, [state.overDropId]);
+    var handleDragEnter = (0, react_1.useCallback)(function (e, dropId) {
+        e.preventDefault();
+        setState(function (s) { return (__assign(__assign({}, s), { isOver: true, overDropId: dropId })); });
     }, []);
-    var handleDrop = (0, react_1.useCallback)(function (e) {
+    var handleDragLeave = (0, react_1.useCallback)(function (e, dropId) {
         e.preventDefault();
-        var data = JSON.parse(e.dataTransfer.getData('application/reactflow'));
-        setState(function (s) { return (__assign(__assign({}, s), { isOver: false, dropData: data })); });
-        onDrop(data);
+        if (state.overDropId === dropId) {
+            setState(function (s) { return (__assign(__assign({}, s), { isOver: false, overDropId: null })); });
+        }
+    }, [state.overDropId]);
+    var handleDrop = (0, react_1.useCallback)(function (e, dropId) {
+        e.preventDefault();
+        var dragId = e.dataTransfer.getData('text/plain');
+        setState({ isDragging: false, isOver: false, draggedItemId: dragId, overDropId: dropId });
+        onDrop(dragId, dropId);
     }, [onDrop]);
-    var handleDragLeave = (0, react_1.useCallback)(function () {
-        setState(function (s) { return (__assign(__assign({}, s), { isOver: false })); });
-    }, []);
     return {
         state: state,
-        bindDrag: {
+        bindDrag: function (dragId) { return ({
             draggable: true,
-            onDragStart: handleDragStart,
-            onDragEnd: handleDragEnd,
-        },
-        bindDrop: {
-            onDragOver: handleDragOver,
-            onDrop: handleDrop,
-            onDragLeave: handleDragLeave,
-        },
+            onDragStart: function (e) { return handleDragStart(e, dragId); },
+        }); },
+        bindDrop: function (dropId) { return ({
+            onDragOver: function (e) { return handleDragOver(e, dropId); },
+            onDragEnter: function (e) { return handleDragEnter(e, dropId); },
+            onDragLeave: function (e) { return handleDragLeave(e, dropId); },
+            onDrop: function (e) { return handleDrop(e, dropId); },
+        }); },
     };
 };
 exports.default = useDragDrop;

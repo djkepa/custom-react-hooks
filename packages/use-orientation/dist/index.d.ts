@@ -5,6 +5,6 @@ export interface OrientationState {
     aspectRatio?: number;
     elementOrientation?: 'landscape' | 'portrait';
 }
-declare function useOrientation<T extends HTMLElement>(elementRef?: RefObject<T>): OrientationState;
+declare function useOrientation<T extends HTMLElement>(elementRef?: RefObject<T>, trackWindow?: boolean): OrientationState;
 export default useOrientation;
 //# sourceMappingURL=index.d.ts.map

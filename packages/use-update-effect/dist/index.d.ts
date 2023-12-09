@@ -1,9 +1,4 @@
-import { DependencyList } from 'react';
-export type UseUpdateEffectOptions = {
-    skipInitialEffect?: boolean;
-    delay?: number;
-    condition?: () => boolean;
-};
-declare function useUpdateEffect(effect: () => void | (() => void), deps?: DependencyList, options?: UseUpdateEffectOptions): void;
+import { EffectCallback, DependencyList } from 'react';
+export declare function useUpdateEffect(effect: EffectCallback, deps?: DependencyList): void;
 export default useUpdateEffect;
 //# sourceMappingURL=index.d.ts.map

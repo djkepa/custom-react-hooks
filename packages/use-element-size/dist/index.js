@@ -1,22 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
-function useElementSize(ref) {
-    var _a = (0, react_1.useState)({ width: undefined, height: undefined }), size = _a[0], setSize = _a[1];
-    var updateSize = (0, react_1.useCallback)(function () {
-        if (ref.current) {
-            var newWidth = ref.current.offsetWidth;
-            var newHeight = ref.current.offsetHeight;
-            if (newWidth !== size.width || newHeight !== size.height) {
-                setSize({ width: newWidth, height: newHeight });
-            }
+function useElementSize() {
+    var _a = (0, react_1.useState)(null), ref = _a[0], setRef = _a[1];
+    var _b = (0, react_1.useState)({ width: 0, height: 0 }), size = _b[0], setSize = _b[1];
+    var handleSize = (0, react_1.useCallback)(function () {
+        if (ref) {
+            setSize({
+                width: ref.offsetWidth,
+                height: ref.offsetHeight,
+            });
         }
-    }, [ref, size.width, size.height]);
-    (0, react_1.useLayoutEffect)(function () {
-        updateSize();
-        window.addEventListener('resize', updateSize);
-        return function () { return window.removeEventListener('resize', updateSize); };
-    }, [updateSize]);
-    return size;
+    }, [ref]);
+    var useEnviromentEffect = typeof window !== 'undefined' ? react_1.useLayoutEffect : react_1.useEffect;
+    useEnviromentEffect(function () {
+        if (!ref)
+            return;
+        handleSize();
+        var resizeObserver = new ResizeObserver(handleSize);
+        resizeObserver.observe(ref);
+        return function () { return resizeObserver.disconnect(); };
+    }, [ref, handleSize]);
+    return [setRef, size];
 }
 exports.default = useElementSize;

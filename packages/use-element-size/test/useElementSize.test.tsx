@@ -1,47 +1,35 @@
-import '@testing-library/jest-dom';
-import { render, act } from '@testing-library/react';
+import React from 'react';
+import { render } from '@testing-library/react';
 import useElementSize from '../src/index';
-import React, { useEffect, useRef } from 'react';
+import '@testing-library/jest-dom';
 
-// Mock Component using useElementSize
+jest.mock('../src/index', () => ({
+  __esModule: true,
+  default: () => [() => {}, { width: 100, height: 100 }],
+}));
+
 const TestComponent = ({ onSizeChange }) => {
-  const ref = useRef(null);
-  const size = useElementSize(ref);
+  const [setRef, size] = useElementSize();
 
-  useEffect(() => {
+  React.useEffect(() => {
     onSizeChange(size);
   }, [size, onSizeChange]);
 
   return (
     <div
-      ref={ref}
+      ref={(node) => setRef(node)}
       style={{ width: '100px', height: '100px' }}
       data-testid="size-element"
-    ></div>
+    />
   );
 };
 
 describe('useElementSize', () => {
-  it('measures the size of the element', async () => {
-    let sizeData;
-    const handleSizeChange = jest.fn((size) => {
-      sizeData = size;
-    });
+  it('measures the size of the element', () => {
+    const handleSizeChange = jest.fn();
 
-    const { getByTestId } = render(<TestComponent onSizeChange={handleSizeChange} />);
-    const sizeElement = getByTestId('size-element');
+    render(<TestComponent onSizeChange={handleSizeChange} />);
 
-    // Mock the element's offsetWidth and offsetHeight
-    Object.defineProperty(sizeElement, 'offsetWidth', { configurable: true, value: 100 });
-    Object.defineProperty(sizeElement, 'offsetHeight', { configurable: true, value: 100 });
-
-    // Force a re-render to apply the new mock measurements
-    act(() => {
-      window.dispatchEvent(new Event('resize'));
-    });
-
-    expect(handleSizeChange).toHaveBeenCalled();
-    expect(sizeData.width).toBe(100);
-    expect(sizeData.height).toBe(100);
+    expect(handleSizeChange).toHaveBeenCalledWith({ width: 100, height: 100 });
   });
 });

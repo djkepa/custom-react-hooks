@@ -1,10 +1,11 @@
 {
   "version": "independent",
   "npmClient": "npm",
-  "commands": {
+  "command": {
     "run": {
       "stream": true
     }
   },
+  "useWorkspaces": true,
   "packages": ["packages/*"]
 }

@@ -1,20 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
+var cachedScriptStatuses = {};
 function useScript(src, removeOnUnmount) {
     if (removeOnUnmount === void 0) { removeOnUnmount = false; }
     var isScriptExisting = document.querySelector("script[src=\"".concat(src, "\"]"));
-    console.log('isScriptExisting', isScriptExisting);
-    var _a = (0, react_1.useState)(isScriptExisting ? 'unknown' : 'loading'), status = _a[0], setStatus = _a[1];
+    var cachedStatus = cachedScriptStatuses[src];
+    var _a = (0, react_1.useState)(cachedStatus || (isScriptExisting ? 'ready' : 'loading')), status = _a[0], setStatus = _a[1];
     (0, react_1.useEffect)(function () {
-        if (isScriptExisting) {
+        if (typeof window === 'undefined' || isScriptExisting) {
             return;
         }
-        console.log('status', status);
         var script = document.createElement('script');
         script.src = src;
-        var handleLoad = function () { return setStatus('ready'); };
-        var handleError = function () { return setStatus('error'); };
+        script.async = true;
+        var handleLoad = function () {
+            setStatus('ready');
+            cachedScriptStatuses[src] = 'ready';
+        };
+        var handleError = function () {
+            setStatus('error');
+            cachedScriptStatuses[src] = 'error';
+        };
         script.addEventListener('load', handleLoad);
         script.addEventListener('error', handleError);
         document.body.appendChild(script);

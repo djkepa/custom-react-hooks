@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-storage",
-  "version": "1.4.18",
+  "version": "1.4.19",
   "author": "Bane Grozdanovic <banegrozdanovic@gmail.com>",
   "license": "MIT",
   "main": "dist/index.js",

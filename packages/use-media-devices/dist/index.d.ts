@@ -8,6 +8,6 @@ export interface UseMediaDevicesState {
     isLoading: boolean;
     error: string | null;
 }
-declare const useMediaDevices: () => UseMediaDevicesState;
+declare const useMediaDevices: (requestPermission?: boolean) => UseMediaDevicesState;
 export default useMediaDevices;
 //# sourceMappingURL=index.d.ts.map

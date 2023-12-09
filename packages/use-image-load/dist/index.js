@@ -23,34 +23,36 @@ function useImageLoad(_a, imgRef) {
     var loadImage = (0, react_1.useCallback)(function (imageSrc) {
         if (!imgRef.current)
             return;
+        setState(function (prevState) { return (__assign(__assign({}, prevState), { isLoading: true })); });
         var img = new Image();
         img.src = imageSrc;
         img.onload = function () {
-            if (imgRef.current) {
-                setState({
-                    src: imageSrc === thumbnailSrc ? fullSrc : imageSrc,
-                    isLoading: false,
-                    isLoaded: true,
-                    hasError: false,
-                });
+            setState({
+                src: imageSrc,
+                isLoading: false,
+                isLoaded: true,
+                hasError: false,
+            });
+            if (imageSrc === thumbnailSrc && fullSrc) {
+                loadImage(fullSrc);
             }
         };
         img.onerror = function () {
-            if (imgRef.current) {
-                setState(function (prevState) { return (__assign(__assign({}, prevState), { isLoading: false, hasError: true })); });
-            }
+            setState(function (prevState) { return (__assign(__assign({}, prevState), { isLoading: false, hasError: true })); });
         };
     }, [thumbnailSrc, fullSrc, imgRef]);
     (0, react_1.useEffect)(function () {
-        if (typeof window === 'undefined' || !lazyLoad || !imgRef.current) {
+        if (typeof window === 'undefined')
+            return;
+        if (!lazyLoad) {
             loadImage(thumbnailSrc);
         }
-        else {
-            var observer_1 = new IntersectionObserver(function (entries, observer) {
+        else if (imgRef.current) {
+            var observer_1 = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
                         loadImage(thumbnailSrc);
-                        observer.unobserve(imgRef.current);
+                        observer_1.unobserve(entry.target);
                     }
                 });
             }, { threshold: 0.1 });

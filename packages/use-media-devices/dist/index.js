@@ -48,7 +48,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
-var useMediaDevices = function () {
+var useMediaDevices = function (requestPermission) {
+    if (requestPermission === void 0) { requestPermission = false; }
     var _a = (0, react_1.useState)({
         devices: [],
         isLoading: false,
@@ -64,9 +65,14 @@ var useMediaDevices = function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4, navigator.mediaDevices.enumerateDevices()];
+                        _a.trys.push([0, 4, , 5]);
+                        if (!requestPermission) return [3, 2];
+                        return [4, navigator.mediaDevices.getUserMedia({ audio: true, video: true })];
                     case 1:
+                        _a.sent();
+                        _a.label = 2;
+                    case 2: return [4, navigator.mediaDevices.enumerateDevices()];
+                    case 3:
                         devices = _a.sent();
                         setState({
                             devices: devices.map(function (device) { return ({
@@ -77,12 +83,12 @@ var useMediaDevices = function () {
                             isLoading: false,
                             error: null,
                         });
-                        return [3, 3];
-                    case 2:
+                        return [3, 5];
+                    case 4:
                         error_1 = _a.sent();
                         setState(function (s) { return (__assign(__assign({}, s), { isLoading: false, error: 'Unable to enumerate devices' })); });
-                        return [3, 3];
-                    case 3: return [2];
+                        return [3, 5];
+                    case 5: return [2];
                 }
             });
         }); };
@@ -92,7 +98,7 @@ var useMediaDevices = function () {
         return function () {
             navigator.mediaDevices.removeEventListener('devicechange', handleDeviceChange);
         };
-    }, []);
+    }, [requestPermission]);
     return state;
 };
 exports.default = useMediaDevices;
