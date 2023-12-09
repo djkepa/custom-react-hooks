@@ -3,6 +3,9 @@
 </p>
 
  <p align="center">
+    <a href="https://www.npmjs.com/package/@custom-react-hooks/all">
+      <img src="https://img.shields.io/npm/v/@custom-react-hooks/all.svg"
+    </a>
     <a href="https://github.com/djkepa/custom-react-hooks/blob/main/LICENSE">
       <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" />
     </a>
@@ -15,17 +18,11 @@
     <a href="https://github.com/djkepa/custom-react-hooks/issues">
       <img src="https://img.shields.io/github/issues/djkepa/custom-react-hooks.svg" alt="GitHub Issues" />
     </a>
-    <a href="https://legacy.reactjs.org/docs/how-to-contribute.html#your-first-pull-request" rel="nofollow"><img
+    <a href="https://legacy.reactjs.org/docs/how-to-contribute.html#your-first-pull-request" rel="nofollow">
+      <img
         src="https://camo.githubusercontent.com/b0ad703a46e8b249ef2a969ab95b2cb361a2866ecb8fe18495a2229f5847102d/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f5052732d77656c636f6d652d627269676874677265656e2e737667"
         alt="PRs Welcome" data-canonical-src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"
-        style="max-width: 100%;"></a>
-    <a href="/" rel="nofollow">
-      <img alt="djkepa"
-src="https://camo.githubusercontent.com/e9ab517025531fcde3ee85df97d9bbae78b747c1acc4927eee17f0baaa1e4564/68747470733a2f2f696d672e736869656c64732e696f2f636f6465636f762f632f6769746875622f53656d616e7469632d4f72672f53656d616e7469632d55492d52656163742f6d61737465722e7376673f7374796c653d666c61742d737175617265"
         style="max-width: 100%;">
-    </a>
-    <a href="https://www.npmjs.com/package/@custom-react-hooks/all">
-      <img src="https://img.shields.io/npm/v/@custom-react-hooks/all.svg"
     </a>
   </p>
 
