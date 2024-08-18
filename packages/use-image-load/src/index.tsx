@@ -86,4 +86,4 @@ function useImageLoad(
   return state;
 }
 
-export default useImageLoad;
+export { useImageLoad };

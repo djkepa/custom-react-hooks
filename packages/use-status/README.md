@@ -35,6 +35,17 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+## Importing the Hook
+
+The `useStatus` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useStatus } from '@custom-react-hooks/use-status';
+```
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
+
 ## Usage
 
 Import and use the `useStatus` hook in your React components to get network status:

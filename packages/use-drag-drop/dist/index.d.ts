@@ -17,5 +17,5 @@ declare const useDragDrop: (onDrop: (dragId: string, dropId: string) => void) =>
         onDrop: (e: React.DragEvent) => void;
     };
 };
-export default useDragDrop;
+export { useDragDrop };
 //# sourceMappingURL=index.d.ts.map

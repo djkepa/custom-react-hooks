@@ -37,4 +37,4 @@ function useHover<T extends HTMLElement>() {
   return { ref, isHovered };
 }
 
-export default useHover;
+export { useHover };

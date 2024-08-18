@@ -26,6 +26,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useGeoLocation = void 0;
 var react_1 = require("react");
 var CustomGeoLocationError = (function (_super) {
     __extends(CustomGeoLocationError, _super);
@@ -76,4 +77,4 @@ function useGeoLocation(options, watch) {
     }, [watch, options, onSuccess, onError]);
     return geoLocationState;
 }
-exports.default = useGeoLocation;
+exports.useGeoLocation = useGeoLocation;

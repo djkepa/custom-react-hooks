@@ -80,4 +80,4 @@ const usePermission = (permissionName: PermissionName): PermissionState => {
   return permission;
 };
 
-export default usePermission;
+export { usePermission };

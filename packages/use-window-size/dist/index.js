@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useWindowSize = void 0;
 var react_1 = require("react");
 function useWindowSize(debounceDelay) {
     if (debounceDelay === void 0) { debounceDelay = 100; }
@@ -36,4 +37,4 @@ function useWindowSize(debounceDelay) {
     }, [handleResize]);
     return windowSize;
 }
-exports.default = useWindowSize;
+exports.useWindowSize = useWindowSize;

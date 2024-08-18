@@ -5,5 +5,5 @@ export type GeoLocationState = {
     isWatching: boolean;
 };
 declare function useGeoLocation(options?: PositionOptions, watch?: boolean): GeoLocationState;
-export default useGeoLocation;
+export { useGeoLocation };
 //# sourceMappingURL=index.d.ts.map

@@ -39,4 +39,4 @@ function useToggle(initialValue: boolean = false, onToggle?: (newValue: boolean)
   return { value, toggle, setTrue, setFalse };
 }
 
-export default useToggle;
+export { useToggle };

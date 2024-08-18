@@ -82,4 +82,4 @@ function useLongPress(callback: () => void, options: LongPressOptions = {}) {
   };
 }
 
-export default useLongPress;
+export { useLongPress };

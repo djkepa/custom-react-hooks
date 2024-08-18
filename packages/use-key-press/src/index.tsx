@@ -47,4 +47,4 @@ function useKeyPress(
   return keyPressed;
 }
 
-export default useKeyPress;
+export { useKeyPress };

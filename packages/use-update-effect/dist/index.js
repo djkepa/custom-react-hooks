@@ -20,4 +20,3 @@ function useUpdateEffect(effect, deps) {
     }, deps);
 }
 exports.useUpdateEffect = useUpdateEffect;
-exports.default = useUpdateEffect;

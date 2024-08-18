@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import useDebounce from '../src/index';
+import { useDebounce } from '../src/index';
 
 describe('useDebounce', () => {
   beforeEach(() => {
@@ -16,17 +16,17 @@ describe('useDebounce', () => {
     const { result } = renderHook(() => useDebounce(callback, delay));
 
     act(() => {
-      result.current[0](); // Trigger debounced function
-      jest.advanceTimersByTime(delay - 100); // Advance timers but not enough to trigger the callback
+      result.current[0]();
+      jest.advanceTimersByTime(delay - 100);
     });
 
     act(() => {
-      expect(callback).not.toHaveBeenCalled(); // Callback should not have been called yet
-      jest.advanceTimersByTime(100); // Advance the remaining time
+      expect(callback).not.toHaveBeenCalled();
+      jest.advanceTimersByTime(100);
     });
 
     act(() => {
-      expect(callback).toHaveBeenCalledTimes(1); // Now the callback should have been called
+      expect(callback).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -37,14 +37,14 @@ describe('useDebounce', () => {
 
     act(() => {
       const debouncedFunction = result.current[0];
-      debouncedFunction(); // Trigger debounced function
+      debouncedFunction();
       const cancelDebounce = result.current[1];
-      cancelDebounce(); // Cancel the debounced call immediately
+      cancelDebounce();
     });
 
     act(() => {
-      expect(callback).not.toHaveBeenCalled(); // Callback should not have been called after cancellation
-      jest.runAllTimers(); // Ensure all timers are cleared
+      expect(callback).not.toHaveBeenCalled();
+      jest.runAllTimers();
     });
   });
 });

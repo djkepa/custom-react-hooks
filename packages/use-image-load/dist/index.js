@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useImageLoad = void 0;
 var react_1 = require("react");
 function useImageLoad(_a, imgRef) {
     var thumbnailSrc = _a.thumbnailSrc, fullSrc = _a.fullSrc, _b = _a.lazyLoad, lazyLoad = _b === void 0 ? false : _b;
@@ -62,4 +63,4 @@ function useImageLoad(_a, imgRef) {
     }, [thumbnailSrc, lazyLoad, loadImage, imgRef]);
     return state;
 }
-exports.default = useImageLoad;
+exports.useImageLoad = useImageLoad;

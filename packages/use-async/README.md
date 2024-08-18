@@ -38,11 +38,22 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+## Importing the Hook
+
+The `useAsync` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useAsync } from '@custom-react-hooks/use-async';
+```
+
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
 ## Usage
 
 ```typescript
 import React, { useState } from 'react';
-import { useAsync } from '@custom-react-hooks/all';
+import { useAsync } from '@custom-react-hooks/use-async';
 
 const fetchData = async (endpoint) => {
   const response = await fetch(endpoint);

@@ -26,4 +26,4 @@ function useLockBodyScroll(lock: boolean = true) {
   }, [lock]);
 }
 
-export default useLockBodyScroll;
+export { useLockBodyScroll };

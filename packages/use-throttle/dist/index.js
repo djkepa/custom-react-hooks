@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useThrottle = void 0;
 var react_1 = require("react");
 function useThrottle(value, limit, immediate) {
     if (immediate === void 0) { immediate = false; }
@@ -20,4 +21,4 @@ function useThrottle(value, limit, immediate) {
     }, [value, limit]);
     return throttledValue;
 }
-exports.default = useThrottle;
+exports.useThrottle = useThrottle;

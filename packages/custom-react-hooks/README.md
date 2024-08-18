@@ -75,6 +75,17 @@ or
 yarn add @custom-react-hooks/use-async
 ```
 
+## Importing the Hook
+
+The `useExample` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useExample } from '@custom-react-hooks/use-example';
+```
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
+
 ## 📚 [Hooks List](#hooks-list)
 
 A list of available hooks and their respective documentation can be found below:

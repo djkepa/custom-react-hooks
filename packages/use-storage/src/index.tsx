@@ -51,4 +51,4 @@ function useStorage<T>(
   return [storedValue, setValue];
 }
 
-export default useStorage;
+export { useStorage };

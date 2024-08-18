@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import useUpdateEffect from '../src/index';
+import { useUpdateEffect } from '../src/index';
 
 jest.useFakeTimers();
 

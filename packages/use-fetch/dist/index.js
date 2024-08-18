@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useFetch = void 0;
 var react_1 = require("react");
 function useFetch(url, options, cache, globalStateSetter) {
     var _this = this;
@@ -109,4 +110,4 @@ function useFetch(url, options, cache, globalStateSetter) {
     }, [fetchData]);
     return { data: data, loading: loading, error: error, fetchData: fetchData };
 }
-exports.default = useFetch;
+exports.useFetch = useFetch;

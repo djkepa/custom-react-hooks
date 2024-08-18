@@ -7,5 +7,5 @@ declare function usePortal(): {
     closePortal: () => void;
     isOpen: boolean;
 };
-export default usePortal;
+export { usePortal };
 //# sourceMappingURL=index.d.ts.map

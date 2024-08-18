@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useStorage = void 0;
 var react_1 = require("react");
 function useStorage(key, defaultValue, storageType) {
     if (storageType === void 0) { storageType = 'local'; }
@@ -35,4 +36,4 @@ function useStorage(key, defaultValue, storageType) {
     };
     return [storedValue, setValue];
 }
-exports.default = useStorage;
+exports.useStorage = useStorage;

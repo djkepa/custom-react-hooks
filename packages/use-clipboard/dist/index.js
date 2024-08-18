@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useClipboard = void 0;
 var react_1 = require("react");
 var isClipboardAvailable = typeof navigator !== 'undefined' && typeof navigator.clipboard !== 'undefined';
 function useClipboard() {
@@ -100,4 +101,4 @@ function useClipboard() {
     }); }, []);
     return { copyToClipboard: copyToClipboard, pasteFromClipboard: pasteFromClipboard, state: state };
 }
-exports.default = useClipboard;
+exports.useClipboard = useClipboard;

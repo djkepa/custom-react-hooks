@@ -13,5 +13,5 @@ export interface NavigatorWithNetworkInformation extends Navigator {
     connection?: NetworkInformation;
 }
 declare function useStatus(): NetworkStatus;
-export default useStatus;
+export { useStatus };
 //# sourceMappingURL=index.d.ts.map

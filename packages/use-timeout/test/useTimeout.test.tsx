@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import useTimeout from '../src/index';
+import { useTimeout } from '../src/index';
 
 jest.useFakeTimers();
 
@@ -46,7 +46,6 @@ describe('useTimeout Hook', () => {
     expect(callback).toHaveBeenCalled();
   });
 
-  // Clean up
   afterEach(() => {
     jest.clearAllTimers();
   });

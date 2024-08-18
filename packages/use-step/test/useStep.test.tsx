@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, renderHook } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useStep from '../src/index';
+import { useStep } from '../src/index';
 
 function TestComponent(props) {
   const { currentStep, nextStep, prevStep, reset } = useStep(props);
@@ -48,8 +48,8 @@ describe('useStep', () => {
     );
     fireEvent.click(getByText('Next'));
     fireEvent.click(getByText('Next'));
-    fireEvent.click(getByText('Next')); // Exceeding total steps
-    expect(getByText('Current Step: 2')).toBeInTheDocument(); // Should remain on the last step
+    fireEvent.click(getByText('Next'));
+    expect(getByText('Current Step: 2')).toBeInTheDocument();
   });
 
   it('does not go before the first step', () => {
@@ -59,8 +59,8 @@ describe('useStep', () => {
         totalSteps={3}
       />,
     );
-    fireEvent.click(getByText('Previous')); // Trying to go before the first step
-    expect(getByText('Current Step: 0')).toBeInTheDocument(); // Should remain on the first step
+    fireEvent.click(getByText('Previous'));
+    expect(getByText('Current Step: 0')).toBeInTheDocument();
   });
 
   it('loops from last step to first when enabled', () => {
@@ -71,7 +71,7 @@ describe('useStep', () => {
         loop={true}
       />,
     );
-    fireEvent.click(getByText('Next')); // Looping to first step
+    fireEvent.click(getByText('Next'));
     expect(getByText('Current Step: 0')).toBeInTheDocument();
   });
 
@@ -83,7 +83,7 @@ describe('useStep', () => {
         loop={true}
       />,
     );
-    fireEvent.click(getByText('Previous')); // Looping to last step
+    fireEvent.click(getByText('Previous'));
     expect(getByText('Current Step: 2')).toBeInTheDocument();
   });
 
@@ -94,8 +94,8 @@ describe('useStep', () => {
         totalSteps={3}
       />,
     );
-    fireEvent.click(getByText('Next')); // Move to second step
-    fireEvent.click(getByText('Reset')); // Resetting to initial step
+    fireEvent.click(getByText('Next'));
+    fireEvent.click(getByText('Reset'));
     expect(getByText('Current Step: 1')).toBeInTheDocument();
   });
 });

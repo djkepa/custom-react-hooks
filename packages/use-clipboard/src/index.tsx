@@ -59,4 +59,4 @@ function useClipboard() {
   return { copyToClipboard, pasteFromClipboard, state };
 }
 
-export default useClipboard;
+export { useClipboard };

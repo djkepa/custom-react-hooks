@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.usePortal = void 0;
 var react_1 = require("react");
 var react_dom_1 = __importDefault(require("react-dom"));
 function usePortal() {
@@ -32,4 +33,4 @@ function usePortal() {
     }, [isOpen]);
     return { Portal: Portal, openPortal: openPortal, closePortal: closePortal, isOpen: isOpen };
 }
-exports.default = usePortal;
+exports.usePortal = usePortal;

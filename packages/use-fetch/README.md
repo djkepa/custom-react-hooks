@@ -30,6 +30,16 @@ yarn add @custom-react-hooks/all
 
 Certainly! Based on the provided `useFetch` hook, here are some detailed features that you can include in your documentation:
 
+## Importing the Hook
+
+The `useFetch` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useFetch } from '@custom-react-hooks/use-fetch';
+```
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
 ## Features
 
 - **Automatic Data Fetching:** The hook initiates a fetch request as soon as the component mounts, making it effortless to load data from APIs or servers. This behavior can be controlled with the `manual` option for more specific use cases.

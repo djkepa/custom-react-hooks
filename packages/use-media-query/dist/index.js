@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useMediaQuery = void 0;
 var react_1 = require("react");
 var getMatches = function (mediaQuery) {
     if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') {
@@ -24,4 +25,4 @@ function useMediaQuery(query) {
     }, [query, handleChange]);
     return matches;
 }
-exports.default = useMediaQuery;
+exports.useMediaQuery = useMediaQuery;

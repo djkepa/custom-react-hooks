@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent, act } from '@testing-library/react';
-import useIdle from '../src/index';
+import { useIdle } from '../src/index';
 
 const TestComponent: React.FC<{ idleTime: number }> = ({ idleTime }) => {
   const isIdle = useIdle(idleTime);

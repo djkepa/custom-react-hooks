@@ -43,4 +43,4 @@ function useOnScreen<T extends HTMLElement = HTMLElement>(
   return { ref, isIntersecting };
 }
 
-export default useOnScreen;
+export { useOnScreen };

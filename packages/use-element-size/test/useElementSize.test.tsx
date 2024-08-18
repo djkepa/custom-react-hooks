@@ -1,11 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import useElementSize from '../src/index';
+import { useElementSize } from '../src/index';
 import '@testing-library/jest-dom';
 
 jest.mock('../src/index', () => ({
   __esModule: true,
-  default: () => [() => {}, { width: 100, height: 100 }],
+  useElementSize: () => [() => {}, { width: 100, height: 100 }],
 }));
 
 const TestComponent = ({ onSizeChange }) => {

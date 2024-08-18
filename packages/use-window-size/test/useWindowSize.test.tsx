@@ -1,38 +1,30 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
-import useWindowSize from '../src/index';
+import { useWindowSize } from '../src/index';
 
-// Define a helper to trigger the window resize event
-const triggerResize = (width, height) => {
-  // Set the window size
+const triggerResize = (width: number, height: number) => {
   window.innerWidth = width;
   window.innerHeight = height;
-  // Dispatch the event
   window.dispatchEvent(new Event('resize'));
 };
 
 describe('useWindowSize', () => {
   it('initializes with the current window size', () => {
-    // Set the initial window size
     window.innerWidth = 1024;
     window.innerHeight = 768;
 
     const { result } = renderHook(() => useWindowSize());
 
-    // Initial window size should be returned
     expect(result.current).toEqual({ width: 1024, height: 768 });
   });
 
   it('updates size on window resize', async () => {
     const { result } = renderHook(() => useWindowSize());
 
-    // Trigger window resize
     act(() => {
       triggerResize(500, 500);
     });
 
-    // Wait for the hook to update its state after the resize event
     await waitFor(() => {
-      // Now we expect the size to be updated
       expect(result.current).toEqual({ width: 500, height: 500 });
     });
   });
@@ -41,10 +33,9 @@ describe('useWindowSize', () => {
     jest.useFakeTimers();
     const { result } = renderHook(() => useWindowSize(500));
 
-    // Trigger a resize event
     act(() => {
       triggerResize(600, 600);
-      jest.advanceTimersByTime(500); // Advance the timers by the debounce delay
+      jest.advanceTimersByTime(500);
     });
 
     expect(result.current).toEqual({ width: 600, height: 600 });

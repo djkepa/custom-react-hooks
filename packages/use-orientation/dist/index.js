@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useOrientation = void 0;
 var react_1 = require("react");
 function useOrientation(elementRef, trackWindow) {
     if (trackWindow === void 0) { trackWindow = false; }
@@ -41,4 +42,4 @@ function useOrientation(elementRef, trackWindow) {
     }, [handleOrientationChange, trackWindow]);
     return orientation;
 }
-exports.default = useOrientation;
+exports.useOrientation = useOrientation;

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import React from 'react';
 import { render } from '@testing-library/react';
-import useOrientation from '../src/index';
+import { useOrientation } from '../src/index';
 
 function TestComponent() {
   const orientation = useOrientation();
@@ -23,7 +23,6 @@ describe('useOrientation', () => {
 
   it('initially has default orientation values', () => {
     const { getByText } = render(<TestComponent />);
-    // Expect 'undefined' for type as no elementRef or trackWindow is provided
     expect(getByText('Angle: 0, Type: undefined')).toBeInTheDocument();
   });
 

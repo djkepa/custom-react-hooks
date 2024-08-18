@@ -7,5 +7,5 @@ declare function useClipboard(): {
     pasteFromClipboard: () => Promise<string | undefined>;
     state: ClipboardState;
 };
-export default useClipboard;
+export { useClipboard };
 //# sourceMappingURL=index.d.ts.map

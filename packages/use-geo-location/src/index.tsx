@@ -86,4 +86,4 @@ function useGeoLocation(options?: PositionOptions, watch: boolean = false): GeoL
   return geoLocationState;
 }
 
-export default useGeoLocation;
+export { useGeoLocation };

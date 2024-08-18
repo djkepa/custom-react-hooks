@@ -6,5 +6,5 @@ declare function useElementSize<T extends HTMLElement = HTMLDivElement>(): [
     (node: T | null) => void,
     Size
 ];
-export default useElementSize;
+export { useElementSize };
 //# sourceMappingURL=index.d.ts.map

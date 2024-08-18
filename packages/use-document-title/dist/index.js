@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useDocumentTitle = void 0;
 var react_1 = require("react");
 function useDocumentTitle(title, revertOnUnmount) {
     if (revertOnUnmount === void 0) { revertOnUnmount = true; }
@@ -15,4 +16,4 @@ function useDocumentTitle(title, revertOnUnmount) {
         };
     }, [title, revertOnUnmount, defaultTitle]);
 }
-exports.default = useDocumentTitle;
+exports.useDocumentTitle = useDocumentTitle;

@@ -2,5 +2,5 @@ declare function useWindowSize(debounceDelay?: number): {
     width: number;
     height: number;
 };
-export default useWindowSize;
+export { useWindowSize };
 //# sourceMappingURL=index.d.ts.map

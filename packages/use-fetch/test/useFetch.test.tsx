@@ -1,13 +1,11 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, act, screen, waitFor } from '@testing-library/react';
-import useFetch from '../src/index';
+import { useFetch } from '../src/index';
 
 declare global {
-  // Extending the existing fetch, not redeclaring it
   function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 
-  // Extend the fetch to include Jest's mock functions
   namespace fetch {
     export var mockResolvedValueOnce: (value: any) => void;
     export var mockRejectedValueOnce: (reason?: any) => void;

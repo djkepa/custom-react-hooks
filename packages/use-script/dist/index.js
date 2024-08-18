@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useScript = void 0;
 var react_1 = require("react");
 var cachedScriptStatuses = {};
 function useScript(src, removeOnUnmount) {
@@ -35,4 +36,4 @@ function useScript(src, removeOnUnmount) {
     }, [src, removeOnUnmount]);
     return status;
 }
-exports.default = useScript;
+exports.useScript = useScript;

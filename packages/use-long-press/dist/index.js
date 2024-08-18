@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useLongPress = void 0;
 var react_1 = require("react");
 function useLongPress(callback, options) {
     if (options === void 0) { options = {}; }
@@ -57,4 +58,4 @@ function useLongPress(callback, options) {
         onTouchEnd: onTouchEnd,
     };
 }
-exports.default = useLongPress;
+exports.useLongPress = useLongPress;

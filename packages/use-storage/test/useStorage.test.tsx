@@ -1,11 +1,10 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { renderHook, act } from '@testing-library/react';
-import useStorage from '../src/index';
+import { useStorage } from '../src/index';
 
 describe('useStorage Hook', () => {
   beforeEach(() => {
-    // Clear localStorage before each test
     localStorage.clear();
   });
 

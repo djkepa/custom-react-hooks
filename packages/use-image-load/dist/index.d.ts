@@ -11,5 +11,5 @@ export interface UseImageLoadState {
     hasError: boolean;
 }
 declare function useImageLoad({ thumbnailSrc, fullSrc, lazyLoad }: UseImageLoadOptions, imgRef: RefObject<HTMLImageElement>): UseImageLoadState;
-export default useImageLoad;
+export { useImageLoad };
 //# sourceMappingURL=index.d.ts.map

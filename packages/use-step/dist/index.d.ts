@@ -10,5 +10,5 @@ declare function useStep({ initialStep, totalSteps, loop }: UseStepOptions): {
     prevStep: () => void;
     reset: () => void;
 };
-export default useStep;
+export { useStep };
 //# sourceMappingURL=index.d.ts.map

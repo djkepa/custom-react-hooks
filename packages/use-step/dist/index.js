@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useStep = void 0;
 var react_1 = require("react");
 function useStep(_a) {
     var _b = _a.initialStep, initialStep = _b === void 0 ? 0 : _b, totalSteps = _a.totalSteps, _c = _a.loop, loop = _c === void 0 ? false : _c;
@@ -25,4 +26,4 @@ function useStep(_a) {
     }, [initialStep]);
     return { currentStep: currentStep, goToStep: goToStep, nextStep: nextStep, prevStep: prevStep, reset: reset };
 }
-exports.default = useStep;
+exports.useStep = useStep;

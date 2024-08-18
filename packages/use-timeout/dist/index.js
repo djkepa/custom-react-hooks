@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useTimeout = void 0;
 var react_1 = require("react");
 function useTimeout(callback, delay) {
     var _a = (0, react_1.useState)(false), isActive = _a[0], setIsActive = _a[1];
@@ -30,4 +31,4 @@ function useTimeout(callback, delay) {
     }, [delay, clear, reset]);
     return { isActive: isActive, reset: reset, clear: clear };
 }
-exports.default = useTimeout;
+exports.useTimeout = useTimeout;

@@ -1,15 +1,13 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
-import useStatus from '../src/index';
+import { useStatus } from '../src/index';
 
 describe('useStatus Hook', () => {
   beforeAll(() => {
-    // Mock navigator.onLine
     Object.defineProperty(window.navigator, 'onLine', {
       value: true,
       writable: true,
     });
 
-    // Mock navigator.connection
     if (!('connection' in navigator)) {
       Object.defineProperty(navigator, 'connection', {
         value: {
@@ -33,7 +31,6 @@ describe('useStatus Hook', () => {
   it('should update network status on online/offline', async () => {
     const { result } = renderHook(() => useStatus());
 
-    // Simulate offline event
     act(() => {
       Object.defineProperty(window.navigator, 'onLine', {
         value: false,
@@ -46,7 +43,6 @@ describe('useStatus Hook', () => {
       expect(result.current.online).toBe(false);
     });
 
-    // Simulate online event
     act(() => {
       Object.defineProperty(window.navigator, 'onLine', {
         value: true,

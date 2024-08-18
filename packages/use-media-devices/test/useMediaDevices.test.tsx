@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useMediaDevices from '../src/index';
+import { useMediaDevices } from '../src/index';
 function TestComponent() {
   const { devices, isLoading, error } = useMediaDevices();
 
@@ -41,7 +41,6 @@ describe('useMediaDevices Hook', () => {
   });
 
   it('should display loading state initially', () => {
-    // Delay the resolution of enumerateDevices to simulate loading
     global.navigator.mediaDevices.enumerateDevices = jest
       .fn()
       .mockImplementation(() => new Promise((resolve) => setTimeout(() => resolve([]), 100)));
@@ -51,7 +50,6 @@ describe('useMediaDevices Hook', () => {
   });
 
   it('should handle errors in enumerating devices', async () => {
-    // Mock a rejection for enumerateDevices
     global.navigator.mediaDevices.enumerateDevices = jest
       .fn()
       .mockRejectedValue(new Error('Enumeration error'));

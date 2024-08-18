@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, fireEvent, renderHook } from '@testing-library/react';
-import useHover from '../src/index';
+import { useHover } from '../src/index';
 
 const TestComponent = () => {
   const { ref, isHovered } = useHover<HTMLDivElement>();

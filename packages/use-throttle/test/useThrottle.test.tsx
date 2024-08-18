@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import useThrottle from '../src/index';
+import { useThrottle } from '../src/index';
 
 jest.useFakeTimers();
 
@@ -24,7 +24,6 @@ describe('useThrottle Hook', () => {
     expect(result.current).toBe('test');
   });
 
-  // Clean up
   afterEach(() => {
     jest.clearAllTimers();
   });

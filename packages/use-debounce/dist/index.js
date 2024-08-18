@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useDebounce = void 0;
 var react_1 = require("react");
 function useDebounce(callback, delay, options) {
     if (delay === void 0) { delay = 500; }
@@ -55,4 +56,4 @@ function useDebounce(callback, delay, options) {
     }, []);
     return [debouncedFunction, cancel];
 }
-exports.default = useDebounce;
+exports.useDebounce = useDebounce;
