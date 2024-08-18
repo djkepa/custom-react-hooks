@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import '@testing-library/jest-dom';
 import { render, act } from '@testing-library/react';
-import useImageLoad, { UseImageLoadOptions } from '../src/index';
+import { useImageLoad, UseImageLoadOptions } from '../src/index';
 
 const TestComponent: React.FC<UseImageLoadOptions> = ({ thumbnailSrc, fullSrc, lazyLoad }) => {
   const imgRef = useRef<HTMLImageElement>(null);

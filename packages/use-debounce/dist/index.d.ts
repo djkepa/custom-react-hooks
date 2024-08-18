@@ -3,5 +3,5 @@ declare function useDebounce<T extends (...args: any[]) => any>(callback: T, del
     leading?: boolean;
     trailing?: boolean;
 }): [T, () => void];
-export default useDebounce;
+export { useDebounce };
 //# sourceMappingURL=index.d.ts.map

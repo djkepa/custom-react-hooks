@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useDragDrop = void 0;
 var react_1 = require("react");
 var useDragDrop = function (onDrop) {
     var _a = (0, react_1.useState)({
@@ -60,4 +61,4 @@ var useDragDrop = function (onDrop) {
         }); },
     };
 };
-exports.default = useDragDrop;
+exports.useDragDrop = useDragDrop;

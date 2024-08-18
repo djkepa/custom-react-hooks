@@ -34,6 +34,17 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+## Importing the Hook
+
+The `useGeoLocation` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useGeoLocation } from '@custom-react-hooks/use-geo-location';
+```
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
+
 ## Usage
 
 Import and use the `useGeoLocation` hook in your React components:

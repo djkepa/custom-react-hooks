@@ -4,5 +4,5 @@ declare function useToggle(initialValue?: boolean, onToggle?: (newValue: boolean
     setTrue: () => void;
     setFalse: () => void;
 };
-export default useToggle;
+export { useToggle };
 //# sourceMappingURL=index.d.ts.map

@@ -19,4 +19,4 @@ function useEffectOnce(effect: () => void | (() => void | undefined)) {
   }, []);
 }
 
-export default useEffectOnce;
+export { useEffectOnce };

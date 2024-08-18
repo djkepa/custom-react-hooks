@@ -80,4 +80,4 @@ const useDragDrop = (onDrop: (dragId: string, dropId: string) => void) => {
   };
 };
 
-export default useDragDrop;
+export { useDragDrop };

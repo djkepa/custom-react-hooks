@@ -46,4 +46,4 @@ function useStep({ initialStep = 0, totalSteps, loop = false }: UseStepOptions) 
   return { currentStep, goToStep, nextStep, prevStep, reset };
 }
 
-export default useStep;
+export { useStep };

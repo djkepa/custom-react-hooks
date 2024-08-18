@@ -7,5 +7,5 @@ export interface UseAsyncReturn<T> {
     error: Error | null;
 }
 declare function useAsync<T>(asyncFunction: AsyncFunction<T>, immediate?: boolean): UseAsyncReturn<T>;
-export default useAsync;
+export { useAsync };
 //# sourceMappingURL=index.d.ts.map

@@ -1,3 +1,3 @@
 declare function useDocumentTitle(title: string, revertOnUnmount?: boolean): void;
-export default useDocumentTitle;
+export { useDocumentTitle };
 //# sourceMappingURL=index.d.ts.map

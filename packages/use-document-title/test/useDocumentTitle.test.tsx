@@ -1,11 +1,11 @@
 import { renderHook } from '@testing-library/react';
-import useDocumentTitle from '../src/index';
+import { useDocumentTitle } from '../src/index';
 
 describe('useDocumentTitle', () => {
   const originalTitle = document.title;
 
   afterEach(() => {
-    document.title = originalTitle; // Reset the title after each test
+    document.title = originalTitle;
   });
 
   it('sets the document title', () => {
@@ -30,6 +30,6 @@ describe('useDocumentTitle', () => {
 
     expect(document.title).toBe(newTitle);
     unmount();
-    expect(document.title).toBe(newTitle); // Still the new title
+    expect(document.title).toBe(newTitle);
   });
 });

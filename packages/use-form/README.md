@@ -35,6 +35,17 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+## Importing the Hook
+
+The `useForm` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useForm } from '@custom-react-hooks/use-form';
+```
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
+
 ## Features
 
 - **Comprehensive Form State Management:** Efficiently manages the state of form fields including values, validation errors, and touched status, ensuring a smooth form handling experience.

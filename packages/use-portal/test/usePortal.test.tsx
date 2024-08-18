@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import usePortal from '../src/index';
+import { usePortal } from '../src/index';
 
 function TestComponent() {
   const { Portal, openPortal, closePortal, isOpen } = usePortal();
@@ -55,6 +55,4 @@ describe('usePortal Hook', () => {
     expect(queryByTestId('portal-content')).not.toBeInTheDocument();
     expect(queryByTestId('backdrop')).not.toBeInTheDocument();
   });
-
-  // Additional tests can be added for more specific behaviors
 });

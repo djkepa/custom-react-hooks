@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useToggle = void 0;
 var react_1 = require("react");
 function useToggle(initialValue, onToggle) {
     if (initialValue === void 0) { initialValue = false; }
@@ -27,4 +28,4 @@ function useToggle(initialValue, onToggle) {
     }, [onToggle]);
     return { value: value, toggle: toggle, setTrue: setTrue, setFalse: setFalse };
 }
-exports.default = useToggle;
+exports.useToggle = useToggle;

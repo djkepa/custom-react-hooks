@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useMouse = void 0;
 var react_1 = require("react");
 function useMouse(ref, options) {
     if (options === void 0) { options = { offsetX: 10, offsetY: 10, avoidEdges: false, relativeToWindow: false }; }
@@ -54,4 +55,4 @@ function useMouse(ref, options) {
     }, [updateMousePosition, options.relativeToWindow, ref]);
     return mousePosition;
 }
-exports.default = useMouse;
+exports.useMouse = useMouse;

@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useStatus = void 0;
 var react_1 = require("react");
 function useStatus() {
     var navigatorWithNetworkInfo = navigator;
@@ -38,4 +39,4 @@ function useStatus() {
     }, []);
     return status;
 }
-exports.default = useStatus;
+exports.useStatus = useStatus;

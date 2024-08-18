@@ -47,6 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.usePermission = void 0;
 var react_1 = require("react");
 var usePermission = function (permissionName) {
     var _a = (0, react_1.useState)({
@@ -98,4 +99,4 @@ var usePermission = function (permissionName) {
     }, [permissionName]);
     return permission;
 };
-exports.default = usePermission;
+exports.usePermission = usePermission;

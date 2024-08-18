@@ -96,4 +96,4 @@ function useMouse<T extends HTMLElement>(
   return mousePosition;
 }
 
-export default useMouse;
+export { useMouse };

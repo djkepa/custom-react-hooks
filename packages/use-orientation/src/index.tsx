@@ -74,4 +74,4 @@ function useOrientation<T extends HTMLElement>(
   return orientation;
 }
 
-export default useOrientation;
+export { useOrientation };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, renderHook } from '@testing-library/react';
-import useEventListener from '../src/index';
+import { useEventListener } from '../src/index';
 
 function TestComponent({ eventName, elementRef, eventHandler, condition = true }) {
   useEventListener(eventName, eventHandler, elementRef, undefined, condition);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, renderHook } from '@testing-library/react';
-import useDragDrop from '../src/index';
+import { useDragDrop } from '../src/index';
 
 const TestComponent = ({ onDrop }) => {
   const { state, bindDrag, bindDrop } = useDragDrop(onDrop);

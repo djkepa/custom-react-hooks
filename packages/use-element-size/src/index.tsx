@@ -44,4 +44,4 @@ function useElementSize<T extends HTMLElement = HTMLDivElement>(): [
   return [setRef, size];
 }
 
-export default useElementSize;
+export { useElementSize };

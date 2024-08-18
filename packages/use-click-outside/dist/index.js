@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useClickOutside = void 0;
 var react_1 = require("react");
 function useClickOutside(refs, callback, events, enableDetection, ignoreRefs) {
     if (events === void 0) { events = ['mousedown', 'touchstart']; }
@@ -31,4 +32,4 @@ function useClickOutside(refs, callback, events, enableDetection, ignoreRefs) {
         };
     }, [refs, callback, events, enableDetection, ignoreRefs]);
 }
-exports.default = useClickOutside;
+exports.useClickOutside = useClickOutside;

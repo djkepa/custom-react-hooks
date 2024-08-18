@@ -5,5 +5,5 @@ export interface PermissionState {
     error: string | null;
 }
 declare const usePermission: (permissionName: PermissionName) => PermissionState;
-export default usePermission;
+export { usePermission };
 //# sourceMappingURL=index.d.ts.map

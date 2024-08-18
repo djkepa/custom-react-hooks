@@ -57,4 +57,4 @@ function useScript(src: string, removeOnUnmount: boolean = false): ScriptStatus 
   return status;
 }
 
-export default useScript;
+export { useScript };

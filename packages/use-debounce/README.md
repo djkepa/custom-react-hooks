@@ -30,6 +30,16 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+## Importing the Hook
+
+The `useDebounce` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useDebounce } from '@custom-react-hooks/use-debounce';
+```
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
 ## Features
 
 - **Function Execution Delay:** Delays the execution of a function until a certain amount of time has passed since its last invocation, effectively controlling the rate at which the function fires.

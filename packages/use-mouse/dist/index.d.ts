@@ -13,5 +13,5 @@ export interface UseMouseState {
     position: 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft';
 }
 declare function useMouse<T extends HTMLElement>(ref: RefObject<T>, options?: MouseOptions): UseMouseState;
-export default useMouse;
+export { useMouse };
 //# sourceMappingURL=index.d.ts.map

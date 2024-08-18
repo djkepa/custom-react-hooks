@@ -160,4 +160,4 @@ function createAllTouchedState<T extends Record<string, any>>(
   }, currentTouched);
 }
 
-export default useForm;
+export { useForm };

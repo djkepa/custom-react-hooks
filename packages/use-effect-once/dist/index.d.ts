@@ -1,3 +1,3 @@
 declare function useEffectOnce(effect: () => void | (() => void | undefined)): void;
-export default useEffectOnce;
+export { useEffectOnce };
 //# sourceMappingURL=index.d.ts.map

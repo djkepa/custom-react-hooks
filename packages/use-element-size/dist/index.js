@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useElementSize = void 0;
 var react_1 = require("react");
 function useElementSize() {
     var _a = (0, react_1.useState)(null), ref = _a[0], setRef = _a[1];
@@ -23,4 +24,4 @@ function useElementSize() {
     }, [ref, handleSize]);
     return [setRef, size];
 }
-exports.default = useElementSize;
+exports.useElementSize = useElementSize;

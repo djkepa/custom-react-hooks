@@ -1,12 +1,11 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import useGeoLocation from '../src/index';
+import { useGeoLocation } from '../src/index';
 import '@testing-library/jest-dom';
 
-// Mock the Geolocation API
 const mockGeolocation = {
   getCurrentPosition: jest.fn(),
-  watchPosition: jest.fn().mockReturnValue(123), // Mock return value for watch ID
+  watchPosition: jest.fn().mockReturnValue(123),
   clearWatch: jest.fn(),
 };
 
@@ -43,7 +42,6 @@ describe('useGeoLocation', () => {
     expect(screen.getByTestId('loading')).toBeInTheDocument();
   });
 
-  // Additional test cases
   it('handles successful geolocation retrieval', async () => {
     const mockPosition = { coords: { latitude: 10, longitude: 20 } };
     mockGeolocation.getCurrentPosition.mockImplementation((success) => {
@@ -89,7 +87,4 @@ describe('useGeoLocation', () => {
     );
     expect(screen.getByTestId('isWatching')).toHaveTextContent('Watching');
   });
-
-  // Add more tests here for different scenarios
-  // e.g., handling success, handling errors, and checking the behavior of the watch functionality
 });

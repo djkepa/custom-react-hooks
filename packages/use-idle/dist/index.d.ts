@@ -1,3 +1,3 @@
 declare function useIdle(idleTime: number): boolean;
-export default useIdle;
+export { useIdle };
 //# sourceMappingURL=index.d.ts.map

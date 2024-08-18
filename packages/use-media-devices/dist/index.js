@@ -47,6 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useMediaDevices = void 0;
 var react_1 = require("react");
 var useMediaDevices = function (requestPermission) {
     if (requestPermission === void 0) { requestPermission = false; }
@@ -101,4 +102,4 @@ var useMediaDevices = function (requestPermission) {
     }, [requestPermission]);
     return state;
 };
-exports.default = useMediaDevices;
+exports.useMediaDevices = useMediaDevices;

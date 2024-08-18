@@ -3,5 +3,5 @@ declare function useOnScreen<T extends HTMLElement = HTMLElement>(options?: Inte
     ref: React.RefObject<T>;
     isIntersecting: boolean;
 };
-export default useOnScreen;
+export { useOnScreen };
 //# sourceMappingURL=index.d.ts.map

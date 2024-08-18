@@ -1,8 +1,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
-import useAsync from '../src';
+import { useAsync } from '../src';
 
 describe('useAsync', () => {
-  // Mock async functions
   const successFunction = jest.fn().mockResolvedValue('success');
   const errorFunction = jest.fn().mockRejectedValue(new Error('error'));
 
@@ -70,7 +69,6 @@ describe('useAsync', () => {
       result.current.execute();
     });
 
-    // After executing, expect the status to be 'pending'
     expect(result.current.status).toBe('pending');
 
     act(() => {

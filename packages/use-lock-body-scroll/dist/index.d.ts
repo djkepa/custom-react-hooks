@@ -1,3 +1,3 @@
 declare function useLockBodyScroll(lock?: boolean): void;
-export default useLockBodyScroll;
+export { useLockBodyScroll };
 //# sourceMappingURL=index.d.ts.map

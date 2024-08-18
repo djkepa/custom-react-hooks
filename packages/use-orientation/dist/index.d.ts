@@ -6,5 +6,5 @@ export interface OrientationState {
     elementOrientation?: 'landscape' | 'portrait';
 }
 declare function useOrientation<T extends HTMLElement>(elementRef?: RefObject<T>, trackWindow?: boolean): OrientationState;
-export default useOrientation;
+export { useOrientation };
 //# sourceMappingURL=index.d.ts.map

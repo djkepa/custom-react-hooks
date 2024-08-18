@@ -44,4 +44,4 @@ function useEventListener<T extends HTMLElement = HTMLDivElement, E extends Even
   }, [eventName, element, options, condition]);
 }
 
-export default useEventListener;
+export { useEventListener };

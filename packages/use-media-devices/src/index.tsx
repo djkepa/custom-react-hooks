@@ -66,4 +66,4 @@ const useMediaDevices = (requestPermission: boolean = false): UseMediaDevicesSta
   return state;
 };
 
-export default useMediaDevices;
+export { useMediaDevices };

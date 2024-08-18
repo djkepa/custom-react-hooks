@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useEventListener = void 0;
 var react_1 = require("react");
 function useEventListener(eventName, handler, element, options, condition) {
     if (condition === void 0) { condition = true; }
@@ -23,4 +24,4 @@ function useEventListener(eventName, handler, element, options, condition) {
         };
     }, [eventName, element, options, condition]);
 }
-exports.default = useEventListener;
+exports.useEventListener = useEventListener;

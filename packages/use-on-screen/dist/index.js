@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useOnScreen = void 0;
 var react_1 = require("react");
 function useOnScreen(options, once) {
     var _a = (0, react_1.useState)(false), isIntersecting = _a[0], setIntersecting = _a[1];
@@ -27,4 +28,4 @@ function useOnScreen(options, once) {
     }, [observer, ref]);
     return { ref: ref, isIntersecting: isIntersecting };
 }
-exports.default = useOnScreen;
+exports.useOnScreen = useOnScreen;

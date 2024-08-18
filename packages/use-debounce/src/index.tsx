@@ -74,4 +74,4 @@ function useDebounce<T extends (...args: any[]) => any>(
   return [debouncedFunction as T, cancel];
 }
 
-export default useDebounce;
+export { useDebounce };

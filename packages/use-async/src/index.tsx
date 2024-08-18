@@ -31,7 +31,7 @@ function useAsync<T>(
   const [value, setValue] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
-  const execute = useCallback(() => {
+  const execute = useCallback(async () => {
     setStatus('pending');
     setValue(null);
     setError(null);
@@ -56,4 +56,4 @@ function useAsync<T>(
   return { execute, status, value, error };
 }
 
-export default useAsync;
+export { useAsync };

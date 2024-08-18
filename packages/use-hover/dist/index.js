@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useHover = void 0;
 var react_1 = require("react");
 function useHover() {
     var _a = (0, react_1.useState)(false), isHovered = _a[0], setIsHovered = _a[1];
@@ -24,4 +25,4 @@ function useHover() {
     }, [handleMouseEnter, handleMouseLeave]);
     return { ref: ref, isHovered: isHovered };
 }
-exports.default = useHover;
+exports.useHover = useHover;

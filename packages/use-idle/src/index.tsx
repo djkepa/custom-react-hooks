@@ -34,4 +34,4 @@ function useIdle(idleTime: number) {
   return isIdle;
 }
 
-export default useIdle;
+export { useIdle };

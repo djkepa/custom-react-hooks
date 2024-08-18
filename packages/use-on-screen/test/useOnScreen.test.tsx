@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, act, renderHook } from '@testing-library/react';
-import useOnScreen from '../src/index';
+import { useOnScreen } from '../src/index';
 import '@testing-library/jest-dom';
 
 function TestComponent({ options, once }) {
@@ -59,7 +59,6 @@ describe('useOnScreen', () => {
       />,
     );
     const element = getByText('Not Visible');
-    // Cast to any to access mock properties
     const observerInstance = (window.IntersectionObserver as any).mock.results[0].value;
 
     act(() => {

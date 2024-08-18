@@ -61,4 +61,4 @@ function useStatus() {
   return status;
 }
 
-export default useStatus;
+export { useStatus };

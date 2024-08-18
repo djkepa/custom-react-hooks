@@ -35,4 +35,4 @@ function useThrottle<T>(value: T, limit: number, immediate: boolean = false): T 
   return throttledValue;
 }
 
-export default useThrottle;
+export { useThrottle };

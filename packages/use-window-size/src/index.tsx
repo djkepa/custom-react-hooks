@@ -44,4 +44,4 @@ function useWindowSize(debounceDelay: number = 100) {
   return windowSize;
 }
 
-export default useWindowSize;
+export { useWindowSize };

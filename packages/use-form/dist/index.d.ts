@@ -12,5 +12,5 @@ export interface UseFormReturnType<T> {
     submissionStatus: 'idle' | 'success' | 'error';
 }
 declare function useForm<T extends Record<string, any>>(initialValues: T, validate?: ValidatorFunction<T>): UseFormReturnType<T>;
-export default useForm;
+export { useForm };
 //# sourceMappingURL=index.d.ts.map

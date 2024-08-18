@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, renderHook } from '@testing-library/react';
-import useLongPress from '../src/index';
+import { useLongPress } from '../src/index';
 
 function TestComponent({ callback, options }) {
   const bindings = useLongPress(callback, options);
@@ -27,10 +27,10 @@ describe('useLongPress', () => {
     const button = getByText('Press me');
 
     fireEvent.mouseDown(button);
-    jest.advanceTimersByTime(500); // Wait for the threshold to pass
+    jest.advanceTimersByTime(500);
     fireEvent.mouseUp(button);
 
-    jest.runAllTimers(); // Ensure all timers are cleared
+    jest.runAllTimers();
 
     expect(callback).toHaveBeenCalledTimes(1);
   });
@@ -46,10 +46,10 @@ describe('useLongPress', () => {
     const button = getByText('Press me');
 
     fireEvent.mouseDown(button);
-    jest.advanceTimersByTime(100); // Advance timers less than threshold
+    jest.advanceTimersByTime(100);
     fireEvent.mouseUp(button);
 
-    jest.runAllTimers(); // Ensure all timers are cleared
+    jest.runAllTimers();
 
     expect(callback).not.toHaveBeenCalled();
   });
@@ -67,10 +67,10 @@ describe('useLongPress', () => {
 
     fireEvent.mouseDown(button);
     expect(onStart).toHaveBeenCalledTimes(1);
-    jest.advanceTimersByTime(500); // Wait for the threshold to pass
+    jest.advanceTimersByTime(500);
     fireEvent.mouseUp(button);
 
-    jest.runAllTimers(); // Ensure all timers are cleared
+    jest.runAllTimers();
 
     expect(onFinish).toHaveBeenCalledTimes(1);
   });
@@ -86,10 +86,10 @@ describe('useLongPress', () => {
     const button = getByText('Press me');
 
     fireEvent.touchStart(button);
-    jest.advanceTimersByTime(500); // Wait for the threshold to pass
+    jest.advanceTimersByTime(500);
     fireEvent.touchEnd(button);
 
-    jest.runAllTimers(); // Ensure all timers are cleared
+    jest.runAllTimers();
 
     expect(callback).toHaveBeenCalledTimes(1);
   });
@@ -106,10 +106,10 @@ describe('useLongPress', () => {
     const button = getByText('Press me');
 
     fireEvent.mouseDown(button);
-    jest.advanceTimersByTime(250); // Advance timers less than threshold
+    jest.advanceTimersByTime(250);
     fireEvent.mouseLeave(button);
 
     expect(callback).not.toHaveBeenCalled();
-    expect(onCancel).toHaveBeenCalledTimes(1); // onCancel should be called on mouse leave
+    expect(onCancel).toHaveBeenCalledTimes(1);
   });
 });

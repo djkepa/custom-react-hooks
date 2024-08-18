@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useIdle = void 0;
 var react_1 = require("react");
 function useIdle(idleTime) {
     var _a = (0, react_1.useState)(false), isIdle = _a[0], setIsIdle = _a[1];
@@ -23,4 +24,4 @@ function useIdle(idleTime) {
     }, [handleActivity]);
     return isIdle;
 }
-exports.default = useIdle;
+exports.useIdle = useIdle;

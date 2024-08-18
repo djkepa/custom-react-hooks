@@ -23,4 +23,4 @@ function useDocumentTitle(title: string, revertOnUnmount: boolean = true) {
   }, [title, revertOnUnmount, defaultTitle]);
 }
 
-export default useDocumentTitle;
+export { useDocumentTitle };

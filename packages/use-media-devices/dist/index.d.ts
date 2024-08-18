@@ -9,5 +9,5 @@ export interface UseMediaDevicesState {
     error: string | null;
 }
 declare const useMediaDevices: (requestPermission?: boolean) => UseMediaDevicesState;
-export default useMediaDevices;
+export { useMediaDevices };
 //# sourceMappingURL=index.d.ts.map

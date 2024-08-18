@@ -44,4 +44,4 @@ function useTimeout(callback: () => void, delay: number | null) {
   return { isActive, reset, clear };
 }
 
-export default useTimeout;
+export { useTimeout };

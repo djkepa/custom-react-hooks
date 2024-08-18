@@ -8,5 +8,5 @@ declare function useFetch<T = unknown>(url: string, options?: FetchOptions, cach
     error: Error | null;
     fetchData: () => Promise<void>;
 };
-export default useFetch;
+export { useFetch };
 //# sourceMappingURL=index.d.ts.map

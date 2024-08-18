@@ -36,6 +36,17 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+## Importing the Hook
+
+The `useMediaDevices` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useMediaDevices } from '@custom-react-hooks/use-media-devices';
+```
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
+
 ## Usage
 
 ```tsx

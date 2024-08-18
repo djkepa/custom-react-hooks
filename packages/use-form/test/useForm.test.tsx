@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, renderHook } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useForm from '../src/index';
+import { useForm } from '../src/index';
 
 const TestForm = ({ initialValues, validate }) => {
   const {
@@ -16,9 +16,7 @@ const TestForm = ({ initialValues, validate }) => {
     submissionStatus,
   } = useForm(initialValues, validate);
 
-  const onSubmit = async (values) => {
-    // Simulate async submit action
-  };
+  const onSubmit = async (values: any) => {};
 
   return (
     <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
@@ -62,7 +60,7 @@ const TestForm = ({ initialValues, validate }) => {
 
 describe('useForm', () => {
   const initialValues = { username: '', password: '' };
-  const validate = (values) => {
+  const validate = (values: { username: any; password: any }) => {
     const errors = { username: '', password: '' };
     if (!values.username) {
       errors.username = 'Username required';
@@ -121,19 +119,15 @@ describe('useForm', () => {
       />,
     );
 
-    // Assert that these elements are HTMLInputElements to access the 'value' property
     const usernameInput = getByLabelText('Username') as HTMLInputElement;
     const passwordInput = getByLabelText('Password') as HTMLInputElement;
     const resetButton = getByRole('button', { name: 'Reset' });
 
-    // Change values
     fireEvent.change(usernameInput, { target: { value: 'user' } });
     fireEvent.change(passwordInput, { target: { value: 'password' } });
 
-    // Reset form
     fireEvent.click(resetButton);
 
-    // Use waitFor to ensure the state updates have been processed
     await waitFor(() => {
       expect(usernameInput.value).toBe('');
       expect(passwordInput.value).toBe('');

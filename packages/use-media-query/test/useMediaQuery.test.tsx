@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import useMediaQuery from '../src/index';
+import { useMediaQuery } from '../src/index';
 
 function TestComponent({ query }) {
   const matches = useMediaQuery(query);
@@ -33,6 +33,4 @@ describe('useMediaQuery Hook', () => {
     const { getByText } = render(<TestComponent query="non-matching-query" />);
     expect(getByText('Does not match')).toBeInTheDocument();
   });
-
-  // Additional tests can be written to simulate changes in media query matching
 });

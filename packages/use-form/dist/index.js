@@ -47,6 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useForm = void 0;
 var react_1 = require("react");
 function useForm(initialValues, validate) {
     var _this = this;
@@ -140,6 +141,7 @@ function useForm(initialValues, validate) {
         submissionStatus: submissionStatus,
     };
 }
+exports.useForm = useForm;
 function areErrorsEqual(errors1, errors2) {
     var keys = Object.keys(errors1);
     return keys.every(function (key) { return errors1[key] === errors2[key]; });
@@ -162,4 +164,3 @@ function createAllTouchedState(values, currentTouched) {
         return acc;
     }, currentTouched);
 }
-exports.default = useForm;

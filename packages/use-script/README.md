@@ -35,6 +35,17 @@ or
 yarn add @custom-react-hooks/all
 ```
 
+## Importing the Hook
+
+The `useScript` hook must be imported using a named import as shown below:
+
+**Named Import:**
+```javascript
+import { useScript } from '@custom-react-hooks/use-script';
+```
+This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
+
+
 ## Usage
 
 Import the `useScript` hook and use it in your React components. You can specify multiple scripts and custom attributes:

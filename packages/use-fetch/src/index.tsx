@@ -75,4 +75,4 @@ function useFetch<T = unknown>(
   return { data, loading, error, fetchData };
 }
 
-export default useFetch;
+export { useFetch };

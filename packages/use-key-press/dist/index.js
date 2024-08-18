@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useKeyPress = void 0;
 var react_1 = require("react");
 function useKeyPress(targetKey, options) {
     if (options === void 0) { options = {}; }
@@ -29,4 +30,4 @@ function useKeyPress(targetKey, options) {
     }, [handleKeyEvent, targetElement]);
     return keyPressed;
 }
-exports.default = useKeyPress;
+exports.useKeyPress = useKeyPress;

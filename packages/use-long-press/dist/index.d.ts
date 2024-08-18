@@ -11,5 +11,5 @@ declare function useLongPress(callback: () => void, options?: LongPressOptions):
     onTouchStart: () => void;
     onTouchEnd: () => void;
 };
-export default useLongPress;
+export { useLongPress };
 //# sourceMappingURL=index.d.ts.map

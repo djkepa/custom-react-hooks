@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.useLockBodyScroll = void 0;
 var react_1 = require("react");
 function useLockBodyScroll(lock) {
     if (lock === void 0) { lock = true; }
@@ -18,4 +19,4 @@ function useLockBodyScroll(lock) {
         };
     }, [lock]);
 }
-exports.default = useLockBodyScroll;
+exports.useLockBodyScroll = useLockBodyScroll;

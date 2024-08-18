@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-lock-body-scroll",
-  "version": "1.4.19",
+  "version": "1.5.1",
   "author": "Bane Grozdanovic <banegrozdanovic@gmail.com>",
   "license": "MIT",
   "main": "dist/index.js",

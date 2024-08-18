@@ -1,7 +1,14 @@
-import React, { createContext, useState, ReactNode, useContext, Dispatch, SetStateAction } from 'react';
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 
 type GlobalState = {
-  data: any; // Replace 'any' with your data type for stricter type checking
+  data: any;
 };
 
 type GlobalStateContextType = {

@@ -44,4 +44,4 @@ function usePortal() {
   return { Portal, openPortal, closePortal, isOpen };
 }
 
-export default usePortal;
+export { usePortal };

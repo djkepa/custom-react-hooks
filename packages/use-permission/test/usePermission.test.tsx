@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import usePermission from '../src/index';
+import { usePermission } from '../src/index';
 
 function TestComponent({ permissionName }) {
   const { state, isLoading, error } = usePermission(permissionName);

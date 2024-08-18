@@ -3,5 +3,5 @@ declare function useTimeout(callback: () => void, delay: number | null): {
     reset: () => void;
     clear: () => void;
 };
-export default useTimeout;
+export { useTimeout };
 //# sourceMappingURL=index.d.ts.map

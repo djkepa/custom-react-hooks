@@ -8,7 +8,7 @@ import { useEffect, useRef, EffectCallback, DependencyList } from 'react';
  * @param deps - The dependency list for the effect. The effect will only re-run if these dependencies change.
  */
 
-export function useUpdateEffect(effect: EffectCallback, deps: DependencyList = []): void {
+function useUpdateEffect(effect: EffectCallback, deps: DependencyList = []): void {
   const useFirstMountState = (): boolean => {
     const isFirst = useRef(true);
 
@@ -29,4 +29,4 @@ export function useUpdateEffect(effect: EffectCallback, deps: DependencyList = [
   }, deps);
 }
 
-export default useUpdateEffect;
+export { useUpdateEffect };
