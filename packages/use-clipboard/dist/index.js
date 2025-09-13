@@ -38,16 +38,56 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useClipboard = void 0;
 var react_1 = require("react");
-var isClipboardAvailable = typeof navigator !== 'undefined' && typeof navigator.clipboard !== 'undefined';
-function useClipboard() {
+var isClipboardAvailable = function () {
+    return typeof navigator !== 'undefined' && typeof navigator.clipboard !== 'undefined';
+};
+function useClipboard(options) {
     var _this = this;
-    var _a = (0, react_1.useState)({ success: false, error: null }), state = _a[0], setState = _a[1];
-    var copyToClipboard = (0, react_1.useCallback)(function (text) { return __awaiter(_this, void 0, void 0, function () {
-        var error_1;
+    if (options === void 0) { options = {}; }
+    var _a = options.readOnMount, readOnMount = _a === void 0 ? true : _a, _b = options.pollingInterval, pollingInterval = _b === void 0 ? 0 : _b, onClipboardChange = options.onClipboardChange;
+    var _c = (0, react_1.useState)({ success: false, error: null }), state = _c[0], setState = _c[1];
+    var _d = (0, react_1.useState)(''), clipboardContent = _d[0], setClipboardContent = _d[1];
+    var _e = (0, react_1.useState)(false), isReading = _e[0], setIsReading = _e[1];
+    var intervalRef = (0, react_1.useRef)(null);
+    var lastContentRef = (0, react_1.useRef)('');
+    var readClipboardContent = (0, react_1.useCallback)(function () { return __awaiter(_this, void 0, void 0, function () {
+        var text, content, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!isClipboardAvailable) {
+                    if (!isClipboardAvailable()) {
+                        return [2, ''];
+                    }
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, 4, 5]);
+                    setIsReading(true);
+                    return [4, navigator.clipboard.readText()];
+                case 2:
+                    text = _a.sent();
+                    content = text || '';
+                    if (content !== lastContentRef.current) {
+                        setClipboardContent(content);
+                        lastContentRef.current = content;
+                        onClipboardChange === null || onClipboardChange === void 0 ? void 0 : onClipboardChange(content);
+                    }
+                    return [2, content];
+                case 3:
+                    error_1 = _a.sent();
+                    return [2, ''];
+                case 4:
+                    setIsReading(false);
+                    return [7];
+                case 5: return [2];
+            }
+        });
+    }); }, [onClipboardChange]);
+    var copyToClipboard = (0, react_1.useCallback)(function (text) { return __awaiter(_this, void 0, void 0, function () {
+        var error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!isClipboardAvailable()) {
                         setState({ success: false, error: 'Clipboard is not available' });
                         return [2];
                     }
@@ -62,23 +102,26 @@ function useClipboard() {
                 case 2:
                     _a.sent();
                     setState({ success: true, error: null });
+                    setClipboardContent(text);
+                    lastContentRef.current = text;
+                    onClipboardChange === null || onClipboardChange === void 0 ? void 0 : onClipboardChange(text);
                     return [3, 4];
                 case 3:
-                    error_1 = _a.sent();
+                    error_2 = _a.sent();
                     setState({ success: false, error: 'Failed to copy' });
                     return [3, 4];
                 case 4: return [2];
             }
         });
-    }); }, []);
+    }); }, [onClipboardChange]);
     var pasteFromClipboard = (0, react_1.useCallback)(function () { return __awaiter(_this, void 0, void 0, function () {
-        var text, error_2;
+        var text, content, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!isClipboardAvailable) {
+                    if (!isClipboardAvailable()) {
                         setState({ success: false, error: 'Clipboard is not available' });
-                        return [2];
+                        return [2, ''];
                     }
                     _a.label = 1;
                 case 1:
@@ -86,19 +129,62 @@ function useClipboard() {
                     return [4, navigator.clipboard.readText()];
                 case 2:
                     text = _a.sent();
-                    if (!text.trim()) {
-                        return [2, ''];
-                    }
+                    content = text || '';
                     setState({ success: true, error: null });
-                    return [2, text];
+                    if (content !== lastContentRef.current) {
+                        setClipboardContent(content);
+                        lastContentRef.current = content;
+                        onClipboardChange === null || onClipboardChange === void 0 ? void 0 : onClipboardChange(content);
+                    }
+                    return [2, content];
                 case 3:
-                    error_2 = _a.sent();
+                    error_3 = _a.sent();
                     setState({ success: false, error: 'Failed to paste' });
                     return [2, ''];
                 case 4: return [2];
             }
         });
-    }); }, []);
-    return { copyToClipboard: copyToClipboard, pasteFromClipboard: pasteFromClipboard, state: state };
+    }); }, [onClipboardChange]);
+    (0, react_1.useEffect)(function () {
+        if (readOnMount) {
+            readClipboardContent();
+        }
+        if (pollingInterval > 0) {
+            intervalRef.current = setInterval(function () {
+                readClipboardContent();
+            }, pollingInterval);
+        }
+        return function () {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+        };
+    }, [readOnMount, pollingInterval, readClipboardContent]);
+    var refreshClipboard = (0, react_1.useCallback)(function () {
+        return readClipboardContent();
+    }, [readClipboardContent]);
+    var clearClipboard = (0, react_1.useCallback)(function () { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, copyToClipboard(' ')];
+                case 1:
+                    _a.sent();
+                    setClipboardContent('');
+                    lastContentRef.current = '';
+                    return [2];
+            }
+        });
+    }); }, [copyToClipboard]);
+    return {
+        copyToClipboard: copyToClipboard,
+        pasteFromClipboard: pasteFromClipboard,
+        state: state,
+        clipboardContent: clipboardContent,
+        isReading: isReading,
+        refreshClipboard: refreshClipboard,
+        clearClipboard: clearClipboard,
+        hasContent: clipboardContent.trim().length > 0,
+    };
 }
 exports.useClipboard = useClipboard;
