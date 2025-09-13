@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/all",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A collection of reusable React hooks by custom-react-hooks.",
