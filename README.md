@@ -121,6 +121,19 @@ This approach ensures that the hook integrates seamlessly into your project, mai
 - [useUpdateEffect](#useupdateeffect-hook)
 - [useWindowSize](#usewindowsize-hook)
 
+## 🆕 New in Version 2.0.0
+
+- [useNetwork](#usenetwork-hook)
+- [usePrevious](#useprevious-hook)
+- [useWebSocket](#usewebsocket-hook)
+- [useCache](#usecache-hook)
+- [useHistoryState](#usehistorystate-hook)
+- [useShare](#useshare-hook)
+- [useWorker](#useworker-hook)
+- [useIsland](#useisland-hook)
+- [useOffscreen](#useoffscreen-hook)
+- [useVirtual](#usevirtual-hook)
+
 
 # useAsync Hook
 
@@ -3656,6 +3669,930 @@ In this example, the `useWindowSize` hook is used to track the size of the brows
 ## Contributing
 
 Contributions to enhance `useWindowSize` are welcome. Feel free to submit issues or pull requests to the repository.
+
+# useNetwork Hook
+
+The `useNetwork` hook is designed for monitoring network status and connection information in React applications. It provides real-time information about the user's network connection including online/offline status, connection speed, and connection type.
+
+## Features
+
+- **Network Status Monitoring:** Tracks online/offline status in real-time.
+- **Connection Information:** Provides detailed network connection data when available.
+- **Automatic Updates:** Listens for network changes and updates state accordingly.
+- **Cross-Browser Support:** Works with different browser implementations of the Network Information API.
+- **SSR Compatibility:** Safe for server-side rendering environments.
+
+## Installation
+
+### Installing Only Current Hooks
+
+```bash
+npm install @custom-react-hooks/use-network
+```
+
+or
+
+```bash
+yarn add @custom-react-hooks/use-network
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
+```
+
+## Usage
+
+```typescript
+import React from 'react';
+import { useNetwork } from '@custom-react-hooks/all';
+
+const NetworkComponent = () => {
+  const { online, downlink, effectiveType, rtt } = useNetwork();
+
+  return (
+    <div>
+      <h2>Network Status</h2>
+      <p>Status: {online ? 'Online' : 'Offline'}</p>
+      
+      {online && (
+        <div>
+          {downlink && <p>Downlink Speed: {downlink} Mbps</p>}
+          {effectiveType && <p>Connection Type: {effectiveType}</p>}
+          {rtt && <p>Round Trip Time: {rtt}ms</p>}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default NetworkComponent;
+```
+
+## API Reference
+
+### Returns
+
+An object containing the following properties:
+
+- `online` (boolean): Indicates if the user is currently online.
+- `downlink` (number, optional): Effective bandwidth estimate in megabits per second.
+- `effectiveType` ('slow-2g' | '2g' | '3g' | '4g', optional): Effective connection type.
+- `rtt` (number, optional): Estimated effective round-trip time in milliseconds.
+
+## Use Cases
+
+- **Adaptive Content Loading**: Adjust content quality based on connection speed.
+- **Offline Handling**: Provide appropriate UI when the user goes offline.
+- **Data Usage Optimization**: Respect user's data saving preferences.
+
+## Contributing
+
+Contributions to enhance `useNetwork` are welcome. Feel free to submit issues or pull requests to the repository.
+
+# usePrevious Hook
+
+The `usePrevious` hook is a simple yet powerful utility that stores the previous value of a state or prop. It's particularly useful for comparing current and previous values in effects, implementing animations based on value changes, or tracking state transitions.
+
+## Features
+
+- **Simple Value Tracking:** Stores the previous value of any data type.
+- **Type Safe:** Full TypeScript support with generic typing.
+- **Memory Efficient:** Uses a single ref to store the previous value.
+- **Universal Compatibility:** Works with any data type (primitives, objects, arrays).
+- **SSR Safe:** No side effects during server-side rendering.
+
+## Installation
+
+### Installing Only Current Hooks
+
+```bash
+npm install @custom-react-hooks/use-previous
+```
+
+or
+
+```bash
+yarn add @custom-react-hooks/use-previous
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
+```
+
+## Usage
+
+```typescript
+import React, { useState } from 'react';
+import { usePrevious } from '@custom-react-hooks/all';
+
+const CounterComponent = () => {
+  const [count, setCount] = useState(0);
+  const previousCount = usePrevious(count);
+
+  return (
+    <div>
+      <h2>Counter: {count}</h2>
+      <p>Previous count: {previousCount ?? 'None'}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setCount(count - 1)}>Decrement</button>
+    </div>
+  );
+};
+
+export default CounterComponent;
+```
+
+## API Reference
+
+### Parameters
+
+- `value` (T): The current value to track. Can be of any type.
+
+### Returns
+
+- `T | undefined`: The previous value. Returns `undefined` on the first render.
+
+## Use Cases
+
+- **Value Comparison**: Compare current and previous values in effects or render logic.
+- **Animation Triggers**: Trigger animations based on value changes.
+- **Optimization**: Prevent unnecessary API calls or expensive operations when values haven't changed.
+
+## Contributing
+
+Contributions to enhance `usePrevious` are welcome. Feel free to submit issues or pull requests to the repository.
+
+# useWebSocket Hook
+
+The `useWebSocket` hook is a simple yet powerful utility for managing WebSocket connections in React applications. It provides an easy way to connect to WebSocket servers, send messages, and handle connection states with optional reconnection functionality.
+
+## Features
+
+- **Simple WebSocket Management:** Easy connection setup and message handling.
+- **Connection State Tracking:** Real-time connection status monitoring.
+- **Automatic Reconnection:** Optional reconnection with configurable attempts and intervals.
+- **Event Callbacks:** Support for onOpen, onClose, onMessage, and onError callbacks.
+- **Protocol Support:** Support for WebSocket subprotocols.
+- **SSR Safe:** Handles server-side rendering environments gracefully.
+
+## Installation
+
+### Installing Only Current Hooks
+
+```bash
+npm install @custom-react-hooks/use-websocket
+```
+
+or
+
+```bash
+yarn add @custom-react-hooks/use-websocket
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
+```
+
+## Usage
+
+```typescript
+import React, { useState } from 'react';
+import { useWebSocket } from '@custom-react-hooks/all';
+
+const ChatComponent = () => {
+  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState<string[]>([]);
+
+  const { sendMessage, lastMessage, connectionStatus } = useWebSocket(
+    'ws://localhost:8080',
+    {
+      onMessage: (event) => {
+        setMessages(prev => [...prev, event.data]);
+      },
+    }
+  );
+
+  const handleSendMessage = () => {
+    if (message.trim()) {
+      sendMessage(message);
+      setMessage('');
+    }
+  };
+
+  return (
+    <div>
+      <div>Status: {connectionStatus}</div>
+      <div>
+        {messages.map((msg, index) => (
+          <div key={index}>{msg}</div>
+        ))}
+      </div>
+      <input
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Type a message..."
+      />
+      <button onClick={handleSendMessage}>Send</button>
+    </div>
+  );
+};
+
+export default ChatComponent;
+```
+
+## API Reference
+
+### Parameters
+
+- `socketUrl` (string | null): The WebSocket URL to connect to.
+- `options` (UseWebSocketOptions, optional): Configuration options object.
+
+### Returns
+
+An object containing:
+
+- `sendMessage` (function): Function to send messages through the WebSocket.
+- `lastMessage` (MessageEvent | null): The last received message event.
+- `connectionStatus` ('Connecting' | 'Open' | 'Closing' | 'Closed'): Human-readable connection status.
+
+## Use Cases
+
+- **Real-time Chat Applications**: Implement chat functionality with instant messaging.
+- **Live Data Feeds**: Display real-time data updates (stock prices, sports scores, etc.).
+- **Collaborative Editing**: Enable real-time collaborative features.
+
+## Contributing
+
+Contributions to enhance `useWebSocket` are welcome. Feel free to submit issues or pull requests to the repository.
+
+# useCache Hook
+
+The `useCache` hook provides a simple in-memory caching solution with TTL (Time To Live) support and automatic cleanup. It's perfect for caching API responses, computed values, or any data that you want to store temporarily in memory.
+
+## Features
+
+- **TTL Support:** Automatic expiration of cached entries after a specified time.
+- **Size Limiting:** Configurable maximum cache size with LRU-style eviction.
+- **Type Safe:** Full TypeScript support with generic typing.
+- **Memory Efficient:** Automatic cleanup of expired entries.
+- **Simple API:** Easy-to-use interface similar to Map/Set APIs.
+- **Persistent Across Renders:** Cache persists across component re-renders.
+
+## Installation
+
+### Installing Only Current Hooks
+
+```bash
+npm install @custom-react-hooks/use-cache
+```
+
+or
+
+```bash
+yarn add @custom-react-hooks/use-cache
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
+```
+
+## Usage
+
+```typescript
+import React, { useState } from 'react';
+import { useCache } from '@custom-react-hooks/all';
+
+const CacheExample = () => {
+  const cache = useCache<string>();
+  const [key, setKey] = useState('');
+  const [value, setValue] = useState('');
+
+  const handleSet = () => {
+    if (key && value) {
+      cache.set(key, value);
+      setKey('');
+      setValue('');
+    }
+  };
+
+  const handleGet = () => {
+    const cachedValue = cache.get(key);
+    alert(cachedValue ? `Value: ${cachedValue}` : 'Key not found');
+  };
+
+  return (
+    <div>
+      <h3>Cache Demo</h3>
+      <div>
+        <input
+          placeholder="Key"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+        />
+        <input
+          placeholder="Value"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <button onClick={handleSet}>Set</button>
+        <button onClick={handleGet}>Get</button>
+      </div>
+      <p>Cache size: {cache.size()}</p>
+    </div>
+  );
+};
+
+export default CacheExample;
+```
+
+## API Reference
+
+### Parameters
+
+- `options` (UseCacheOptions, optional): Configuration options for the cache.
+
+### Returns
+
+An object containing cache management functions:
+
+- `get(key: string)`: Retrieve a value from the cache.
+- `set(key: string, value: T, ttl?: number)`: Store a value in the cache.
+- `has(key: string)`: Check if a key exists and is not expired.
+- `delete(key: string)`: Remove a specific entry from the cache.
+- `clear()`: Remove all entries from the cache.
+- `size()`: Get the current number of entries.
+
+## Use Cases
+
+- **API Response Caching**: Cache API responses to reduce network requests.
+- **Computed Value Caching**: Store results of expensive calculations.
+- **User Data Caching**: Cache user profiles, preferences, or session data.
+
+## Contributing
+
+Contributions to enhance `useCache` are welcome. Feel free to submit issues or pull requests to the repository.
+
+# useHistoryState Hook
+
+The `useHistoryState` hook extends the standard `useState` with undo/redo functionality. It maintains a history of state changes and provides functions to navigate through the history, making it perfect for implementing undo/redo features in your React applications.
+
+## Features
+
+- **Undo/Redo Functionality:** Navigate through state history with undo and redo operations.
+- **History Management:** Maintains a configurable history of state changes.
+- **Functional Updates:** Supports functional state updates like regular `useState`.
+- **Memory Efficient:** Configurable maximum history size to prevent memory leaks.
+- **Type Safe:** Full TypeScript support with generic typing.
+- **Smart History:** Prevents duplicate consecutive states from being added to history.
+
+## Installation
+
+### Installing Only Current Hooks
+
+```bash
+npm install @custom-react-hooks/use-history-state
+```
+
+or
+
+```bash
+yarn add @custom-react-hooks/use-history-state
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
+```
+
+## Usage
+
+### Basic Usage
+
+```typescript
+import React from 'react';
+import { useHistoryState } from '@custom-react-hooks/use-history-state';
+
+const UndoRedoCounter = () => {
+  const { state, setState, undo, redo, canUndo, canRedo } = useHistoryState(0);
+
+  return (
+    <div>
+      <h2>Counter: {state}</h2>
+      <div>
+        <button onClick={() => setState(state + 1)}>Increment</button>
+        <button onClick={() => setState(state - 1)}>Decrement</button>
+      </div>
+      <div>
+        <button onClick={undo} disabled={!canUndo}>
+          Undo
+        </button>
+        <button onClick={redo} disabled={!canRedo}>
+          Redo
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default UndoRedoCounter;
+```
+
+## API Reference
+
+### Parameters
+
+- `initialState` (T): The initial state value.
+- `options` (UseHistoryStateOptions, optional): Configuration options.
+  - `maxHistorySize` (number, optional): Maximum number of states to keep in history. Default: 50.
+
+### Returns
+
+An object containing:
+
+- `state` (T): The current state value.
+- `setState` (function): Function to update the state (similar to useState).
+- `undo` (function): Function to undo the last state change.
+- `redo` (function): Function to redo the next state change.
+- `canUndo` (boolean): Whether undo operation is possible.
+- `canRedo` (boolean): Whether redo operation is possible.
+- `clear` (function): Function to clear the history (keeps current state).
+- `history` (T[]): Array of all states in history.
+- `currentIndex` (number): Current position in the history.
+
+## Use Cases
+
+- **Text Editors**: Implement undo/redo functionality in text editors or rich text components.
+- **Drawing Applications**: Allow users to undo/redo drawing operations on canvas.
+- **Form Management**: Enable users to undo form changes or navigate through form states.
+- **Game Development**: Implement move history in games like chess or puzzle games.
+- **Data Visualization**: Allow users to undo changes to charts or graph configurations.
+- **Image Editing**: Provide undo/redo for image manipulation operations.
+
+## Contributing
+
+Contributions to enhance `useHistoryState` are welcome. Feel free to submit issues or pull requests to the repository.
+
+# useShare Hook
+
+The `useShare` hook provides an easy way to implement native sharing functionality using the Web Share API, with automatic fallback to clipboard copying when native sharing is not available. Perfect for sharing content, URLs, and files across different platforms and devices.
+
+## Features
+
+- **Native Sharing:** Uses the Web Share API for native sharing experience on supported devices.
+- **Automatic Fallback:** Falls back to clipboard copying when Web Share API is not available.
+- **File Sharing:** Supports sharing files when the platform allows it.
+- **Error Handling:** Comprehensive error handling with customizable callbacks.
+- **Loading States:** Tracks sharing state for better UX.
+- **SSR Safe:** Handles server-side rendering environments gracefully.
+
+## Installation
+
+### Installing Only Current Hooks
+
+```bash
+npm install @custom-react-hooks/use-share
+```
+
+or
+
+```bash
+yarn add @custom-react-hooks/use-share
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
+```
+
+## Usage
+
+### Basic Usage
+
+```typescript
+import React from 'react';
+import { useShare } from '@custom-react-hooks/use-share';
+
+const ShareButton = () => {
+  const { share, isSupported, isSharing, error } = useShare({
+    onSuccess: () => console.log('Shared successfully!'),
+    onError: (error) => console.error('Share failed:', error),
+  });
+
+  const handleShare = async () => {
+    try {
+      await share({
+        title: 'Check out this awesome content!',
+        text: 'I found this really interesting article.',
+        url: 'https://example.com',
+      });
+    } catch (error) {
+      console.error('Sharing failed:', error);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={handleShare} disabled={isSharing}>
+        {isSharing ? 'Sharing...' : 'Share'}
+      </button>
+      
+      {!isSupported && (
+        <p>Native sharing not supported - will copy to clipboard</p>
+      )}
+      
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+    </div>
+  );
+};
+
+export default ShareButton;
+```
+
+## API Reference
+
+### Parameters
+
+- `options` (UseShareOptions, optional): Configuration options.
+  - `onSuccess` (function, optional): Callback fired when sharing succeeds.
+  - `onError` (function, optional): Callback fired when sharing fails.
+  - `fallbackCopy` (boolean, optional): Whether to fallback to clipboard copying. Default: `true`.
+
+### Returns
+
+An object containing:
+
+- `share` (function): Function to trigger sharing with ShareData.
+- `isSupported` (boolean): Whether the Web Share API is supported.
+- `isSharing` (boolean): Whether sharing is currently in progress.
+- `error` (string | null): Error message if sharing fails.
+
+## Use Cases
+
+- **Content Sharing**: Share articles, blog posts, or any web content.
+- **Social Media Integration**: Enable users to share content to social platforms.
+- **File Sharing**: Share images, documents, or other files.
+- **E-commerce**: Share product pages or deals.
+- **Event Sharing**: Share event details or calendar invites.
+- **App Promotion**: Share app download links or referral codes.
+
+## Contributing
+
+Contributions to enhance `useShare` are welcome. Feel free to submit issues or pull requests to the repository.
+
+# useWorker Hook
+
+The `useWorker` hook provides an easy way to manage Web Workers in React applications. It allows you to offload heavy computations to background threads, preventing UI blocking while maintaining a clean and simple API for communication with workers.
+
+## Features
+
+- **Background Processing:** Offload heavy computations to prevent UI blocking.
+- **Function or URL Support:** Create workers from functions or external script files.
+- **Message Handling:** Simple API for sending and receiving messages.
+- **Error Handling:** Comprehensive error handling with timeout support.
+- **Automatic Cleanup:** Workers are automatically terminated on component unmount.
+- **Loading States:** Track worker processing state for better UX.
+
+## Installation
+
+### Installing Only Current Hooks
+
+```bash
+npm install @custom-react-hooks/use-worker
+```
+
+or
+
+```bash
+yarn add @custom-react-hooks/use-worker
+```
+
+### Installing All Hooks
+
+```sh
+npm install @custom-react-hooks/all
+```
+
+or
+
+```sh
+yarn add @custom-react-hooks/all
+```
+
+## Usage
+
+### Basic Usage with Function
+
+```typescript
+import React, { useState } from 'react';
+import { useWorker } from '@custom-react-hooks/use-worker';
+
+const HeavyCalculation = () => {
+  const [input, setInput] = useState(10);
+  
+  // Define the worker function
+  const fibonacciWorker = (n: number): number => {
+    const fib = (num: number): number => {
+      if (num <= 1) return num;
+      return fib(num - 1) + fib(num - 2);
+    };
+    return fib(n);
+  };
+
+  const { postMessage, data, error, isLoading } = useWorker(fibonacciWorker, {
+    onMessage: (result) => {
+      console.log('Calculation completed:', result);
+    },
+    onError: (error) => {
+      console.error('Worker error:', error);
+    },
+  });
+
+  const handleCalculate = () => {
+    postMessage(input);
+  };
+
+  return (
+    <div>
+      <h3>Fibonacci Calculator</h3>
+      <input
+        type="number"
+        value={input}
+        onChange={(e) => setInput(Number(e.target.value))}
+        min="1"
+        max="40"
+      />
+      <button onClick={handleCalculate} disabled={isLoading}>
+        {isLoading ? 'Calculating...' : 'Calculate'}
+      </button>
+      
+      {data !== null && <p>Result: {data}</p>}
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+    </div>
+  );
+};
+
+export default HeavyCalculation;
+```
+
+## API Reference
+
+### Parameters
+
+- `workerScript` (string | function): Either a URL to a worker script file or a function to execute in the worker.
+- `options` (UseWorkerOptions, optional): Configuration options.
+  - `onMessage` (function, optional): Callback fired when worker sends a message.
+  - `onError` (function, optional): Callback fired when worker encounters an error.
+  - `timeout` (number, optional): Timeout in milliseconds for worker operations.
+
+### Returns
+
+An object containing:
+
+- `postMessage` (function): Function to send messages to the worker.
+- `terminate` (function): Function to terminate the worker.
+- `data` (any): Latest data received from the worker.
+- `error` (string | null): Error message if worker fails.
+- `isLoading` (boolean): Whether worker is currently processing.
+
+## Use Cases
+
+- **Heavy Calculations:** Fibonacci, prime numbers, mathematical computations.
+- **Data Processing:** Large dataset transformations, sorting, filtering.
+- **Image/Video Processing:** Filters, compression, format conversion.
+- **Cryptographic Operations:** Hashing, encryption, mining simulations.
+- **Text Processing:** Parsing, analysis, search operations.
+- **Scientific Simulations:** Physics, chemistry, biology simulations.
+
+## Contributing
+
+Contributions to enhance `useWorker` are welcome. Feel free to submit issues or pull requests to the repository.
+
+# useIsland Hook
+
+The `useIsland` hook implements island architecture and selective hydration for React applications. It allows components to be hydrated only when they become visible or when explicitly triggered, improving performance by reducing initial JavaScript bundle size and execution time.
+
+## Features
+
+- **Selective Hydration:** Components hydrate only when needed (visibility-based or manual)
+- **Island Architecture:** Implements modern island architecture patterns
+- **Performance Optimization:** Reduces initial bundle size and execution time
+- **Intersection Observer:** Uses modern browser APIs for efficient visibility detection
+- **Priority Control:** Configure hydration priority (high, low, auto)
+- **SSR Safe:** Handles server-side rendering environments gracefully
+
+## Installation
+
+```bash
+npm install @custom-react-hooks/use-island
+```
+
+## Usage
+
+```typescript
+import React from 'react';
+import { useIsland } from '@custom-react-hooks/use-island';
+
+const HeavyComponent = () => {
+  const { isVisible, isHydrated, ref, hydrate } = useIsland({
+    threshold: 0.1,
+    rootMargin: '50px',
+    priority: 'low',
+    delay: 100
+  });
+
+  return (
+    <div ref={ref}>
+      {isHydrated ? (
+        <ExpensiveComponent />
+      ) : (
+        <div>Loading...</div>
+      )}
+      <button onClick={hydrate}>Force Hydrate</button>
+    </div>
+  );
+};
+```
+
+## Use Cases
+
+- **Heavy Components:** Defer hydration of computationally expensive components
+- **Below-the-fold Content:** Hydrate content only when it becomes visible
+- **Performance Optimization:** Reduce initial page load time and JavaScript execution
+- **Progressive Enhancement:** Gradually enhance page functionality as needed
+
+# useOffscreen Hook
+
+The `useOffscreen` hook provides offscreen rendering capabilities for heavy computations and rendering tasks. It allows rendering components or performing computations in the background without blocking the main thread.
+
+## Features
+
+- **Background Processing:** Perform heavy computations without blocking the UI
+- **Priority Control:** Configure rendering priority (high, normal, low)
+- **Timeout Support:** Set timeouts for long-running operations
+- **Error Handling:** Comprehensive error handling for failed operations
+- **Cancellation:** Cancel ongoing operations when needed
+
+## Installation
+
+```bash
+npm install @custom-react-hooks/use-offscreen
+```
+
+## Usage
+
+```typescript
+import React from 'react';
+import { useOffscreen } from '@custom-react-hooks/use-offscreen';
+
+const HeavyRenderingComponent = () => {
+  const { render, isRendering, result, error } = useOffscreen({
+    priority: 'low',
+    timeout: 5000
+  });
+
+  const handleHeavyRender = () => {
+    render(() => {
+      // Heavy computation or rendering logic
+      return processLargeDataset(data);
+    });
+  };
+
+  return (
+    <div>
+      <button onClick={handleHeavyRender} disabled={isRendering}>
+        {isRendering ? 'Processing...' : 'Start Heavy Render'}
+      </button>
+      {result && <div>Result: {result}</div>}
+      {error && <div>Error: {error.message}</div>}
+    </div>
+  );
+};
+```
+
+## Use Cases
+
+- **Heavy Computations:** Process large datasets without blocking the UI
+- **Image Processing:** Perform image manipulations in the background
+- **Data Transformations:** Transform large amounts of data efficiently
+- **Complex Calculations:** Execute mathematical computations without UI freezing
+
+# useVirtual Hook
+
+The `useVirtual` hook provides virtualization for large lists, improving performance by rendering only visible items plus a small buffer. This significantly reduces DOM nodes and improves scroll performance for large datasets.
+
+## Features
+
+- **List Virtualization:** Render only visible items for optimal performance
+- **Dynamic Item Heights:** Support for variable item heights
+- **Smooth Scrolling:** Maintain smooth scroll experience
+- **Overscan Support:** Render additional items outside viewport for smoother scrolling
+- **Scroll Control:** Programmatic scrolling to specific items or offsets
+
+## Installation
+
+```bash
+npm install @custom-react-hooks/use-virtual
+```
+
+## Usage
+
+```typescript
+import React, { useRef } from 'react';
+import { useVirtual } from '@custom-react-hooks/use-virtual';
+
+const VirtualList = ({ items }) => {
+  const parentRef = useRef();
+  
+  const { virtualItems, totalSize, scrollToIndex } = useVirtual(
+    items.length,
+    parentRef,
+    {
+      itemHeight: 50,
+      containerHeight: 400,
+      overscan: 5
+    }
+  );
+
+  return (
+    <div
+      ref={parentRef}
+      style={{
+        height: 400,
+        overflow: 'auto'
+      }}
+    >
+      <div style={{ height: totalSize, position: 'relative' }}>
+        {virtualItems.map(({ index, start, size }) => (
+          <div
+            key={index}
+            style={{
+              position: 'absolute',
+              top: start,
+              height: size,
+              width: '100%'
+            }}
+          >
+            {items[index]}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+## Use Cases
+
+- **Large Lists:** Efficiently render thousands of list items
+- **Data Tables:** Virtualize large data tables for better performance
+- **Chat Applications:** Handle long message histories efficiently
+- **File Browsers:** Display large directories without performance issues
 
 ## 🛠️ [Contributing](#contributing)
 
