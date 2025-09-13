@@ -1,4 +1,4 @@
-import { useReducer, useCallback, useRef } from 'react';
+import { useReducer, useCallback } from 'react';
 
 export interface UseHistoryStateOptions {
   maxHistorySize?: number;

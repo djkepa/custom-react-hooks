@@ -105,7 +105,7 @@ function useVirtual(
     const viewportEnd = scrollTop + containerHeight;
 
     let start = 0;
-    let end = count - 1;
+    let end;
 
     // Binary search for start index
     let low = 0;
@@ -120,7 +120,6 @@ function useVirtual(
       } else if (offset >= viewportStart) {
         high = mid - 1;
       } else {
-        start = mid;
         break;
       }
     }
@@ -272,4 +271,3 @@ function useVirtual(
 }
 
 export { useVirtual };
-

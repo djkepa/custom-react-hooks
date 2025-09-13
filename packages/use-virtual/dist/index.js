@@ -52,7 +52,7 @@ function useVirtual(count, parentRef, options) {
         const viewportStart = scrollTop;
         const viewportEnd = scrollTop + containerHeight;
         let start = 0;
-        let end = count - 1;
+        let end;
         // Binary search for start index
         let low = 0;
         let high = count - 1;
@@ -67,7 +67,6 @@ function useVirtual(count, parentRef, options) {
                 high = mid - 1;
             }
             else {
-                start = mid;
                 break;
             }
         }

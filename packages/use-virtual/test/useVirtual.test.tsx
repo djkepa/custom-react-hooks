@@ -1,5 +1,4 @@
 import { renderHook, act } from '@testing-library/react';
-import { useRef } from 'react';
 import { useVirtual } from '../src/index';
 
 // Mock scrollTo method
