@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-websocket",
-  "version": "2.0.1",
+  "version": "1.0.0",
   "description": "A simple React hook for WebSocket connections",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

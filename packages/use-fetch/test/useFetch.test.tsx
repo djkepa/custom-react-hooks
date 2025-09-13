@@ -32,6 +32,8 @@ function TestComponent({ url, options = {} }) {
 describe('useFetch Hook', () => {
   beforeEach(() => {
     global.fetch = jest.fn();
+    // Clear any existing cache
+    jest.clearAllMocks();
   });
 
   it('should fetch data successfully', async () => {
@@ -55,14 +57,26 @@ describe('useFetch Hook', () => {
 
     render(
       <TestComponent
-        url="https://example.com"
+        url="https://manual-test.com"
         options={{ manual: true }}
       />,
     );
-    expect(screen.queryByTestId('loading')).toBeNull();
 
-    screen.getByTestId('fetch-button').click();
-    await waitFor(() => expect(screen.getByTestId('data')).toHaveTextContent('manual fetch data'));
+    // Initially, no data should be loaded
+    expect(screen.queryByTestId('loading')).toBeNull();
+    expect(screen.queryByTestId('data')).toBeNull();
+
+    // Click to manually fetch data
+    await act(async () => {
+      screen.getByTestId('fetch-button').click();
+    });
+
+    // Wait for data to be loaded and check the JSON stringified content
+    await waitFor(() => {
+      const dataElement = screen.getByTestId('data');
+      expect(dataElement).toHaveTextContent('{"data":"manual fetch data"}');
+    });
+
     expect(screen.queryByTestId('error')).toBeNull();
   });
 });

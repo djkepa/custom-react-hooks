@@ -1,153 +1,193 @@
 import { renderHook, act } from '@testing-library/react';
 import { useOffscreen } from '../src/index';
 
-/**
- * Test suite for useOffscreen hook
- * Tests offscreen rendering functionality
- */
 describe('useOffscreen', () => {
   beforeEach(() => {
-    // Reset DOM
-    document.body.innerHTML = '';
+    jest.clearAllTimers();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   });
 
   it('should initialize with default values', () => {
     const { result } = renderHook(() => useOffscreen());
 
-    expect(result.current.isOffscreen).toBe(false);
-    expect(typeof result.current.moveOffscreen).toBe('function');
-    expect(typeof result.current.moveOnscreen).toBe('function');
-    expect(typeof result.current.toggle).toBe('function');
+    expect(result.current.isRendering).toBe(false);
+    expect(result.current.result).toBeNull();
+    expect(result.current.error).toBeNull();
+    expect(typeof result.current.render).toBe('function');
   });
 
-  it('should move element offscreen', () => {
+  it('should render synchronously when disabled', () => {
+    const { result } = renderHook(() => useOffscreen({ enabled: false }));
+
+    const renderFn = jest.fn(() => 'test result');
+
+    act(() => {
+      const syncResult = result.current.render(renderFn);
+      expect(syncResult).toBe('test result');
+    });
+
+    expect(renderFn).toHaveBeenCalled();
+    expect(result.current.result).toBe('test result');
+    expect(result.current.error).toBeNull();
+    expect(result.current.isRendering).toBe(false);
+  });
+
+  it('should handle synchronous rendering errors when disabled', () => {
+    const { result } = renderHook(() => useOffscreen({ enabled: false }));
+
+    const renderFn = jest.fn(() => {
+      throw new Error('Render error');
+    });
+
+    act(() => {
+      const syncResult = result.current.render(renderFn);
+      expect(syncResult).toBeNull();
+    });
+
+    expect(result.current.result).toBeNull();
+    expect(result.current.error).toEqual(new Error('Render error'));
+    expect(result.current.isRendering).toBe(false);
+  });
+
+  it('should render asynchronously with normal priority', async () => {
+    const { result } = renderHook(() => useOffscreen({ priority: 'normal' }));
+
+    const renderFn = jest.fn(() => 'async result');
+
+    act(() => {
+      const asyncResult = result.current.render(renderFn);
+      expect(asyncResult).toBeNull(); // Should return null for async rendering
+    });
+
+    expect(result.current.isRendering).toBe(true);
+
+    // Fast-forward timers to complete async rendering
+    act(() => {
+      jest.runAllTimers();
+    });
+
+    expect(renderFn).toHaveBeenCalled();
+    expect(result.current.result).toBe('async result');
+    expect(result.current.isRendering).toBe(false);
+    expect(result.current.error).toBeNull();
+  });
+
+  it('should render immediately with high priority', () => {
+    const { result } = renderHook(() => useOffscreen({ priority: 'high' }));
+
+    const renderFn = jest.fn(() => 'high priority result');
+
+    act(() => {
+      const highPriorityResult = result.current.render(renderFn);
+      expect(highPriorityResult).toBe('high priority result');
+    });
+
+    expect(renderFn).toHaveBeenCalled();
+    expect(result.current.result).toBe('high priority result');
+    expect(result.current.isRendering).toBe(false);
+    expect(result.current.error).toBeNull();
+  });
+
+  it('should render with low priority using setTimeout', async () => {
+    const { result } = renderHook(() => useOffscreen({ priority: 'low' }));
+
+    const renderFn = jest.fn(() => 'low priority result');
+
+    act(() => {
+      const lowPriorityResult = result.current.render(renderFn);
+      expect(lowPriorityResult).toBeNull(); // Should return null for async rendering
+    });
+
+    expect(result.current.isRendering).toBe(true);
+
+    // Fast-forward timers to complete low priority rendering
+    act(() => {
+      jest.runAllTimers();
+    });
+
+    expect(renderFn).toHaveBeenCalled();
+    expect(result.current.result).toBe('low priority result');
+    expect(result.current.isRendering).toBe(false);
+  });
+
+  it('should handle rendering errors', async () => {
     const { result } = renderHook(() => useOffscreen());
 
-    act(() => {
-      result.current.moveOffscreen();
+    const renderFn = jest.fn(() => {
+      throw new Error('Async render error');
     });
 
-    expect(result.current.isOffscreen).toBe(true);
+    act(() => {
+      result.current.render(renderFn);
+    });
+
+    expect(result.current.isRendering).toBe(true);
+
+    act(() => {
+      jest.runAllTimers();
+    });
+
+    expect(result.current.result).toBeNull();
+    expect(result.current.error).toEqual(new Error('Async render error'));
+    expect(result.current.isRendering).toBe(false);
   });
 
-  it('should move element onscreen', () => {
+  it('should handle timeout configuration', () => {
+    const { result } = renderHook(() => useOffscreen({ timeout: 1000 }));
+
+    // Test that timeout option is accepted and hook initializes properly
+    expect(result.current.isRendering).toBe(false);
+    expect(result.current.result).toBeNull();
+    expect(result.current.error).toBeNull();
+    expect(typeof result.current.render).toBe('function');
+  });
+
+  it('should cancel previous rendering when new render is called', async () => {
     const { result } = renderHook(() => useOffscreen());
 
-    // First move offscreen
-    act(() => {
-      result.current.moveOffscreen();
-    });
-
-    expect(result.current.isOffscreen).toBe(true);
-
-    // Then move onscreen
-    act(() => {
-      result.current.moveOnscreen();
-    });
-
-    expect(result.current.isOffscreen).toBe(false);
-  });
-
-  it('should toggle offscreen state', () => {
-    const { result } = renderHook(() => useOffscreen());
-
-    // Initial state is onscreen
-    expect(result.current.isOffscreen).toBe(false);
-
-    // Toggle to offscreen
-    act(() => {
-      result.current.toggle();
-    });
-
-    expect(result.current.isOffscreen).toBe(true);
-
-    // Toggle back to onscreen
-    act(() => {
-      result.current.toggle();
-    });
-
-    expect(result.current.isOffscreen).toBe(false);
-  });
-
-  it('should initialize with offscreen state when specified', () => {
-    const { result } = renderHook(() => useOffscreen({ initialOffscreen: true }));
-
-    expect(result.current.isOffscreen).toBe(true);
-  });
-
-  it('should call onOffscreen callback', () => {
-    const onOffscreen = jest.fn();
-    const { result } = renderHook(() => useOffscreen({ onOffscreen }));
+    const firstRenderFn = jest.fn(() => 'first result');
+    const secondRenderFn = jest.fn(() => 'second result');
 
     act(() => {
-      result.current.moveOffscreen();
+      result.current.render(firstRenderFn);
     });
 
-    expect(onOffscreen).toHaveBeenCalled();
-  });
+    expect(result.current.isRendering).toBe(true);
 
-  it('should call onOnscreen callback', () => {
-    const onOnscreen = jest.fn();
-    const { result } = renderHook(() => 
-      useOffscreen({ initialOffscreen: true, onOnscreen })
-    );
+    // Start second render before first completes
+    act(() => {
+      result.current.render(secondRenderFn);
+    });
 
     act(() => {
-      result.current.moveOnscreen();
+      jest.runAllTimers();
     });
 
-    expect(onOnscreen).toHaveBeenCalled();
-  });
-
-  it('should handle performance mode', () => {
-    const { result } = renderHook(() => 
-      useOffscreen({ performanceMode: true })
-    );
-
-    act(() => {
-      result.current.moveOffscreen();
-    });
-
-    expect(result.current.isOffscreen).toBe(true);
-  });
-
-  it('should handle auto cleanup', () => {
-    const { result } = renderHook(() => 
-      useOffscreen({ autoCleanup: true })
-    );
-
-    act(() => {
-      result.current.moveOffscreen();
-    });
-
-    expect(result.current.isOffscreen).toBe(true);
-  });
-
-  it('should handle render priority', () => {
-    const { result } = renderHook(() => 
-      useOffscreen({ renderPriority: 'low' })
-    );
-
-    act(() => {
-      result.current.moveOffscreen();
-    });
-
-    expect(result.current.isOffscreen).toBe(true);
+    // Only second render should complete
+    expect(secondRenderFn).toHaveBeenCalled();
+    expect(result.current.result).toBe('second result');
+    expect(result.current.isRendering).toBe(false);
   });
 
   it('should cleanup on unmount', () => {
     const { result, unmount } = renderHook(() => useOffscreen());
 
+    const renderFn = jest.fn(() => 'test');
+
     act(() => {
-      result.current.moveOffscreen();
+      result.current.render(renderFn);
     });
 
-    expect(result.current.isOffscreen).toBe(true);
+    expect(result.current.isRendering).toBe(true);
 
     unmount();
 
-    // After unmount, cleanup should occur
-    // This is mainly to ensure no memory leaks
-    expect(true).toBe(true); // Placeholder assertion
+    // Should not throw errors and should cleanup properly
+    expect(true).toBe(true);
   });
 });

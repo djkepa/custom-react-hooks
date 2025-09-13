@@ -73,11 +73,27 @@ describe('useHistoryState', () => {
     act(() => {
       result.current.setState(1);
       result.current.setState(2);
-      result.current.undo();
+    });
+
+    // After setting states: history = [0, 1, 2], currentIndex = 2
+    expect(result.current.state).toBe(2);
+    expect(result.current.currentIndex).toBe(2);
+
+    act(() => {
       result.current.undo();
     });
 
+    // After first undo: currentIndex = 1, state = 1
+    expect(result.current.state).toBe(1);
+    expect(result.current.currentIndex).toBe(1);
+
+    act(() => {
+      result.current.undo();
+    });
+
+    // After second undo: currentIndex = 0, state = 0
     expect(result.current.state).toBe(0);
+    expect(result.current.currentIndex).toBe(0);
 
     act(() => {
       result.current.redo();
@@ -101,7 +117,22 @@ describe('useHistoryState', () => {
     act(() => {
       result.current.setState(1);
       result.current.setState(2);
+    });
+
+    // Initial state: history = [0, 1, 2], currentIndex = 2
+    expect(result.current.history).toEqual([0, 1, 2]);
+    expect(result.current.currentIndex).toBe(2);
+
+    act(() => {
       result.current.undo(); // Go back to 1
+    });
+
+    // After undo: history = [0, 1, 2], currentIndex = 1, state = 1
+    expect(result.current.state).toBe(1);
+    expect(result.current.currentIndex).toBe(1);
+    expect(result.current.history).toEqual([0, 1, 2]);
+
+    act(() => {
       result.current.setState(3); // Should clear the "2" from future
     });
 
@@ -131,11 +162,21 @@ describe('useHistoryState', () => {
     act(() => {
       result.current.setState(1);
       result.current.setState(2);
+    });
+
+    // After setting states: history = [0, 1, 2], currentIndex = 2
+    expect(result.current.history.length).toBe(3);
+    expect(result.current.currentIndex).toBe(2);
+    expect(result.current.state).toBe(2);
+
+    act(() => {
       result.current.undo();
     });
 
+    // After undo: history = [0, 1, 2], currentIndex = 1, state = 1
     expect(result.current.history.length).toBe(3);
     expect(result.current.currentIndex).toBe(1);
+    expect(result.current.state).toBe(1);
 
     act(() => {
       result.current.clear();

@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-share",
-  "version": "2.0.0",
+  "version": "1.0.1",
   "description": "A React hook for Web Share API with fallback support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -43,5 +43,8 @@
     "dist",
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

@@ -30,7 +30,7 @@ export interface UseWorkerReturn {
  */
 
 function useWorker(
-  workerScript: string | (() => void),
+  workerScript: string | ((data: any) => any),
   options: UseWorkerOptions = {},
 ): UseWorkerReturn {
   const { onMessage, onError, timeout } = options;
@@ -210,4 +210,3 @@ function useWorker(
 }
 
 export { useWorker };
-

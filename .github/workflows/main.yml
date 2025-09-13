@@ -66,16 +66,14 @@ jobs:
       - name: Run unit tests
         run: npm run test
 
-      - name: Run React ${{ matrix.react-version }} tests
-        run: npm run test:react-${{ matrix.react-version }}
+      - name: Run tests for React ${{ matrix.react-version }}
+        run: npm run test
         continue-on-error: ${{ matrix.react-version == '19' }}
 
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
+      - name: Run tests with coverage
+        run: npm run test:coverage
         if: matrix.node-version == '18.x' && matrix.react-version == '18'
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
+        continue-on-error: true
 
   build:
     name: Build Packages

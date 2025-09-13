@@ -46,16 +46,12 @@ function useIsland(options: UseIslandOptions = {}): UseIslandReturn {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const hydrate = useCallback(() => {
-    if (!isHydrated) {
-      setIsHydrated(true);
-    }
-  }, [isHydrated]);
+    setIsHydrated(true);
+  }, []);
 
   const dehydrate = useCallback(() => {
-    if (isHydrated) {
-      setIsHydrated(false);
-    }
-  }, [isHydrated]);
+    setIsHydrated(false);
+  }, []);
 
   const handleIntersection = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -169,4 +165,3 @@ function useIsland(options: UseIslandOptions = {}): UseIslandReturn {
 }
 
 export { useIsland };
-
