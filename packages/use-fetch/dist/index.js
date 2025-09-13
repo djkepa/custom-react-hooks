@@ -60,13 +60,38 @@ var __rest = (this && this.__rest) || function (s, e) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.useFetch = void 0;
 var react_1 = require("react");
-var globalCache = new Map();
-var batchQueue = new Map();
+var CacheManager = (function () {
+    function CacheManager() {
+        this.cache = new Map();
+        this.batchQueue = new Map();
+    }
+    CacheManager.prototype.get = function (key) {
+        return this.cache.get(key);
+    };
+    CacheManager.prototype.set = function (key, value) {
+        this.cache.set(key, value);
+    };
+    CacheManager.prototype.getBatch = function (key) {
+        return this.batchQueue.get(key);
+    };
+    CacheManager.prototype.setBatch = function (key, value) {
+        this.batchQueue.set(key, value);
+    };
+    CacheManager.prototype.deleteBatch = function (key) {
+        this.batchQueue.delete(key);
+    };
+    CacheManager.prototype.clear = function () {
+        this.cache.clear();
+        this.batchQueue.clear();
+    };
+    return CacheManager;
+}());
+var cacheManager = new CacheManager();
 function useFetch(url, options, cache, globalStateSetter) {
     var _this = this;
     if (options === void 0) { options = {}; }
     if (cache === void 0) { cache = null; }
-    var _a = options.revalidateOnFocus, revalidateOnFocus = _a === void 0 ? true : _a, _b = options.revalidateOnReconnect, revalidateOnReconnect = _b === void 0 ? true : _b, _c = options.refreshInterval, refreshInterval = _c === void 0 ? 0 : _c, _d = options.dedupingInterval, dedupingInterval = _d === void 0 ? 2000 : _d, _e = options.errorRetryCount, errorRetryCount = _e === void 0 ? 3 : _e, _f = options.errorRetryInterval, errorRetryInterval = _f === void 0 ? 5000 : _f, fallbackData = options.fallbackData, _g = options.keepPreviousData, keepPreviousData = _g === void 0 ? false : _g, _h = options.compression, compression = _h === void 0 ? false : _h, _j = options.batchRequests, batchRequests = _j === void 0 ? false : _j, transform = options.transform, _k = options.manual, manual = _k === void 0 ? false : _k, timeout = options.timeout, fetchOptions = __rest(options, ["revalidateOnFocus", "revalidateOnReconnect", "refreshInterval", "dedupingInterval", "errorRetryCount", "errorRetryInterval", "fallbackData", "keepPreviousData", "compression", "batchRequests", "transform", "manual", "timeout"]);
+    var _a = options.revalidateOnFocus, revalidateOnFocus = _a === void 0 ? true : _a, _b = options.revalidateOnReconnect, revalidateOnReconnect = _b === void 0 ? true : _b, _c = options.refreshInterval, refreshInterval = _c === void 0 ? 0 : _c, _d = options.dedupingInterval, dedupingInterval = _d === void 0 ? 2000 : _d, _e = options.errorRetryCount, errorRetryCount = _e === void 0 ? 3 : _e, _f = options.errorRetryInterval, errorRetryInterval = _f === void 0 ? 5000 : _f, fallbackData = options.fallbackData, _g = options.keepPreviousData, keepPreviousData = _g === void 0 ? false : _g, _h = options.batchRequests, batchRequests = _h === void 0 ? false : _h, _j = options.batchDelay, batchDelay = _j === void 0 ? 10 : _j, transform = options.transform, _k = options.manual, manual = _k === void 0 ? false : _k, timeout = options.timeout, fetchOptions = __rest(options, ["revalidateOnFocus", "revalidateOnReconnect", "refreshInterval", "dedupingInterval", "errorRetryCount", "errorRetryInterval", "fallbackData", "keepPreviousData", "batchRequests", "batchDelay", "transform", "manual", "timeout"]);
     var _l = (0, react_1.useState)(fallbackData || null), data = _l[0], setData = _l[1];
     var _m = (0, react_1.useState)(!!url && !manual), loading = _m[0], setLoading = _m[1];
     var _o = (0, react_1.useState)(null), error = _o[0], setError = _o[1];
@@ -74,33 +99,62 @@ function useFetch(url, options, cache, globalStateSetter) {
     var retryCountRef = (0, react_1.useRef)(0);
     var intervalRef = (0, react_1.useRef)(null);
     var abortControllerRef = (0, react_1.useRef)(null);
-    var executeBatchedRequest = (0, react_1.useCallback)(function (batchKey) { return __awaiter(_this, void 0, void 0, function () {
-        var queue, response, result, transformedResult_1, err_1, error_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+    var handleCachedData = (0, react_1.useCallback)(function (cached, now) {
+        if (cached && now - cached.timestamp < dedupingInterval) {
+            if (cached.promise) {
+                return cached.promise;
+            }
+            setData(cached.data);
+            setLoading(false);
+            return true;
+        }
+        return false;
+    }, [dedupingInterval]);
+    var performFetch = (0, react_1.useCallback)(function () { return __awaiter(_this, void 0, void 0, function () {
+        var response, result;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    queue = batchQueue.get(batchKey) || [];
-                    batchQueue.delete(batchKey);
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 4, , 5]);
                     if (!url)
                         throw new Error('No URL provided');
-                    return [4, fetch(url, fetchOptions)];
-                case 2:
-                    response = _a.sent();
+                    if (timeout) {
+                        setTimeout(function () {
+                            var _a;
+                            (_a = abortControllerRef.current) === null || _a === void 0 ? void 0 : _a.abort();
+                        }, timeout);
+                    }
+                    return [4, fetch(url, __assign(__assign({}, fetchOptions), { signal: (_a = abortControllerRef.current) === null || _a === void 0 ? void 0 : _a.signal }))];
+                case 1:
+                    response = _b.sent();
                     if (!response.ok)
                         throw new Error(response.statusText);
                     return [4, response.json()];
-                case 3:
-                    result = _a.sent();
-                    transformedResult_1 = transform ? transform(result) : result;
+                case 2:
+                    result = _b.sent();
+                    return [2, transform ? transform(result) : result];
+            }
+        });
+    }); }, [url, fetchOptions, timeout, transform]);
+    var executeBatchedRequest = (0, react_1.useCallback)(function (batchKey) { return __awaiter(_this, void 0, void 0, function () {
+        var queue, transformedResult_1, err_1, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    queue = cacheManager.getBatch(batchKey) || [];
+                    cacheManager.deleteBatch(batchKey);
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4, performFetch()];
+                case 2:
+                    transformedResult_1 = _a.sent();
                     queue.forEach(function (_a) {
                         var resolve = _a.resolve;
                         return resolve(transformedResult_1);
                     });
                     return [2, transformedResult_1];
-                case 4:
+                case 3:
                     err_1 = _a.sent();
                     error_1 = err_1 instanceof Error ? err_1 : new Error('Fetch failed');
                     queue.forEach(function (_a) {
@@ -108,14 +162,42 @@ function useFetch(url, options, cache, globalStateSetter) {
                         return reject(error_1);
                     });
                     throw error_1;
-                case 5: return [2];
+                case 4: return [2];
             }
         });
-    }); }, [url, fetchOptions, transform]);
+    }); }, [performFetch]);
+    var handleBatchedRequest = (0, react_1.useCallback)(function (batchKey) {
+        if (cacheManager.getBatch(batchKey)) {
+            return new Promise(function (resolve, reject) {
+                cacheManager.getBatch(batchKey).push({
+                    resolve: function (data) {
+                        setData(data);
+                        resolve();
+                    },
+                    reject: reject,
+                });
+            });
+        }
+        else {
+            cacheManager.setBatch(batchKey, []);
+            setTimeout(function () {
+                executeBatchedRequest(batchKey);
+            }, batchDelay);
+            return new Promise(function (resolve, reject) {
+                cacheManager.getBatch(batchKey).push({
+                    resolve: function (data) {
+                        setData(data);
+                        resolve();
+                    },
+                    reject: reject,
+                });
+            });
+        }
+    }, [executeBatchedRequest, batchDelay]);
     var fetchData = (0, react_1.useCallback)(function (revalidate) {
         if (revalidate === void 0) { revalidate = false; }
         return __awaiter(_this, void 0, void 0, function () {
-            var now, cached, batchKey_1, fetchPromise;
+            var now, cached, cacheResult, batchKey, fetchPromise;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -123,46 +205,20 @@ function useFetch(url, options, cache, globalStateSetter) {
                         if (!url)
                             return [2];
                         now = Date.now();
-                        cached = globalCache.get(url);
-                        if (!(!revalidate && cached && now - cached.timestamp < dedupingInterval)) return [3, 3];
-                        if (!cached.promise) return [3, 2];
-                        return [4, cached.promise];
+                        cached = cacheManager.get(url);
+                        if (!!revalidate) return [3, 2];
+                        cacheResult = handleCachedData(cached, now);
+                        if (cacheResult === true)
+                            return [2];
+                        if (!(cacheResult instanceof Promise)) return [3, 2];
+                        return [4, cacheResult];
                     case 1:
                         _a.sent();
                         return [2];
                     case 2:
-                        setData(cached.data);
-                        setLoading(false);
-                        return [2];
-                    case 3:
                         if (batchRequests) {
-                            batchKey_1 = "".concat(url, "_batch");
-                            if (batchQueue.has(batchKey_1)) {
-                                return [2, new Promise(function (resolve, reject) {
-                                        batchQueue.get(batchKey_1).push({
-                                            resolve: function (data) {
-                                                setData(data);
-                                                resolve();
-                                            },
-                                            reject: reject,
-                                        });
-                                    })];
-                            }
-                            else {
-                                batchQueue.set(batchKey_1, []);
-                                setTimeout(function () {
-                                    executeBatchedRequest(batchKey_1);
-                                }, 10);
-                                return [2, new Promise(function (resolve, reject) {
-                                        batchQueue.get(batchKey_1).push({
-                                            resolve: function (data) {
-                                                setData(data);
-                                                resolve();
-                                            },
-                                            reject: reject,
-                                        });
-                                    })];
-                            }
+                            batchKey = "".concat(url, "_batch");
+                            return [2, handleBatchedRequest(batchKey)];
                         }
                         if (abortControllerRef.current) {
                             abortControllerRef.current.abort();
@@ -174,28 +230,15 @@ function useFetch(url, options, cache, globalStateSetter) {
                             setLoading(true);
                         }
                         fetchPromise = (function () { return __awaiter(_this, void 0, void 0, function () {
-                            var response, result, transformedResult, err_2, error_2;
-                            var _a;
-                            return __generator(this, function (_b) {
-                                switch (_b.label) {
+                            var transformedResult, err_2, error_2;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
                                     case 0:
-                                        _b.trys.push([0, 3, 4, 5]);
-                                        if (timeout) {
-                                            setTimeout(function () {
-                                                var _a;
-                                                (_a = abortControllerRef.current) === null || _a === void 0 ? void 0 : _a.abort();
-                                            }, timeout);
-                                        }
-                                        return [4, fetch(url, __assign(__assign({}, fetchOptions), { signal: (_a = abortControllerRef.current) === null || _a === void 0 ? void 0 : _a.signal }))];
+                                        _a.trys.push([0, 2, 3, 4]);
+                                        return [4, performFetch()];
                                     case 1:
-                                        response = _b.sent();
-                                        if (!response.ok)
-                                            throw new Error(response.statusText);
-                                        return [4, response.json()];
-                                    case 2:
-                                        result = _b.sent();
-                                        transformedResult = transform ? transform(result) : result;
-                                        globalCache.set(url, {
+                                        transformedResult = _a.sent();
+                                        cacheManager.set(url, {
                                             data: transformedResult,
                                             timestamp: now,
                                         });
@@ -204,8 +247,8 @@ function useFetch(url, options, cache, globalStateSetter) {
                                         retryCountRef.current = 0;
                                         globalStateSetter === null || globalStateSetter === void 0 ? void 0 : globalStateSetter(transformedResult);
                                         return [2, transformedResult];
-                                    case 3:
-                                        err_2 = _b.sent();
+                                    case 2:
+                                        err_2 = _a.sent();
                                         error_2 = err_2 instanceof Error ? err_2 : new Error('Fetch failed');
                                         if (retryCountRef.current < errorRetryCount) {
                                             retryCountRef.current++;
@@ -216,21 +259,21 @@ function useFetch(url, options, cache, globalStateSetter) {
                                         }
                                         setError(error_2);
                                         throw error_2;
-                                    case 4:
+                                    case 3:
                                         setLoading(false);
                                         setIsValidating(false);
                                         return [7];
-                                    case 5: return [2];
+                                    case 4: return [2];
                                 }
                             });
                         }); })();
-                        globalCache.set(url, {
+                        cacheManager.set(url, {
                             data: cached === null || cached === void 0 ? void 0 : cached.data,
                             timestamp: (cached === null || cached === void 0 ? void 0 : cached.timestamp) || now,
                             promise: fetchPromise,
                         });
                         return [4, fetchPromise];
-                    case 4:
+                    case 3:
                         _a.sent();
                         return [2];
                 }
@@ -238,14 +281,12 @@ function useFetch(url, options, cache, globalStateSetter) {
         });
     }, [
         url,
-        fetchOptions,
-        dedupingInterval,
+        handleCachedData,
         batchRequests,
-        executeBatchedRequest,
-        transform,
+        handleBatchedRequest,
+        performFetch,
         errorRetryCount,
         errorRetryInterval,
-        timeout,
         keepPreviousData,
         globalStateSetter,
     ]);
@@ -258,12 +299,12 @@ function useFetch(url, options, cache, globalStateSetter) {
                     if (!url)
                         return [2, null];
                     if (!(typeof data === 'function')) return [3, 2];
-                    currentData = ((_a = globalCache.get(url)) === null || _a === void 0 ? void 0 : _a.data) || null;
+                    currentData = ((_a = cacheManager.get(url)) === null || _a === void 0 ? void 0 : _a.data) || null;
                     return [4, data(currentData)];
                 case 1:
                     newData = _c.sent();
                     setData(newData);
-                    globalCache.set(url, { data: newData, timestamp: Date.now() });
+                    cacheManager.set(url, { data: newData, timestamp: Date.now() });
                     return [2, newData];
                 case 2:
                     if (!(data !== undefined)) return [3, 4];
@@ -271,12 +312,12 @@ function useFetch(url, options, cache, globalStateSetter) {
                 case 3:
                     resolvedData = _c.sent();
                     setData(resolvedData);
-                    globalCache.set(url, { data: resolvedData, timestamp: Date.now() });
+                    cacheManager.set(url, { data: resolvedData, timestamp: Date.now() });
                     return [2, resolvedData];
                 case 4: return [4, fetchData(true)];
                 case 5:
                     _c.sent();
-                    return [2, ((_b = globalCache.get(url)) === null || _b === void 0 ? void 0 : _b.data) || null];
+                    return [2, ((_b = cacheManager.get(url)) === null || _b === void 0 ? void 0 : _b.data) || null];
             }
         });
     }); }, [url, fetchData]);

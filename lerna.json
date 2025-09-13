@@ -6,6 +6,5 @@
       "stream": true
     }
   },
-  "useWorkspaces": true,
   "packages": ["packages/*"]
 }

@@ -9,8 +9,8 @@ export interface FetchOptions<T = any> extends RequestInit {
     errorRetryInterval?: number;
     fallbackData?: T;
     keepPreviousData?: boolean;
-    compression?: boolean;
     batchRequests?: boolean;
+    batchDelay?: number;
     transform?: (data: any) => T;
 }
 declare function useFetch<T = unknown>(url: string | null, options?: FetchOptions<T>, cache?: Map<string, T> | null, globalStateSetter?: (data: T | null) => void): {

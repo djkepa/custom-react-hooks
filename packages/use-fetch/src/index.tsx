@@ -11,14 +11,44 @@ export interface FetchOptions<T = any> extends RequestInit {
   errorRetryInterval?: number;
   fallbackData?: T;
   keepPreviousData?: boolean;
-  compression?: boolean;
   batchRequests?: boolean;
+  batchDelay?: number;
   transform?: (data: any) => T;
 }
 
-// Global cache for SWR pattern
-const globalCache = new Map<string, { data: any; timestamp: number; promise?: Promise<any> }>();
-const batchQueue = new Map<string, Array<{ resolve: Function; reject: Function }>>();
+// Cache manager for better memory management and isolation
+class CacheManager {
+  private cache = new Map<string, { data: any; timestamp: number; promise?: Promise<any> }>();
+  private batchQueue = new Map<string, Array<{ resolve: Function; reject: Function }>>();
+
+  get(key: string) {
+    return this.cache.get(key);
+  }
+
+  set(key: string, value: { data: any; timestamp: number; promise?: Promise<any> }) {
+    this.cache.set(key, value);
+  }
+
+  getBatch(key: string) {
+    return this.batchQueue.get(key);
+  }
+
+  setBatch(key: string, value: Array<{ resolve: Function; reject: Function }>) {
+    this.batchQueue.set(key, value);
+  }
+
+  deleteBatch(key: string) {
+    this.batchQueue.delete(key);
+  }
+
+  clear() {
+    this.cache.clear();
+    this.batchQueue.clear();
+  }
+}
+
+// Global cache instance
+const cacheManager = new CacheManager();
 
 function useFetch<T = unknown>(
   url: string | null,
@@ -43,8 +73,8 @@ function useFetch<T = unknown>(
     errorRetryInterval = 5000,
     fallbackData,
     keepPreviousData = false,
-    compression = false,
     batchRequests = false,
+    batchDelay = 10,
     transform,
     manual = false,
     timeout,
@@ -60,20 +90,50 @@ function useFetch<T = unknown>(
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Batch request handler
+  // Helper functions for better code organization
+  const handleCachedData = useCallback(
+    (cached: any, now: number) => {
+      if (cached && now - cached.timestamp < dedupingInterval) {
+        if (cached.promise) {
+          return cached.promise;
+        }
+        setData(cached.data);
+        setLoading(false);
+        return true;
+      }
+      return false;
+    },
+    [dedupingInterval],
+  );
+
+  const performFetch = useCallback(async (): Promise<T> => {
+    if (!url) throw new Error('No URL provided');
+
+    // Set timeout if specified
+    if (timeout) {
+      setTimeout(() => {
+        abortControllerRef.current?.abort();
+      }, timeout);
+    }
+
+    const response = await fetch(url, {
+      ...fetchOptions,
+      signal: abortControllerRef.current?.signal,
+    });
+
+    if (!response.ok) throw new Error(response.statusText);
+
+    const result = await response.json();
+    return transform ? transform(result) : result;
+  }, [url, fetchOptions, timeout, transform]);
+
   const executeBatchedRequest = useCallback(
     async (batchKey: string): Promise<T> => {
-      const queue = batchQueue.get(batchKey) || [];
-      batchQueue.delete(batchKey);
+      const queue = cacheManager.getBatch(batchKey) || [];
+      cacheManager.deleteBatch(batchKey);
 
       try {
-        if (!url) throw new Error('No URL provided');
-
-        const response = await fetch(url, fetchOptions);
-        if (!response.ok) throw new Error(response.statusText);
-
-        const result = await response.json();
-        const transformedResult = transform ? transform(result) : result;
+        const transformedResult = await performFetch();
 
         // Resolve all queued promises with the same result
         queue.forEach(({ resolve }) => resolve(transformedResult));
@@ -86,63 +146,67 @@ function useFetch<T = unknown>(
         throw error;
       }
     },
-    [url, fetchOptions, transform],
+    [performFetch],
   );
 
-  // Main fetch function
+  const handleBatchedRequest = useCallback(
+    (batchKey: string): Promise<void> => {
+      if (cacheManager.getBatch(batchKey)) {
+        // Add to existing batch
+        return new Promise<void>((resolve, reject) => {
+          cacheManager.getBatch(batchKey)!.push({
+            resolve: (data: T) => {
+              setData(data);
+              resolve();
+            },
+            reject,
+          });
+        });
+      } else {
+        // Create new batch
+        cacheManager.setBatch(batchKey, []);
+
+        // Execute batch after configurable delay
+        setTimeout(() => {
+          executeBatchedRequest(batchKey);
+        }, batchDelay);
+
+        return new Promise<void>((resolve, reject) => {
+          cacheManager.getBatch(batchKey)!.push({
+            resolve: (data: T) => {
+              setData(data);
+              resolve();
+            },
+            reject,
+          });
+        });
+      }
+    },
+    [executeBatchedRequest, batchDelay],
+  );
+
+  // Main fetch function - now much more focused and readable
   const fetchData = useCallback(
     async (revalidate = false): Promise<void> => {
       if (!url) return;
 
       const now = Date.now();
-      const cached = globalCache.get(url);
+      const cached = cacheManager.get(url);
 
       // Check if we have fresh cached data
-      if (!revalidate && cached && now - cached.timestamp < dedupingInterval) {
-        if (cached.promise) {
-          // Return existing promise if still pending
-          await cached.promise;
+      if (!revalidate) {
+        const cacheResult = handleCachedData(cached, now);
+        if (cacheResult === true) return;
+        if (cacheResult instanceof Promise) {
+          await cacheResult;
           return;
         }
-        setData(cached.data);
-        setLoading(false);
-        return;
       }
 
       // Handle request batching
       if (batchRequests) {
         const batchKey = `${url}_batch`;
-
-        if (batchQueue.has(batchKey)) {
-          // Add to existing batch
-          return new Promise<void>((resolve, reject) => {
-            batchQueue.get(batchKey)!.push({
-              resolve: (data: T) => {
-                setData(data);
-                resolve();
-              },
-              reject,
-            });
-          });
-        } else {
-          // Create new batch
-          batchQueue.set(batchKey, []);
-
-          // Execute batch after a short delay
-          setTimeout(() => {
-            executeBatchedRequest(batchKey);
-          }, 10);
-
-          return new Promise<void>((resolve, reject) => {
-            batchQueue.get(batchKey)!.push({
-              resolve: (data: T) => {
-                setData(data);
-                resolve();
-              },
-              reject,
-            });
-          });
-        }
+        return handleBatchedRequest(batchKey);
       }
 
       // Cancel previous request
@@ -159,25 +223,10 @@ function useFetch<T = unknown>(
 
       const fetchPromise = (async (): Promise<T> => {
         try {
-          // Set timeout if specified
-          if (timeout) {
-            setTimeout(() => {
-              abortControllerRef.current?.abort();
-            }, timeout);
-          }
-
-          const response = await fetch(url, {
-            ...fetchOptions,
-            signal: abortControllerRef.current?.signal,
-          });
-
-          if (!response.ok) throw new Error(response.statusText);
-
-          const result = await response.json();
-          const transformedResult = transform ? transform(result) : result;
+          const transformedResult = await performFetch();
 
           // Cache the result
-          globalCache.set(url, {
+          cacheManager.set(url, {
             data: transformedResult,
             timestamp: now,
           });
@@ -211,7 +260,7 @@ function useFetch<T = unknown>(
       })();
 
       // Cache the promise
-      globalCache.set(url, {
+      cacheManager.set(url, {
         data: cached?.data,
         timestamp: cached?.timestamp || now,
         promise: fetchPromise,
@@ -221,14 +270,12 @@ function useFetch<T = unknown>(
     },
     [
       url,
-      fetchOptions,
-      dedupingInterval,
+      handleCachedData,
       batchRequests,
-      executeBatchedRequest,
-      transform,
+      handleBatchedRequest,
+      performFetch,
       errorRetryCount,
       errorRetryInterval,
-      timeout,
       keepPreviousData,
       globalStateSetter,
     ],
@@ -240,19 +287,19 @@ function useFetch<T = unknown>(
       if (!url) return null;
 
       if (typeof data === 'function') {
-        const currentData = globalCache.get(url)?.data || null;
+        const currentData = cacheManager.get(url)?.data || null;
         const newData = await (data as Function)(currentData);
         setData(newData);
-        globalCache.set(url, { data: newData, timestamp: Date.now() });
+        cacheManager.set(url, { data: newData, timestamp: Date.now() });
         return newData;
       } else if (data !== undefined) {
         const resolvedData = await Promise.resolve(data);
         setData(resolvedData);
-        globalCache.set(url, { data: resolvedData, timestamp: Date.now() });
+        cacheManager.set(url, { data: resolvedData, timestamp: Date.now() });
         return resolvedData;
       } else {
         await fetchData(true);
-        return globalCache.get(url)?.data || null;
+        return cacheManager.get(url)?.data || null;
       }
     },
     [url, fetchData],
