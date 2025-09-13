@@ -58,7 +58,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useFetch = void 0;
+exports.useFetch = exports.cacheManager = void 0;
 var react_1 = require("react");
 var CacheManager = (function () {
     function CacheManager() {
@@ -87,6 +87,7 @@ var CacheManager = (function () {
     return CacheManager;
 }());
 var cacheManager = new CacheManager();
+exports.cacheManager = cacheManager;
 function useFetch(url, options, cache, globalStateSetter) {
     var _this = this;
     if (options === void 0) { options = {}; }
@@ -98,6 +99,7 @@ function useFetch(url, options, cache, globalStateSetter) {
     var _p = (0, react_1.useState)(false), isValidating = _p[0], setIsValidating = _p[1];
     var retryCountRef = (0, react_1.useRef)(0);
     var intervalRef = (0, react_1.useRef)(null);
+    var timeoutRef = (0, react_1.useRef)(null);
     var abortControllerRef = (0, react_1.useRef)(null);
     var handleCachedData = (0, react_1.useCallback)(function (cached, now) {
         if (cached && now - cached.timestamp < dedupingInterval) {
@@ -111,33 +113,53 @@ function useFetch(url, options, cache, globalStateSetter) {
         return false;
     }, [dedupingInterval]);
     var performFetch = (0, react_1.useCallback)(function () { return __awaiter(_this, void 0, void 0, function () {
-        var response, result;
+        var response, result, error_1;
         var _a;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     if (!url)
                         throw new Error('No URL provided');
+                    if (timeoutRef.current) {
+                        clearTimeout(timeoutRef.current);
+                        timeoutRef.current = null;
+                    }
                     if (timeout) {
-                        setTimeout(function () {
+                        timeoutRef.current = setTimeout(function () {
                             var _a;
                             (_a = abortControllerRef.current) === null || _a === void 0 ? void 0 : _a.abort();
+                            timeoutRef.current = null;
                         }, timeout);
                     }
-                    return [4, fetch(url, __assign(__assign({}, fetchOptions), { signal: (_a = abortControllerRef.current) === null || _a === void 0 ? void 0 : _a.signal }))];
+                    _b.label = 1;
                 case 1:
+                    _b.trys.push([1, 4, , 5]);
+                    return [4, fetch(url, __assign(__assign({}, fetchOptions), { signal: (_a = abortControllerRef.current) === null || _a === void 0 ? void 0 : _a.signal }))];
+                case 2:
                     response = _b.sent();
+                    if (timeoutRef.current) {
+                        clearTimeout(timeoutRef.current);
+                        timeoutRef.current = null;
+                    }
                     if (!response.ok)
                         throw new Error(response.statusText);
                     return [4, response.json()];
-                case 2:
+                case 3:
                     result = _b.sent();
                     return [2, transform ? transform(result) : result];
+                case 4:
+                    error_1 = _b.sent();
+                    if (timeoutRef.current) {
+                        clearTimeout(timeoutRef.current);
+                        timeoutRef.current = null;
+                    }
+                    throw error_1;
+                case 5: return [2];
             }
         });
     }); }, [url, fetchOptions, timeout, transform]);
     var executeBatchedRequest = (0, react_1.useCallback)(function (batchKey) { return __awaiter(_this, void 0, void 0, function () {
-        var queue, transformedResult_1, err_1, error_1;
+        var queue, transformedResult_1, err_1, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -156,12 +178,12 @@ function useFetch(url, options, cache, globalStateSetter) {
                     return [2, transformedResult_1];
                 case 3:
                     err_1 = _a.sent();
-                    error_1 = err_1 instanceof Error ? err_1 : new Error('Fetch failed');
+                    error_2 = err_1 instanceof Error ? err_1 : new Error('Fetch failed');
                     queue.forEach(function (_a) {
                         var reject = _a.reject;
-                        return reject(error_1);
+                        return reject(error_2);
                     });
-                    throw error_1;
+                    throw error_2;
                 case 4: return [2];
             }
         });
@@ -230,7 +252,7 @@ function useFetch(url, options, cache, globalStateSetter) {
                             setLoading(true);
                         }
                         fetchPromise = (function () { return __awaiter(_this, void 0, void 0, function () {
-                            var transformedResult, err_2, error_2;
+                            var transformedResult, err_2, error_3;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
@@ -249,16 +271,16 @@ function useFetch(url, options, cache, globalStateSetter) {
                                         return [2, transformedResult];
                                     case 2:
                                         err_2 = _a.sent();
-                                        error_2 = err_2 instanceof Error ? err_2 : new Error('Fetch failed');
+                                        error_3 = err_2 instanceof Error ? err_2 : new Error('Fetch failed');
                                         if (retryCountRef.current < errorRetryCount) {
                                             retryCountRef.current++;
                                             setTimeout(function () {
                                                 fetchData(true);
                                             }, errorRetryInterval);
-                                            throw error_2;
+                                            throw error_3;
                                         }
-                                        setError(error_2);
-                                        throw error_2;
+                                        setError(error_3);
+                                        throw error_3;
                                     case 3:
                                         setLoading(false);
                                         setIsValidating(false);
@@ -368,6 +390,9 @@ function useFetch(url, options, cache, globalStateSetter) {
             }
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);
+            }
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
             }
         };
     }, []);

@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/use-fetch",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "Bane Grozdanovic <banegrozdanovic@gmail.com>",
   "license": "MIT",
   "main": "dist/index.js",

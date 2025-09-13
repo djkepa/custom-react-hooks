@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/all",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A collection of reusable React hooks by custom-react-hooks.",
@@ -34,7 +34,7 @@
     "@custom-react-hooks/use-effect-once": "1.5.1",
     "@custom-react-hooks/use-element-size": "1.5.1",
     "@custom-react-hooks/use-event-listener": "1.5.1",
-    "@custom-react-hooks/use-fetch": "2.0.2",
+    "@custom-react-hooks/use-fetch": "2.0.3",
     "@custom-react-hooks/use-form": "1.5.1",
     "@custom-react-hooks/use-geo-location": "1.5.1",
     "@custom-react-hooks/use-hover": "1.5.1",

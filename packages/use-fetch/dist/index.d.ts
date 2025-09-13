@@ -13,6 +13,32 @@ export interface FetchOptions<T = any> extends RequestInit {
     batchDelay?: number;
     transform?: (data: any) => T;
 }
+declare class CacheManager {
+    private cache;
+    private batchQueue;
+    get(key: string): {
+        data: any;
+        timestamp: number;
+        promise?: Promise<any> | undefined;
+    } | undefined;
+    set(key: string, value: {
+        data: any;
+        timestamp: number;
+        promise?: Promise<any>;
+    }): void;
+    getBatch(key: string): {
+        resolve: Function;
+        reject: Function;
+    }[] | undefined;
+    setBatch(key: string, value: Array<{
+        resolve: Function;
+        reject: Function;
+    }>): void;
+    deleteBatch(key: string): void;
+    clear(): void;
+}
+declare const cacheManager: CacheManager;
+export { cacheManager };
 declare function useFetch<T = unknown>(url: string | null, options?: FetchOptions<T>, cache?: Map<string, T> | null, globalStateSetter?: (data: T | null) => void): {
     data: T | null;
     loading: boolean;

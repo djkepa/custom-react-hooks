@@ -50,6 +50,9 @@ class CacheManager {
 // Global cache instance
 const cacheManager = new CacheManager();
 
+// Export for testing
+export { cacheManager };
+
 function useFetch<T = unknown>(
   url: string | null,
   options: FetchOptions<T> = {},
@@ -88,6 +91,7 @@ function useFetch<T = unknown>(
 
   const retryCountRef = useRef<number>(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   // Helper functions for better code organization
@@ -109,22 +113,44 @@ function useFetch<T = unknown>(
   const performFetch = useCallback(async (): Promise<T> => {
     if (!url) throw new Error('No URL provided');
 
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
     // Set timeout if specified
     if (timeout) {
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         abortControllerRef.current?.abort();
+        timeoutRef.current = null;
       }, timeout);
     }
 
-    const response = await fetch(url, {
-      ...fetchOptions,
-      signal: abortControllerRef.current?.signal,
-    });
+    try {
+      const response = await fetch(url, {
+        ...fetchOptions,
+        signal: abortControllerRef.current?.signal,
+      });
 
-    if (!response.ok) throw new Error(response.statusText);
+      // Clear timeout on successful response
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
 
-    const result = await response.json();
-    return transform ? transform(result) : result;
+      if (!response.ok) throw new Error(response.statusText);
+
+      const result = await response.json();
+      return transform ? transform(result) : result;
+    } catch (error) {
+      // Clear timeout on error
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      throw error;
+    }
   }, [url, fetchOptions, timeout, transform]);
 
   const executeBatchedRequest = useCallback(
@@ -366,6 +392,9 @@ function useFetch<T = unknown>(
       }
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
     };
   }, []);
