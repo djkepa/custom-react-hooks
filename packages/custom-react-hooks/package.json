@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/all",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A collection of reusable React hooks by custom-react-hooks.",
@@ -27,7 +27,7 @@
   "dependencies": {
     "@custom-react-hooks/use-async": "1.5.1",
     "@custom-react-hooks/use-click-outside": "1.5.1",
-    "@custom-react-hooks/use-clipboard": "1.5.1",
+    "@custom-react-hooks/use-clipboard": "1.6.0",
     "@custom-react-hooks/use-debounce": "1.5.1",
     "@custom-react-hooks/use-document-title": "1.5.1",
     "@custom-react-hooks/use-drag-drop": "1.5.1",
