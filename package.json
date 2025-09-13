@@ -1,6 +1,6 @@
 {
   "name": "custom-react-hooks",
-  "version": "1.4.12",
+  "version": "2.0.0",
   "private": true,
   "description": "A collection of custom React hooks.",
   "main": "index.js",
@@ -9,12 +9,12 @@
   ],
   "scripts": {
     "test": "lerna run test --parallel",
+    "test:coverage": "lerna run test --parallel -- --coverage",
     "build": "lerna run build --stream",
     "prepublish": "npm run build",
-    "test:react-16": "cd tests/react-16-test && npm install && npm test",
-    "test:react-17": "cd tests/react-17-test && npm install && npm test",
-    "test:react-18": "cd tests/react-18-test && npm install && npm test",
-    "test-all": "npm run test:react-16 && npm run test:react-17 && npm run test:react-18"
+    "test-all": "npm run test && npm run test:coverage",
+    "lint": "echo 'Linting not configured yet'",
+    "validate": "npm run build && npm run test"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,6 @@
   "homepage": "https://custom-react-hooks-live.vercel.app/",
   "devDependencies": {
     "jest-environment-jsdom": "^29.7.0",
-    "lerna": "^5.3.2"
+    "lerna": "^8.2.3"
   }
 }

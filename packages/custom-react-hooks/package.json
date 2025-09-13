@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/all",
-  "version": "1.5.1",
+  "version": "2.0.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A collection of reusable React hooks by custom-react-hooks.",
@@ -34,7 +34,7 @@
     "@custom-react-hooks/use-effect-once": "1.5.1",
     "@custom-react-hooks/use-element-size": "1.5.1",
     "@custom-react-hooks/use-event-listener": "1.5.1",
-    "@custom-react-hooks/use-fetch": "1.5.1",
+    "@custom-react-hooks/use-fetch": "2.0.3",
     "@custom-react-hooks/use-form": "1.5.1",
     "@custom-react-hooks/use-geo-location": "1.5.1",
     "@custom-react-hooks/use-hover": "1.5.1",
@@ -58,7 +58,17 @@
     "@custom-react-hooks/use-timeout": "1.5.1",
     "@custom-react-hooks/use-toggle": "1.5.1",
     "@custom-react-hooks/use-update-effect": "1.5.1",
-    "@custom-react-hooks/use-window-size": "1.5.1"
+    "@custom-react-hooks/use-window-size": "1.5.1",
+    "@custom-react-hooks/use-cache": "1.0.0",
+    "@custom-react-hooks/use-history-state": "1.0.1",
+    "@custom-react-hooks/use-island": "1.0.4",
+    "@custom-react-hooks/use-network": "1.0.1",
+    "@custom-react-hooks/use-offscreen": "1.0.4",
+    "@custom-react-hooks/use-previous": "1.0.0",
+    "@custom-react-hooks/use-share": "1.0.1",
+    "@custom-react-hooks/use-virtual": "1.0.5",
+    "@custom-react-hooks/use-websocket": "1.0.0",
+    "@custom-react-hooks/use-worker": "1.0.4"
   },
   "publishConfig": {
     "access": "public"

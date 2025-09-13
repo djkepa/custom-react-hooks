@@ -32,3 +32,15 @@ export { useTimeout } from '@custom-react-hooks/use-timeout';
 export { useToggle } from '@custom-react-hooks/use-toggle';
 export { useUpdateEffect } from '@custom-react-hooks/use-update-effect';
 export { useWindowSize } from '@custom-react-hooks/use-window-size';
+
+// New hooks for version 2.0.1 - All working hooks with TypeScript declarations
+export { useCache } from '@custom-react-hooks/use-cache';
+export { useHistoryState } from '@custom-react-hooks/use-history-state';
+export { useIsland } from '@custom-react-hooks/use-island';
+export { useNetwork } from '@custom-react-hooks/use-network';
+export { useOffscreen } from '@custom-react-hooks/use-offscreen';
+export { usePrevious } from '@custom-react-hooks/use-previous';
+export { useShare } from '@custom-react-hooks/use-share';
+export { useVirtual } from '@custom-react-hooks/use-virtual';
+export { useWebSocket } from '@custom-react-hooks/use-websocket';
+export { useWorker } from '@custom-react-hooks/use-worker';

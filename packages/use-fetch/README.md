@@ -1,10 +1,10 @@
 # useFetch Hook
 
-The `useFetch` hook is a powerful tool for making API requests in React applications. It simplifies the process of fetching data from a URL and handles various advanced features like caching, timeouts, and integration with global state management systems.
+The `useFetch` hook is a powerful and feature-rich tool for making API requests in React applications. It provides advanced features like SWR-style caching, automatic retries, request batching, data transformation, and comprehensive state management.
 
 ## Installation
 
-### Installing Only Current Hooks
+### Installing Only Current Hook
 
 ```bash
 npm install @custom-react-hooks/use-fetch
@@ -28,8 +28,6 @@ or
 yarn add @custom-react-hooks/all
 ```
 
-Certainly! Based on the provided `useFetch` hook, here are some detailed features that you can include in your documentation:
-
 ## Importing the Hook
 
 The `useFetch` hook must be imported using a named import as shown below:
@@ -38,113 +36,291 @@ The `useFetch` hook must be imported using a named import as shown below:
 ```javascript
 import { useFetch } from '@custom-react-hooks/use-fetch';
 ```
-This approach ensures that the hook integrates seamlessly into your project, maintaining consistency and predictability in how you use our package.
 
 ## Features
 
-- **Automatic Data Fetching:** The hook initiates a fetch request as soon as the component mounts, making it effortless to load data from APIs or servers. This behavior can be controlled with the `manual` option for more specific use cases.
+- **🚀 Automatic Data Fetching:** Initiates fetch requests on component mount with configurable manual control
+- **🔄 SWR-Style Caching:** Built-in intelligent caching with configurable deduplication intervals
+- **🔁 Automatic Retries:** Configurable retry logic with exponential backoff for failed requests
+- **📦 Request Batching:** Batch multiple identical requests to reduce server load
+- **🔄 Data Revalidation:** Manual and automatic revalidation with focus/reconnect triggers
+- **✨ Data Transformation:** Transform response data with custom functions
+- **⏱️ Timeout Support:** Configurable request timeouts with proper cleanup
+- **🔧 Data Mutation:** Optimistic updates and manual data mutations
+- **📊 Loading States:** Comprehensive loading and validation state management
+- **🎯 Fallback Data:** Support for fallback data during loading states
+- **🔒 Memory Management:** Proper cleanup and memory leak prevention
+- **🌐 Global State Integration:** Optional integration with global state management
+- **⚡ Performance Optimized:** Keep previous data option for smooth UX transitions
 
-- **Manual Fetch Control:** Provides the flexibility to manually trigger fetch requests using the `fetchData` function. This is particularly useful for cases where data needs to be re-fetched based on user interactions or other events.
-
-- **Built-in Loading and Error States:** Manages loading and error states internally, simplifying the process of rendering different UI components based on the status of the API request.
-
-- **Configurable Fetch Options:** Extends the standard `fetch` API options, allowing customization of request headers, method, body, and other settings. This makes it versatile for various types of API requests.
-
-- **Timeout Support:** Includes a timeout feature, enabling the specification of a maximum time to wait for a response. This helps in handling scenarios where the server response might be delayed.
-
-- **Response Caching:** Offers an optional caching mechanism to store and retrieve responses. This reduces redundant network requests, optimizing performance for frequently accessed data.
-
-- **Global State Integration:** Allows for the integration with global state management systems by providing an optional setter function. This is useful for updating global states like Redux or Context API with the fetched data.
-
-- **Automatic Cleanup:** Handles the cleanup of timeouts and aborts ongoing fetch requests to prevent memory leaks and unwanted side effects, especially important in dynamic and complex applications.
-
-- **Error Handling:** Captures and returns errors encountered during the fetch process, facilitating robust error handling and user feedback mechanisms in the application.
-
-- **Flexible Return Types:** The hook is generic, making it capable of returning data in any format (e.g., JSON, text), depending on the needs of the application.
-
-- **Server-Side Rendering Compatibility:** Designed to be safely used in server-side rendering environments, avoiding errors related to the absence of a `window` or browser-specific APIs.
-
-
-## Usage
-
-Here's an example of how to use the `useFetch` hook in a component:
+## Basic Usage
 
 ```typescript
-import { useFetch } from '@custom-react-hooks/all';
+import React from 'react';
+import { useFetch } from '@custom-react-hooks/use-fetch';
 
-const FetchComponent = () => {
-  const [url, setUrl] = useState('https://jsonplaceholder.typicode.com/users/1');
-  const { data, loading, error, fetchData } = useFetch(url, { manual: true });
+const UserProfile = () => {
+  const { data, loading, error, isValidating } = useFetch('/api/user/profile');
 
-  const handleChange = (event) => {
-    setUrl(event.target.value);
-  };
-
-  const handleFetch = () => {
-    fetchData();
-  };
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div>
-      <input
-        type="text"
-        value={url}
-        onChange={handleChange}
-      />
-      <button
-        onClick={handleFetch}
-        disabled={loading}
-      >
-        Fetch Data
-      </button>
-
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {data && (
-        <div>
-          <p>Data:</p>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </div>
-      )}
+      <h1>{data?.name}</h1>
+      <p>{data?.email}</p>
+      {isValidating && <span>Refreshing...</span>}
     </div>
   );
 };
-
-export default FetchComponent;
 ```
 
-In this example, `useFetch` is used to load data from an API. The component displays the data, a loading state, and any error that might occur. A button is provided to manually trigger the fetch request.
+## Advanced Usage
+
+### Manual Fetching with Options
+
+```typescript
+const DataComponent = () => {
+  const { data, loading, error, fetchData, mutate, revalidate } = useFetch(
+    'https://api.example.com/data',
+    {
+      manual: true,
+      timeout: 5000,
+      errorRetryCount: 3,
+      errorRetryInterval: 1000,
+      dedupingInterval: 30000,
+      keepPreviousData: true,
+      transform: (rawData) => ({
+        ...rawData,
+        processedAt: new Date().toISOString()
+      })
+    }
+  );
+
+  const handleFetch = () => fetchData();
+  const handleMutate = () => mutate({ name: 'Updated Data' });
+  const handleRevalidate = () => revalidate();
+
+  return (
+    <div>
+      <button onClick={handleFetch} disabled={loading}>
+        Fetch Data
+      </button>
+      <button onClick={handleMutate}>Update Data</button>
+      <button onClick={handleRevalidate}>Refresh</button>
+      
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error.message}</p>}
+      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+    </div>
+  );
+};
+```
+
+### With Request Batching
+
+```typescript
+const BatchedRequests = () => {
+  const { data: data1 } = useFetch('/api/popular-data', {
+    batchRequests: true,
+    batchDelay: 50 // Wait 50ms to batch requests
+  });
+  
+  const { data: data2 } = useFetch('/api/popular-data', {
+    batchRequests: true,
+    batchDelay: 50
+  });
+
+  // Both requests will be batched into a single network call
+  return <div>{/* Render data */}</div>;
+};
+```
+
+### With Automatic Revalidation
+
+```typescript
+const LiveData = () => {
+  const { data, isValidating } = useFetch('/api/live-data', {
+    refreshInterval: 5000, // Refresh every 5 seconds
+    revalidateOnFocus: true, // Refresh when window gains focus
+    revalidateOnReconnect: true, // Refresh when network reconnects
+    dedupingInterval: 2000 // Cache for 2 seconds
+  });
+
+  return (
+    <div>
+      <h2>Live Data {isValidating && '🔄'}</h2>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+};
+```
 
 ## API Reference
 
 ### Parameters
 
-- `url` (string): The URL to fetch data from.
-- `options` (RequestInit & { manual?: boolean, timeout?: number }, optional): Configuration options for the fetch request. Includes standard `fetch` options along with `manual` for manual trigger and `timeout` for request timeout.
-- `cache` (Map<string, T> | null, optional): An optional cache object to store and retrieve responses.
-- `globalStateSetter` ((data: T | null) => void, optional): An optional global state setter function for integration with global state management systems.
+#### `url` (string | null)
+The URL to fetch data from. Pass `null` to disable fetching.
+
+#### `options` (FetchOptions<T>)
+Configuration options extending the standard `RequestInit`:
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `manual` | `boolean` | `false` | Disable automatic fetching on mount |
+| `timeout` | `number` | `undefined` | Request timeout in milliseconds |
+| `revalidateOnFocus` | `boolean` | `true` | Revalidate when window gains focus |
+| `revalidateOnReconnect` | `boolean` | `true` | Revalidate when network reconnects |
+| `refreshInterval` | `number` | `0` | Auto-refresh interval in milliseconds |
+| `dedupingInterval` | `number` | `2000` | Cache duration in milliseconds |
+| `errorRetryCount` | `number` | `3` | Number of retry attempts on error |
+| `errorRetryInterval` | `number` | `5000` | Delay between retries in milliseconds |
+| `fallbackData` | `T` | `undefined` | Initial data to display |
+| `keepPreviousData` | `boolean` | `false` | Keep previous data during revalidation |
+| `batchRequests` | `boolean` | `false` | Enable request batching |
+| `batchDelay` | `number` | `10` | Batch delay in milliseconds |
+| `transform` | `(data: any) => T` | `undefined` | Transform response data |
+
+#### `cache` (Map<string, T> | null)
+Optional external cache instance for custom caching strategies.
+
+#### `globalStateSetter` ((data: T | null) => void)
+Optional function to update global state with fetched data.
 
 ### Returns
 
-An object containing:
-- `data` (T | null): The data received from the fetch request.
-- `loading` (boolean): The loading state of the request.
-- `error` (Error | null): Any error encountered during the request.
-- `fetchData` (() => Promise<void>): A function to manually trigger the fetch request.
+The hook returns an object with the following properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `data` | `T \| null` | The fetched data |
+| `loading` | `boolean` | Initial loading state |
+| `error` | `Error \| null` | Error object if request failed |
+| `isValidating` | `boolean` | Whether data is being revalidated |
+| `fetchData` | `() => Promise<void>` | Manually trigger fetch |
+| `mutate` | `(data?: T \| Promise<T> \| ((current: T \| null) => T \| Promise<T>)) => Promise<T \| null>` | Update data optimistically |
+| `revalidate` | `() => Promise<void>` | Revalidate current data |
+
+## Advanced Features
+
+### Data Mutation
+
+```typescript
+const { data, mutate } = useFetch('/api/user');
+
+// Optimistic update
+const updateUser = async (newData) => {
+  // Update UI immediately
+  mutate(newData);
+  
+  // Send request to server
+  try {
+    const result = await fetch('/api/user', {
+      method: 'PUT',
+      body: JSON.stringify(newData)
+    });
+    // Revalidate to sync with server
+    mutate();
+  } catch (error) {
+    // Revert on error
+    mutate(data);
+  }
+};
+```
+
+### Custom Cache Management
+
+```typescript
+import { cacheManager } from '@custom-react-hooks/use-fetch';
+
+// Clear all cache
+cacheManager.clear();
+
+// Access cache directly
+const cachedData = cacheManager.get('/api/data');
+```
+
+### Error Handling with Retries
+
+```typescript
+const { data, error } = useFetch('/api/unreliable-endpoint', {
+  errorRetryCount: 5,
+  errorRetryInterval: 2000, // 2 seconds between retries
+  timeout: 10000 // 10 second timeout
+});
+
+if (error) {
+  console.log('Failed after 5 retries:', error.message);
+}
+```
 
 ## Use Cases
 
-- **Data Fetching**: Load data from an API or server, handling loading states and errors.
-- **Caching Responses**: Implement caching strategies to reduce redundant network requests.
-- **Global State Updates**: Update global state (like in Redux or Context API) with fetched data.
-- **Polling Mechanism**: Implement polling for real-time updates from a server.
-- **Conditional Requests**: Make API requests based on user actions or component lifecycle.
+- **📊 Dashboard Data:** Real-time dashboards with automatic refresh
+- **👤 User Profiles:** User data with optimistic updates
+- **📝 Form Submissions:** Handle form data with proper error states
+- **🔍 Search Results:** Debounced search with caching
+- **📱 Mobile Apps:** Offline-first data fetching
+- **⚡ Performance Critical:** Batched requests and intelligent caching
+- **🌐 Global State:** Integration with Redux, Zustand, or Context API
+
+## Best Practices
+
+1. **Use caching wisely:** Set appropriate `dedupingInterval` based on data freshness requirements
+2. **Handle loading states:** Always provide feedback during data fetching
+3. **Implement error boundaries:** Wrap components using `useFetch` in error boundaries
+4. **Optimize re-renders:** Use `keepPreviousData` for smooth transitions
+5. **Clean up properly:** The hook handles cleanup automatically, but be mindful of component unmounting
+6. **Batch similar requests:** Use `batchRequests` for frequently accessed endpoints
+
+## TypeScript Support
+
+The hook is fully typed and supports generic type parameters:
+
+```typescript
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+const { data } = useFetch<User>('/api/user/1');
+// data is typed as User | null
+```
+
+## Error Handling
+
+```typescript
+const { data, error, loading } = useFetch('/api/data');
+
+if (loading) return <Spinner />;
+if (error) {
+  return (
+    <ErrorMessage>
+      {error.message}
+      <button onClick={() => window.location.reload()}>
+        Retry
+      </button>
+    </ErrorMessage>
+  );
+}
+
+return <DataDisplay data={data} />;
+```
 
 ## Notes
 
-- The `useFetch` hook is designed to be flexible and can be adapted to fit various fetching requirements.
-- Remember to handle the cleanup of timeouts and abort controllers to avoid memory leaks and unexpected behavior in your components.
+- The hook uses a global cache manager for optimal performance across components
+- Request deduplication prevents unnecessary network calls
+- Automatic cleanup prevents memory leaks
+- Server-side rendering compatible
+- Works with any data format (JSON, text, blob, etc.)
 
 ## Contributing
 
-Contributions to enhance the `useFetch` hook are welcome. Feel free to submit issues or pull requests to the repository.
+Contributions to enhance the `useFetch` hook are welcome. Please feel free to submit issues or pull requests to the repository.
+
+## License
+
+MIT License - see LICENSE file for details.
