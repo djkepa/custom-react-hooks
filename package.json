@@ -37,6 +37,7 @@
     "lerna": "^8.2.3"
   },
   "overrides": {
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "picomatch": "^4.0.3"
   }
 }
