@@ -69,6 +69,7 @@ const PermissionComponent = () => {
         <option value="notifications">Notifications</option>
         <option value="microphone">Microphone</option>
         <option value="camera">Camera</option>
+        <option value="local-network-access">Local Network Access</option>
       </select>
 
       <div>
@@ -93,6 +94,26 @@ export default PermissionComponent;
 
 ### Parameters
   - `permissionName`: A string that represents the permission to query. It must be one of the supported permission names defined by the Permissions API.
+
+### Supported Permissions
+  - `geolocation` - User's geographical location
+  - `notifications` - Display notifications
+  - `push` - Push notifications
+  - `microphone` - Audio input access
+  - `camera` - Video input access
+  - `speaker` - Audio output access
+  - `device-info` - Device information
+  - `background-sync` - Background synchronization
+  - `bluetooth` - Bluetooth device access
+  - `persistent-storage` - Persistent storage
+  - `ambient-light-sensor` - Ambient light sensor
+  - `accelerometer` - Accelerometer sensor
+  - `gyroscope` - Gyroscope sensor
+  - `magnetometer` - Magnetometer sensor
+  - `clipboard-read` - Read from clipboard
+  - `clipboard-write` - Write to clipboard
+  - `payment-handler` - Payment handler
+  - `local-network-access` - Local network access (Chrome 142+)
 
 ### Returns
   - `state`: A string representing the permission state (`'prompt'`, `'granted'`, or `'denied'`).

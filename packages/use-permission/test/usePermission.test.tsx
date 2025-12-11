@@ -29,4 +29,10 @@ describe('usePermission Hook', () => {
     const { findByText } = render(<TestComponent permissionName="notifications" />);
     expect(await findByText('Permission: denied')).toBeInTheDocument();
   });
+
+  it('should handle local-network-access permission', async () => {
+    navigator.permissions.query = jest.fn().mockResolvedValue({ state: 'granted', onchange: null });
+    const { findByText } = render(<TestComponent permissionName="local-network-access" />);
+    expect(await findByText('Permission: granted')).toBeInTheDocument();
+  });
 });
