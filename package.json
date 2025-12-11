@@ -35,5 +35,8 @@
   "devDependencies": {
     "jest-environment-jsdom": "^29.7.0",
     "lerna": "^8.2.3"
+  },
+  "overrides": {
+    "js-yaml": "^4.1.1"
   }
 }
