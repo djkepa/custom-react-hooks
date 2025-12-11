@@ -18,6 +18,7 @@ export type PermissionName =
   | 'clipboard-read'
   | 'clipboard-write'
   | 'payment-handler'
+  | 'local-network-access'
   | 'unknown-permission'
   | string;
 

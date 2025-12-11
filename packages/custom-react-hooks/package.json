@@ -1,6 +1,6 @@
 {
   "name": "@custom-react-hooks/all",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "description": "A collection of reusable React hooks by custom-react-hooks.",
@@ -48,7 +48,7 @@
     "@custom-react-hooks/use-mouse": "1.5.1",
     "@custom-react-hooks/use-on-screen": "1.5.1",
     "@custom-react-hooks/use-orientation": "1.5.1",
-    "@custom-react-hooks/use-permission": "1.5.1",
+    "@custom-react-hooks/use-permission": "1.5.2",
     "@custom-react-hooks/use-portal": "1.5.1",
     "@custom-react-hooks/use-script": "1.5.1",
     "@custom-react-hooks/use-status": "1.5.1",
